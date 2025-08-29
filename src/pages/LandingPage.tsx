@@ -4,13 +4,13 @@ import { motion } from "framer-motion";
 import NavbarComponentLanding from "@/components/pages/Navbar";
 
 import { Button } from "../components/ui/button";
-import { TextGenerateEffectDemo } from "./TextGenerateEffectDemo";
+import { TextGenerateEffectDemo } from "../components/pages/TextGenerateEffectDemo";
 import 'animate.css';
-import HeaderSection from "./HeaderSection";
-import SectionOther from "./SectionOther";
+import HeaderSection from "../components/pages/HeaderSection";
+import SectionOther from "../components/pages/SectionOther";
 
-import SectionLogoCloud from "./SectionLogoCloud";
-import { InfiniteMovingCardsDemo } from "./InfiniteMovingCardsDemo";
+import SectionLogoCloud from "../components/pages/SectionLogoCloud";
+import { InfiniteMovingCardsDemo } from "../components/pages/InfiniteMovingCardsDemo";
 
 const fadeUp = {
     hidden: { opacity: 0, y: 20 },
@@ -269,19 +269,20 @@ const LandingPage = () => {
                 <SectionOther
                 />
             </section>
-            <section className="flex flex-col items-center justify-center bg-gray-50 py-16 px-4 text-center gap-6">
+            
+            <section>
+                <InfiniteMovingCardsDemo 
+                />
+            </section>
+
+            <section className="flex flex-col items-center justify-center border rounded-2xl bg-gray-50 py-16 px-4 text-center gap-6">
                 <h2 className="text-3xl font-bold">Start securing your passwords today</h2>
-                <p className="text-gray-600 max-w-xl">
+                <p className="text-gray-600 font-myfont max-w-xl">
                     Join millions of users who trust us to keep their digital lives safe and organized.
                 </p>
                 <Button className="bg-black text-white rounded-full mt-4 hover:bg-gray-900">
                     Get Started
                 </Button>
-            </section>
-
-            <section>
-                <InfiniteMovingCardsDemo 
-                />
             </section>
         </>
     );

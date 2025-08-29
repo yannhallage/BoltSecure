@@ -2,6 +2,7 @@
 import { Helmet } from 'react-helmet';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import LandingPage from './pages/LandingPage';
+import Signin from './pages/Signin';
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
           <main className="flex-1">
             <Routes>
               <Route path="/" element={<LandingPage />} />
+              <Route path="/Signin" element={<Signin />} />
             </Routes>
           </main>
         </div>
