@@ -1,0 +1,150 @@
+
+ function DashboardPage() {
+    return (
+        <main className="flex-grow px-6">
+            {/* Header */}
+            <div className="w-full flex flex-col items-center gap-4 mt-12 mb-12">
+                <h2 className="text-center font-normal text-2xl sm:text-3xl 2xl:text-4xl">
+                    Que voulez-vous apprendre ?
+                </h2>
+
+                {/* 3 Cards */}
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full max-w-3xl">
+                    <Card className="relative p-4 cursor-pointer rounded-3xl group transition-all hover:shadow-md">
+                        <span className="absolute top-2 right-2 text-xs px-2 py-0.5 rounded-full bg-green-100 text-green-700">
+                            Populaire
+                        </span>
+                        <div className="flex items-center gap-3">
+                            <Upload className="h-6 w-6 text-primary/70 group-hover:text-primary" />
+                            <div>
+                                <h3 className="font-medium">Télécharger</h3>
+                                <p className="text-xs text-muted-foreground">
+                                    Fichier, audio, vidéo
+                                </p>
+                            </div>
+                        </div>
+                    </Card>
+
+                    <Card className="p-4 cursor-pointer rounded-3xl group transition-all hover:shadow-md">
+                        <div className="flex items-center gap-3">
+                            <Link2 className="h-6 w-6 text-primary/70 group-hover:text-primary" />
+                            <div>
+                                <h3 className="font-medium">Coller</h3>
+                                <p className="text-xs text-muted-foreground">
+                                    YouTube, site web, texte
+                                </p>
+                            </div>
+                        </div>
+                    </Card>
+
+                    <Card className="p-4 cursor-pointer rounded-3xl group transition-all hover:shadow-md">
+                        <div className="flex items-center gap-3">
+                            <Mic className="h-6 w-6 text-primary/70 group-hover:text-primary" />
+                            <div>
+                                <h3 className="font-medium">Enregistrer</h3>
+                                <p className="text-xs text-muted-foreground">
+                                    Un cours, un appel vidéo
+                                </p>
+                            </div>
+                        </div>
+                    </Card>
+                </div>
+            </div>
+
+            {/* Espaces */}
+            <section className="max-w-5xl mx-auto mt-10">
+                <h3 className="text-lg font-medium mb-4">Espaces</h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {/* Exemple d’espace */}
+                    <Card className="flex items-center justify-between p-3 rounded-2xl cursor-pointer hover:shadow-md">
+                        <div className="flex items-center gap-3">
+                            <Box className="h-5 w-5" />
+                            <div>
+                                <span className="text-sm font-medium">Yann&apos;s Space</span>
+                                <p className="text-xs text-muted-foreground">0 contenu</p>
+                            </div>
+                        </div>
+                        <MoreHorizontal className="h-4 w-4 text-muted-foreground" />
+                    </Card>
+
+                    {/* Bouton créer espace */}
+                    <button className="flex items-center justify-center border-dashed border-2 rounded-2xl h-16 text-sm text-muted-foreground hover:border-primary hover:text-primary transition">
+                        <Plus className="h-5 w-5 mr-2" />
+                        Créer un espace
+                    </button>
+                </div>
+            </section>
+
+            {/* Explorer */}
+            <section className="max-w-5xl mx-auto mt-12">
+                <div className="flex justify-between items-center mb-4">
+                    <h3 className="text-lg font-medium">Explorer</h3>
+                    <Button variant="outline" size="sm">
+                        Voir tous
+                    </Button>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {/* Exemple de contenu */}
+                    <Card className="overflow-hidden rounded-2xl cursor-pointer hover:shadow-md">
+                        <img
+                            src="https://i.ytimg.com/vi/0JUN9aDxVmI/hqdefault.jpg"
+                            alt="Thumbnail"
+                            className="w-full aspect-video object-cover"
+                        />
+                        <div className="p-3">
+                            <h5 className="text-sm font-medium truncate">
+                                Introduction To Advanced Algorithms
+                            </h5>
+                            <p className="text-xs text-muted-foreground">Cours YouTube</p>
+                        </div>
+                    </Card>
+                </div>
+            </section>
+        </main>
+    )
+}
+
+
+
+
+<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 3xl:grid-cols-5 gap-4">
+    <a className="flex flex-col justify-between shadow-[0_4px_10px_rgba(0,0,0,0.02)] hover:dark:border-neutral-700/40 bg-white dark:bg-neutral-800/50 cursor-pointer transition-all duration-200 rounded-2xl border group"
+        href="/learn/content/Si2vmzUWfJE">
+        <div
+            className="relative cursor-pointer flex-col justify-center items-center rounded-lg transition duration-200 dark:border-primary group hover:shadow-none w-full hover:dark:shadow-none drop-shadow-none">
+            <div aria-label="Options"
+                className="absolute z-30 top-2.5 right-2.5 p-1 hover:scale-110 duration-200 cursor-pointer rounded-full dark:bg-primary lg:bg-transparent lg:dark:bg-transparent group-hover:bg-white group-hover:dark:bg-primary transition-all">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    className="lucide lucide-ellipsis-vertical w-3.5 h-3.5 opacity-100 xl:opacity-0 group-hover:opacity-100 text-black"
+                    aria-label="optionsMenu.openMenu" aria-hidden="true" type="button" id="radix-_r_14m_"
+                    aria-haspopup="menu" aria-expanded="false" data-state="closed">
+                    <circle cx="12" cy="12" r="1"></circle>
+                    <circle cx="12" cy="5" r="1"></circle>
+                    <circle cx="12" cy="19" r="1"></circle>
+                </svg>
+            </div>
+            <div arial-label="thumbnail" className="rounded-t-2xl border-b overflow-hidden relative">
+                <img draggable="false" alt="thumbnailUrl" width="360" height="200" decoding="async" data-nimg="1"
+                    className="aspect-video w-full object-cover"
+                    src="https://i.ytimg.com/vi/HAnw168huqA/maxresdefault.jpg?sqp=-oaymwEmCIAKENAF8quKqQMa8AEB-AH-CYAC0AWKAgwIABABGEggVihyMA8=&amp;rs=AOn4CLDutYV5ojgJsoN_ShFMaKJxZaW2hg"
+                    // style="color: transparent;" />
+            </div>
+            <div className="w-full my-2.5 flex gap-2 px-3 py-1 relative group items-center"><svg
+                    xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    className="lucide lucide-play w-4 h-4 text-muted-foreground flex-shrink-0 mr-1" aria-hidden="true">
+                    <polygon points="6 3 20 12 6 21 6 3"></polygon>
+                </svg>
+                <div className="flex-1 min-w-0">
+                    <div className="flex flex-col gap-1">
+                        <h5 aria-label="title"
+                            className="text-sm font-medium truncate tracking-wide text-primary/80 group-hover:text-primary">
+                            But what is a neural network? | Deep learning chapter 1</h5>
+                        <div className="text-xs text-muted-foreground/70">il y a 5 mois</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </a>
+</div>

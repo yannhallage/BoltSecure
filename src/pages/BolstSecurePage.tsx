@@ -5,7 +5,7 @@ import TableExample from "@/components/comp-467";
 // import NavbarComponentLanding from "@/components/pages/Navbar";
 import NavbarApp from "@/components/pages/app/navbarApp";
 
-import { Settings, Trash2, Download, FolderClosed } from 'lucide-react';
+import { Settings, Trash2, Download } from 'lucide-react';
 import ToolitpPassword, { ToolitpCreditCards, ToolitpPasskeys, ToolitpButtonCreeFolder } from "@/components/comp-357";
 import MenuWithIcons from "@/components/MenuWithIcons";
 

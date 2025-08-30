@@ -6,7 +6,6 @@ import Signin from './pages/Signin';
 import PersonalInfo from './pages/personal-info';
 import BolstSecurePage from './pages/BolstSecurePage';
 
-// const defaultId = "asgqteuxbcipelmpdnhgsteuzbhshkicudxdhdj"
 function App() {
   return (
     <>
