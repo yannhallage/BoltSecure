@@ -5,6 +5,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip"
+import CreerFolders from "./CreerFolders"
 
 export default function ToolitpPassword() {
   return (
@@ -174,11 +175,9 @@ export function ToolitpButtonCreeFolder() {
     <TooltipProvider delayDuration={2}>
       <Tooltip>
         <TooltipTrigger asChild>
-          <button
-            onClick={() => console.log("Créer un espace")}
-            className="w-full lg:w-[66px] h-[66px] bg-transparent hover:border-primary/20 dark:text-neutral-400 text-neutral-600 dark:hover:text-neutral-50 hover:text-neutral-900 hover:text-primary border-dashed border-2 border-primary/10 dark:border-primary/20 flex items-center justify-start lg:justify-center p-3.5 cursor-pointer transition-all duration-200 rounded-2xl drop-shadow-sm gap-2" data-state="closed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-plus h-6 w-6" aria-hidden="true"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg>
-            <span className="lg:hidden block text-sm font-medium">Créer un espace</span>
-          </button>
+          <span >
+            <CreerFolders />
+          </span>
         </TooltipTrigger>
         <TooltipContent className="py-3">
           <div className="space-y-1">
