@@ -68,10 +68,11 @@ export default function AddPassword({ open, onOpenChange }: AddPasswordProps) {
       >
         <div className="flex flex-col gap-2">
           <div
-            className="flex size-11 shrink-0 items-center justify-center rounded-full border"
+            className="flex size-11 shrink-0 items-center justify-center rounded-full "
             aria-hidden="true"
           >
-            <LockKeyhole  className="opacity-80" size={16} />
+            <img src="https://www.thiings.co/_next/image?url=https%3A%2F%2Flftz25oez4aqbxpq.public.blob.vercel-storage.com%2Fimage-EvpVqXgiKOwI32jZyyBn5jfgsOUi97.png&w=500&q=75" alt="" />
+            {/* <LockKeyhole  className="opacity-80" size={16} /> */}
           </div>
           <DialogHeader>
             <DialogTitle className="text-left">Ajouter un mot de passe</DialogTitle>

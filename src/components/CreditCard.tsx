@@ -41,10 +41,11 @@ export default function CreditCard({ open, onOpenChange }: AddPasswordProps) {
       <DialogContent>
         <div className="flex flex-col gap-2">
           <div
-            className="flex size-11 shrink-0 items-center justify-center rounded-full border"
+            className="flex size-11 shrink-0 items-center justify-center rounded-full "
             aria-hidden="true"
           >
-            <WalletIcon className="opacity-80" size={16} />
+            {/* <WalletIcon className="opacity-80" size={16} /> */}
+            <img src="https://www.thiings.co/_next/image?url=https%3A%2F%2Flftz25oez4aqbxpq.public.blob.vercel-storage.com%2Fimage-xylXWxjRoBYdaH9IPOx1080olvl5Ur.png&w=500&q=75" alt="" />
           </div>
           <DialogHeader>
             <DialogTitle className="text-left">Update your card</DialogTitle>
