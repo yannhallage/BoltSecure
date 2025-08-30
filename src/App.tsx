@@ -21,7 +21,7 @@ function App() {
               <Route path="/" element={<LandingPage />} />
               <Route path="/Signin" element={<Signin />} />
               <Route path="/personal-info" element={<PersonalInfo />} />
-              <Route path="/boltsecure" element={<BolstSecurePage />} />
+              <Route path="/web" element={<BolstSecurePage />} />
             </Routes>
           </main>
         </div>

@@ -2,7 +2,9 @@
 "use client"
 import { motion } from "framer-motion";
 import TableExample from "@/components/comp-467";
-import NavbarComponentLanding from "@/components/pages/Navbar";
+// import NavbarComponentLanding from "@/components/pages/Navbar";
+import NavbarApp from "@/components/pages/app/navbarApp";
+
 
 // import { Upload, Link2, Mic, Box, MoreHorizontal, Plus } from "lucide-react"
 // import { Card } from "@/components/ui/card"
@@ -13,7 +15,7 @@ export default function BolstSecurePage() {
     return (
         <>
             <header>
-                <NavbarComponentLanding />
+                <NavbarApp />
             </header>
             <main>
                 <motion.section
@@ -253,7 +255,13 @@ export default function BolstSecurePage() {
                             <a className="self-center" href="/explore"><button className="inline-flex items-center justify-center whitespace-nowrap ring-offset-background transition-colors focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 border border-input bg-background h-9 rounded-lg px-3 text-xs sm:text-sm border-none font-normal hover:bg-transparent hover:text-primary/70"><span>Voir tous</span></button></a>
                         </div>
                     </motion.div>
-                    <TableExample />
+                    <motion.div className="border p-5 rounded-3xl flex flex-col text-center 2xl:max-w-[672px] xl:max-w-[1076px] md:max-w-[712px] w-full z-30"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ delay: 0.5, duration: 1 }}
+                    >
+                        <TableExample />
+                    </motion.div>
                 </motion.section>
                 <section className="mt-12"></section>
             </main>
