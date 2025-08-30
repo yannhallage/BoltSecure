@@ -3,7 +3,10 @@ import { Helmet } from 'react-helmet';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import LandingPage from './pages/LandingPage';
 import Signin from './pages/Signin';
+import PersonalInfo from './pages/personal-info';
+import BolstSecurePage from './pages/BolstSecurePage';
 
+// const defaultId = "asgqteuxbcipelmpdnhgsteuzbhshkicudxdhdj"
 function App() {
   return (
     <>
@@ -17,6 +20,8 @@ function App() {
             <Routes>
               <Route path="/" element={<LandingPage />} />
               <Route path="/Signin" element={<Signin />} />
+              <Route path="/personal-info" element={<PersonalInfo />} />
+              <Route path="/boltsecure" element={<BolstSecurePage />} />
             </Routes>
           </main>
         </div>

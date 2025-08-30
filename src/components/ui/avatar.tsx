@@ -1,5 +1,5 @@
 import * as React from "react"
-import * as AvatarPrimitive from "@radix-ui/react-avatar"
+import { Avatar as AvatarPrimitive } from "radix-ui"
 
 import { cn } from "@/lib/utils"
 
@@ -40,7 +40,7 @@ function AvatarFallback({
     <AvatarPrimitive.Fallback
       data-slot="avatar-fallback"
       className={cn(
-        "bg-muted flex size-full items-center justify-center rounded-full",
+        "bg-secondary flex size-full items-center justify-center rounded-[inherit] text-xs",
         className
       )}
       {...props}
@@ -48,4 +48,4 @@ function AvatarFallback({
   )
 }
 
-export { Avatar, AvatarImage, AvatarFallback }
+export { Avatar, AvatarFallback, AvatarImage }

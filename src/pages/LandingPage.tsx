@@ -1,5 +1,6 @@
 "use client";
 
+import { useNavigate } from "react-router";
 import { motion } from "framer-motion";
 import NavbarComponentLanding from "@/components/pages/Navbar";
 
@@ -18,6 +19,7 @@ const fadeUp = {
 };
 
 const LandingPage = () => {
+    const navigate = useNavigate();
     return (
         <>
             <header>
@@ -53,7 +55,11 @@ const LandingPage = () => {
                     <Button className="bg-white border rounded-full border-gray-300 text-gray-800 hover:bg-gray-100">
                         See features
                     </Button>
-                    <Button className="bg-black rounded-full text-white hover:bg-gray-900">
+                    <Button className="bg-black rounded-full text-white hover:bg-gray-900"
+                        onClick={() => {
+                            navigate("/Signin");
+                        }}
+                    >
                         Get Started
                     </Button>
                 </motion.div>
@@ -269,9 +275,9 @@ const LandingPage = () => {
                 <SectionOther
                 />
             </section>
-            
+
             <section>
-                <InfiniteMovingCardsDemo 
+                <InfiniteMovingCardsDemo
                 />
             </section>
 
@@ -280,7 +286,11 @@ const LandingPage = () => {
                 <p className="text-gray-600 font-myfont max-w-xl">
                     Join millions of users who trust us to keep their digital lives safe and organized.
                 </p>
-                <Button className="bg-black text-white rounded-full mt-4 hover:bg-gray-900">
+                <Button className="bg-black text-white rounded-full mt-4 hover:bg-gray-900"
+                    onClick={() => {
+                        navigate("/Signin");
+                    }}
+                >
                     Get Started
                 </Button>
             </section>

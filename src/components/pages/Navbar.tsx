@@ -1,9 +1,12 @@
 "use client";
 import { useState, useEffect } from "react";
+
+import { useNavigate } from "react-router";
 import { Button } from "../ui/button";
 
 export default function NavbarComponentLanding() {
     const [scrolled, setScrolled] = useState(false);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const handleScroll = () => {
@@ -12,12 +15,11 @@ export default function NavbarComponentLanding() {
         window.addEventListener("scroll", handleScroll);
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
-
     return (
         <nav
             className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${scrolled
-                    ? "backdrop-blur-xl bg-white/30 shadow-lg"
-                    : "bg-transparent"
+                ? "backdrop-blur-xl bg-white/30 shadow-lg"
+                : "bg-transparent"
                 }`}
         >
             <div className="container mx-auto px-4">
@@ -27,7 +29,11 @@ export default function NavbarComponentLanding() {
                         alt="Logo"
                         className="w-24"
                     />
-                    <Button className="rounded-full px-4 py-2 text-white text-sm font-normal">
+                    <Button className="rounded-full px-4 cursor-pointer py-2 text-white text-sm font-normal"
+                        onClick={() => {
+                            navigate("/Signin");
+                        }}
+                    >
                         Get Started
                     </Button>
                 </div>
