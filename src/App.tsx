@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import LandingPage from './pages/LandingPage';
 import Signin from './pages/Signin';
 import PersonalInfo from './pages/personal-info';
-import BolstSecurePage from './pages/BolstSecurePage';
+import BolstSecurePage from './pages/web';
 
 function App() {
   return (

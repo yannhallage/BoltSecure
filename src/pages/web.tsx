@@ -5,9 +5,11 @@ import TableExample from "@/components/comp-467";
 // import NavbarComponentLanding from "@/components/pages/Navbar";
 import NavbarApp from "@/components/pages/app/navbarApp";
 
+
 import { Settings, Trash2, Download } from 'lucide-react';
 import ToolitpPassword, { ToolitpCreditCards, ToolitpPasskeys, ToolitpButtonCreeFolder } from "@/components/comp-357";
 import MenuWithIcons from "@/components/MenuWithIcons";
+
 
 export default function BolstSecurePage() {
     return (
@@ -164,12 +166,9 @@ export default function BolstSecurePage() {
                 </motion.section>
 
                 <motion.section className="sm:px-10 lg:px-24 xl:px-36 w-full relative"
-                    transition={{ duration: 0.8 }}
                 >
                     <motion.div className="mb-6"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ delay: 0.5, duration: 1 }}
+                        initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.7 }}
                     >
                         <div className="text-left w-full flex justify-between items-center mb-4">
                             <div className="flex flex-col">
@@ -181,9 +180,7 @@ export default function BolstSecurePage() {
                         </div>
                     </motion.div>
                     <motion.div className="border p-5 rounded-3xl flex flex-col text-center 2xl:max-w-[672px] xl:max-w-[1076px] md:max-w-[712px] w-full z-30"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ delay: 0.5, duration: 1 }}
+                        initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.7 }}
                     >
                         <TableExample />
                     </motion.div>

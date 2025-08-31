@@ -44,10 +44,10 @@ export default function NavbarApp() {
                         <polygon points="374,225 177.9,403.5 236.4,251.3 275.7,225"
                             fill="url(#grad1)" />
                     </svg>
-                    {/* <h1 className="text-2xl font-extrabold tracking-wide">
+                    <h1 className="text-2xl font-extrabold tracking-wide">
                         <span className="text-[#112E70]">Bolt</span>
                         <span className="bg-gradient-to-r from-sky-400 to-blue-700 bg-clip-text text-transparent">Secure</span>
-                    </h1> */}
+                    </h1>
                     <Account />
                 </div>
             </div>
