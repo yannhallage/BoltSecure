@@ -52,50 +52,6 @@ const items = [
     status: "Active",
     balance: "-$1,000.00",
   },
-  {
-    id: "5",
-    name: "David Kim",
-    username: "@davidkim",
-    image:
-      "https://raw.githubusercontent.com/origin-space/origin-images/refs/heads/main/exp1/avatar-40-05_cmz0mg.jpg",
-    email: "d.kim@company.com",
-    location: "Seoul, KR",
-    status: "Active",
-    balance: "-$1,000.00",
-  },
-  {
-    id: "5",
-    name: "David Kim",
-    username: "@davidkim",
-    image:
-      "https://raw.githubusercontent.com/origin-space/origin-images/refs/heads/main/exp1/avatar-40-05_cmz0mg.jpg",
-    email: "d.kim@company.com",
-    location: "Seoul, KR",
-    status: "Active",
-    balance: "-$1,000.00",
-  },
-  {
-    id: "5",
-    name: "David Kim",
-    username: "@davidkim",
-    image:
-      "https://raw.githubusercontent.com/origin-space/origin-images/refs/heads/main/exp1/avatar-40-05_cmz0mg.jpg",
-    email: "d.kim@company.com",
-    location: "Seoul, KR",
-    status: "Active",
-    balance: "-$1,000.00",
-  },
-  {
-    id: "5",
-    name: "David Kim",
-    username: "@davidkim",
-    image:
-      "https://raw.githubusercontent.com/origin-space/origin-images/refs/heads/main/exp1/avatar-40-05_cmz0mg.jpg",
-    email: "d.kim@company.com",
-    location: "Seoul, KR",
-    status: "Active",
-    balance: "-$1,000.00",
-  },
 ]
 
 export default function TableExample() {
@@ -112,35 +68,47 @@ export default function TableExample() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {items.map((item) => (
-            <TableRow key={item.id}>
-              <TableCell>
-                <div className="flex items-center gap-3">
-                  <img
-                    className="rounded-full"
-                    src={item.image}
-                    width={40}
-                    height={40}
-                    alt={item.name}
-                  />
-                  <div>
-                    <div className="font-medium">{item.name}</div>
-                    <span className="text-muted-foreground mt-0.5 text-xs">
-                      {item.username}
-                    </span>
+          {items ? (
+            items.map((item) => (
+              <TableRow key={item.id}>
+                <TableCell>
+                  <div className="flex items-center gap-3">
+                    <img
+                      className="rounded-full"
+                      src={item.image}
+                      width={40}
+                      height={40}
+                      alt={item.name}
+                    />
+                    <div>
+                      <div className="font-medium">{item.name}</div>
+                      <span className="text-muted-foreground mt-0.5 text-xs">
+                        {item.username}
+                      </span>
+                    </div>
                   </div>
-                </div>
+                </TableCell>
+                <TableCell>{item.email}</TableCell>
+                <TableCell>{item.location}</TableCell>
+                <TableCell>{item.status}</TableCell>
+                <TableCell className="text-right">{item.balance}</TableCell>
+              </TableRow>
+            ))
+          ) : (
+            <TableRow>
+              <TableCell colSpan={6} className="h-24 text-center">
+                No data available
               </TableCell>
-              <TableCell>{item.email}</TableCell>
-              <TableCell>{item.location}</TableCell>
-              <TableCell>{item.status}</TableCell>
-              <TableCell className="text-right">{item.balance}</TableCell>
             </TableRow>
-          ))}
+          )}
         </TableBody>
       </Table>
       <p className="text-muted-foreground mt-4 text-center text-sm">
-        Table with images
+        {
+          items.length === 0
+            ? "Aucune données en disponible pour l'instant."
+            : ""
+        }
       </p>
     </div>
   )
