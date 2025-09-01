@@ -1,3 +1,4 @@
+
 import {
   Table,
   TableBody,
@@ -6,6 +7,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import { motion } from "framer-motion"
 
 const items = [
   {
@@ -51,6 +53,20 @@ const items = [
     location: "Seoul, KR",
     status: "Active",
     balance: "-$1,000.00",
+  },
+]
+
+const itemsDocuments = [
+  {
+    id: "1",
+    name: "Alex Thompson",
+    username: "@alexthompson",
+    image:
+      "https://raw.githubusercontent.com/origin-space/origin-images/refs/heads/main/exp1/avatar-40-02_upqrxi.jpg",
+    email: "alex.t@company.com",
+    location: "San Francisco, US",
+    status: "Active",
+    balance: "$1,250.00",
   },
 ]
 
@@ -111,5 +127,67 @@ export default function TableExample() {
         }
       </p>
     </div>
+  )
+}
+
+export function TableExampleForDocuments() {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2}}
+    >
+      <Table>
+        <TableHeader>
+          <TableRow className="hover:bg-transparent">
+            <TableHead>Name</TableHead>
+            <TableHead>Email</TableHead>
+            <TableHead>Location</TableHead>
+            <TableHead>Status</TableHead>
+            <TableHead className="text-right">Balance</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {itemsDocuments ? (
+            itemsDocuments.map((item) => (
+              <TableRow key={item.id}>
+                <TableCell>
+                  <div className="flex items-center gap-3">
+                    <img
+                      className="rounded-full"
+                      src={item.image}
+                      width={40}
+                      height={40}
+                      alt={item.name}
+                    />
+                    <div>
+                      <div className="font-medium">{item.name}</div>
+                      <span className="text-muted-foreground mt-0.5 text-xs">
+                        {item.username}
+                      </span>
+                    </div>
+                  </div>
+                </TableCell>
+                <TableCell>{item.email}</TableCell>
+                <TableCell>{item.location}</TableCell>
+                <TableCell>{item.status}</TableCell>
+                <TableCell className="text-right">{item.balance}</TableCell>
+              </TableRow>
+            ))
+          ) : (
+            <TableRow>
+              <TableCell colSpan={6} className="h-24 text-center">
+                No data available
+              </TableCell>
+            </TableRow>
+          )}
+        </TableBody>
+      </Table>
+      <p className="text-muted-foreground mt-4 text-center text-sm">
+        {
+          itemsDocuments.length === 0
+            ? "Aucune données en disponible pour l'instant."
+            : ""
+        }
+      </p>
+    </motion.div>
   )
 }
