@@ -1,4 +1,3 @@
-import ToolitpPassword, { ToolitpCreditCards, ToolitpPasskeys } from "@/components/comp-357"
 import { Button } from "@/components/ui/button"
 import {
     DropdownMenu,
@@ -30,43 +29,6 @@ export function DropdownMenuDemo() {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="w-46" align="start">
                     <DropdownMenuLabel>Ajoutez items</DropdownMenuLabel>
-                    {/* <DropdownMenuGroup>
-                    <DropdownMenuItem>
-                        Profile
-                        <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem>
-                        Billing
-                        <DropdownMenuShortcut>⌘B</DropdownMenuShortcut>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem>
-                        Settings
-                        <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem>
-                        Keyboard shortcuts
-                        <DropdownMenuShortcut>⌘K</DropdownMenuShortcut>
-                    </DropdownMenuItem>
-                </DropdownMenuGroup> */}
-                    {/* <DropdownMenuSeparator /> */}
-                    {/* <DropdownMenuGroup>
-                    <DropdownMenuItem>Team</DropdownMenuItem>
-                    <DropdownMenuSub>
-                        <DropdownMenuSubTrigger>Invite users</DropdownMenuSubTrigger>
-                        <DropdownMenuPortal>
-                            <DropdownMenuSubContent>
-                                <DropdownMenuItem>Email</DropdownMenuItem>
-                                <DropdownMenuItem>Message</DropdownMenuItem>
-                                <DropdownMenuSeparator />
-                                <DropdownMenuItem>More...</DropdownMenuItem>
-                            </DropdownMenuSubContent>
-                        </DropdownMenuPortal>
-                    </DropdownMenuSub>
-                    <DropdownMenuItem>
-                        New Team
-                        <DropdownMenuShortcut>⌘+T</DropdownMenuShortcut>
-                    </DropdownMenuItem>
-                </DropdownMenuGroup> */}
                     <DropdownMenuSeparator />
                     <DropdownMenuItem>
                         <div className="flex space-x-2">
@@ -107,11 +69,6 @@ export function DropdownMenuDemo() {
                             </span>
                         </div>
                     </DropdownMenuItem>
-                    {/* <DropdownMenuSeparator /> */}
-                    {/* <DropdownMenuItem>
-                    Log out
-                    <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
-                </DropdownMenuItem> */}
                 </DropdownMenuContent>
             </DropdownMenu>
 

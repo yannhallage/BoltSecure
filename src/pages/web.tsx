@@ -16,6 +16,26 @@ import { DropdownMenuDemo } from "@/components/pages/app/DropdownMenuDemo";
 export default function BolstSecurePage() {
     const [folderChange, setFolderChange] = useState<boolean>(true)
 
+    const DocumentSelect = [
+        {
+            id: 1,
+            name: "Yann's Space",
+            contenu: 2,
+            // icon: <Download className="w-6 h-6 text-gray-400" />
+        },
+        {
+            id: 2,
+            name: "Document 2",
+            contenu: 2,
+            // icon: <Download className="w-6 h-6 text-gray-400" />
+        },
+        {
+            id: 3,
+            name: "Document 3",
+            contenu: 2,
+            // icon: <Download className="w-6 h-6 text-gray" />
+        }
+    ]
     return (
         <>
             <header>
@@ -111,54 +131,40 @@ export default function BolstSecurePage() {
                                         <span className="items-end">Documents</span>
                                     </div>
                                     <div className="mt-4">
-                                        <div  onClick={() => setFolderChange(!folderChange)} className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4 py-1">
-                                            <span>
-                                                <div className="group w-full text-primary/80 hover:text-primary flex flex-row justify-between items-center p-3 rounded-2xl border shadow-[0_4px_10px_rgba(0,0,0,0.02)] hover:dark:border-neutral-700/40 bg-white dark:bg-neutral-800/50 cursor-pointer transition-all duration-200">
-                                                    <div className="flex flex-row space-x-3 items-center flex-1 truncate">
-                                                        {/* <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-box flex-shrink-0 h-4 w-4" aria-hidden="true"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"></path><path d="m3.3 7 8.7 5 8.7-5"></path><path d="M12 22V12"></path></svg> */}
-                                                        {/* <FolderClosed
-                                                            className="cursor-pointer"
-                                                            size={16}
-                                                        /> */}
-                                                        <img width={50}
-                                                            src="https://www.thiings.co/_next/image?url=https%3A%2F%2Flftz25oez4aqbxpq.public.blob.vercel-storage.com%2Fimage-6TJq3TblGrgJLKvMLFj3N2YcDEXG2A.png&w=500&q=75"
-                                                            alt="" />
-                                                        <div className="flex flex-col space-y-1 truncate flex-1">
-                                                            <span className="truncate text-sm tracking-wide font-medium">Yann's Space</span>
-                                                            <div className="text-xs text-muted-foreground">0 <span className="lowercase">contenu</span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div className="flex flex-row items-center gap-2">
-                                                        {/* <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-ellipsis w-3.5 h-3.5 flex-shrink-0 opacity-100 xl:opacity-0 group-hover:opacity-100 text-primary" type="button" id="radix-_r_u9_" aria-haspopup="menu" aria-expanded="false" data-state="closed"><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle><circle cx="5" cy="12" r="1"></circle></svg> */}
-                                                        <MenuWithIcons />
-                                                    </div>
-                                                </div>
-                                            </span>
-                                            <span>
-                                                <div className="group w-full text-primary/80 hover:text-primary flex flex-row justify-between items-center p-3 rounded-2xl border shadow-[0_4px_10px_rgba(0,0,0,0.02)] hover:dark:border-neutral-700/40 bg-white dark:bg-neutral-800/50 cursor-pointer transition-all duration-200">
-                                                    <div className="flex flex-row space-x-3 items-center flex-1 truncate">
-                                                        {/* <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-box flex-shrink-0 h-4 w-4" aria-hidden="true"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"></path><path d="m3.3 7 8.7 5 8.7-5"></path><path d="M12 22V12"></path></svg> */}
-                                                        {/* <FolderClosed
-                                                            className="cursor-pointer"
-                                                            size={16}
-                                                        /> */}
-                                                        <img width={50}
-                                                            src="https://www.thiings.co/_next/image?url=https%3A%2F%2Flftz25oez4aqbxpq.public.blob.vercel-storage.com%2Fimage-6TJq3TblGrgJLKvMLFj3N2YcDEXG2A.png&w=500&q=75"
-                                                            alt="" />
-                                                        <div className="flex flex-col space-y-1 truncate flex-1"><span className="truncate text-sm tracking-wide font-medium">Espace sans titre</span>
-                                                            <div className="text-xs text-muted-foreground">0 <span className="lowercase">contenu</span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div className="flex flex-row items-center gap-2">
-                                                        {/* <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-ellipsis w-3.5 h-3.5 flex-shrink-0 opacity-100 xl:opacity-0 group-hover:opacity-100 text-primary" type="button" id="radix-_r_ub_" aria-haspopup="menu" aria-expanded="false" data-state="closed"><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle><circle cx="5" cy="12" r="1"></circle></svg> */}
-                                                        <MenuWithIcons />
-                                                    </div>
-                                                </div>
-                                            </span>
-                                            {/*  */}
-                                            <ToolitpButtonCreeFolder
+                                        <div onClick={() => setFolderChange(!folderChange)} className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4 py-1">
+                                            {
+                                                DocumentSelect.map((item) => {
+                                                    return (
+                                                        <motion.div className=""
+                                                            initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.7 }}
+                                                        >
+                                                            <span>
+                                                                <div className="group w-full text-primary/80 hover:text-primary flex flex-row justify-between items-center p-3 rounded-2xl border shadow-[0_4px_10px_rgba(0,0,0,0.02)] hover:dark:border-neutral-700/40 bg-white dark:bg-neutral-800/50 cursor-pointer transition-all duration-200">
+                                                                    <div className="flex flex-row space-x-3 items-center flex-1 truncate">
+                                                                        <img width={50}
+                                                                            src="https://www.thiings.co/_next/image?url=https%3A%2F%2Flftz25oez4aqbxpq.public.blob.vercel-storage.com%2Fimage-6TJq3TblGrgJLKvMLFj3N2YcDEXG2A.png&w=500&q=75"
+                                                                            alt="" />
+                                                                        <div className="flex flex-col space-y-1 truncate flex-1">
+                                                                            <span className="truncate text-sm tracking-wide font-medium"> 
+                                                                                {
+                                                                                    item.name
+                                                                                }
+                                                                            </span>
+                                                                            <div className="text-xs text-muted-foreground">
+                                                                                { item.contenu}<span className="lowercase"> contenu</span>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div className="flex flex-row items-center gap-2">
+                                                                        <MenuWithIcons />
+                                                                    </div>
+                                                                </div>
+                                                            </span>
+                                                        </motion.div>
+                                                    )
+                                                })
+                                            }
+                                            < ToolitpButtonCreeFolder
                                             />
                                         </div>
                                     </div>
