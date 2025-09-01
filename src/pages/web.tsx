@@ -22,7 +22,6 @@ export default function BolstSecurePage() {
                     className="flex flex-col items-center justify-center min-h-[500px] bg-white px-4 text-center gap-6"
                     initial="hidden"
                     animate="visible"
-                    // variants={fadeUp}
                     transition={{ duration: 0.8 }}
                 >
                     <span className="text-xs text-gray-400 uppercase tracking-widest bg-gray-100 px-2 py-1 rounded-full">

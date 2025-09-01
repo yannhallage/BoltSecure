@@ -39,7 +39,8 @@ const LandingPage = () => {
                 </span>
 
                 <h1 className="text-4xl sm:text-5xl font-bold text-black">
-                    <TextGenerateEffectDemo text={'Secure your passwords, effortlessly'} />
+                    <TextGenerateEffectDemo
+                        text={'Sécurisez vos mots de passe, sans effort'} />
                 </h1>
 
                 <motion.p
@@ -48,19 +49,19 @@ const LandingPage = () => {
                     animate={{ opacity: 1 }}
                     transition={{ delay: 0.5, duration: 1 }}
                 >
-                    Store, generate, and manage your passwords safely in one place. Fast, encrypted, and accessible anywhere.
+                    Stockez, générez et gérez vos mots de passe en toute sécurité, en un seul endroit. Rapide, chiffré et accessible partout.
                 </motion.p>
 
                 <motion.div className="flex gap-4 mt-4" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.7 }}>
                     <Button className="bg-white border rounded-full border-gray-300 text-gray-800 hover:bg-gray-100">
-                        See features
+                        Voir les fonctionnalités
                     </Button>
-                    <Button className="bg-black rounded-full text-white hover:bg-gray-900"
+                    <Button className="rounded-full text-white bg-[#112E70] cursor-pointer"
                         onClick={() => {
                             navigate("/Signin");
                         }}
                     >
-                        Get Started
+                        Commencer
                     </Button>
                 </motion.div>
 
@@ -84,15 +85,15 @@ const LandingPage = () => {
                 variants={fadeUp}
                 transition={{ duration: 0.8 }}
             >
-                <h2 className="text-3xl font-bold text-center mb-12">Features that make your life easier</h2>
+                <h2 className="text-3xl font-bold text-center mb-12">Des fonctionnalités qui vous simplifient la vie</h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
                     {[
-                        { title: "Password Generator", desc: "Generate strong and unique passwords instantly for all your accounts." },
-                        { title: "Secure Storage", desc: "All your passwords are encrypted and safely stored in the cloud." },
-                        { title: "Autofill", desc: "Automatically fill login forms and save time across devices and browsers." },
-                        { title: "Secure Sharing", desc: "Share passwords with team members safely without exposing them in plain text." },
-                        { title: "Cross-Device Access", desc: "Access your passwords on desktop, mobile, or tablet seamlessly." },
-                        { title: "Security Alerts", desc: "Get notified if any of your passwords are compromised online." },
+                        { title: "Générateur de mot de passe", desc: "Générez instantanément des mots de passe forts et uniques pour tous vos comptes." },
+                        { title: "Stockage sécurisé", desc: "Tous vos mots de passe sont cryptés et stockés en toute sécurité dans le cloud." },
+                        { title: "Remplissage automatique", desc: "Remplissez automatiquement les formulaires de connexion et gagnez du temps sur tous les appareils et navigateurs." },
+                        { title: "Partage sécurisé", desc: "Partagez les mots de passe avec les membres de l’équipe en toute sécurité sans les exposer en texte clair." },
+                        { title: "Accès multi-appareils", desc: "Accédez à vos mots de passe sur ordinateur, mobile ou tablette en toute transparence. "},
+                        { title: "Alertes de sécurité", desc: "Soyez averti si l’un de vos mots de passe est compromis en ligne." },
                     ].map((feature, i) => (
                         <motion.div
                             key={i}
@@ -130,12 +131,12 @@ const LandingPage = () => {
                     />
                 </motion.div>
                 <motion.div className="lg:w-1/2 flex flex-col gap-4" initial={{ opacity: 0, x: 50 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.8 }}>
-                    <h2 className="text-3xl font-bold">Top-notch Security</h2>
+                    <h2 className="text-3xl font-bold">Sécurité de premier ordre</h2>
                     <p className="text-gray-600">
-                        We use AES-256 encryption and zero-knowledge architecture. Your master password never leaves your device.
+                        Nous utilisons le chiffrement AES-256 et une architecture à connaissance nulle. Votre mot de passe principal reste toujours sur votre appareil.
                     </p>
-                    <Button className="bg-black text-white rounded-full w-fit mt-4 hover:bg-gray-900">
-                        Learn More
+                    <Button className="bg-[#112E70] cursor-pointer text-white rounded-full w-fit mt-4 hover:bg-gray-900">
+                        En savoir plus
                     </Button>
                 </motion.div>
             </motion.section>
