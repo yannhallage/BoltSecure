@@ -29,7 +29,8 @@ interface AddPasswordProps {
   onOpenChange: (open: boolean) => void
 }
 
-export default function AddPassword({ open, onOpenChange }: AddPasswordProps) {
+export default function
+  AddPassword({ open, onOpenChange }: AddPasswordProps) {
   const [title, setTitle] = useState("")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")

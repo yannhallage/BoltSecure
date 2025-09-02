@@ -1,3 +1,4 @@
+import { Trash, CircleArrowOutUpRight } from 'lucide-react';
 
 import {
   Table,
@@ -133,7 +134,7 @@ export default function TableExample() {
 export function TableExampleForDocuments() {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2}}
+      initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}
     >
       <Table>
         <TableHeader>
@@ -143,6 +144,7 @@ export function TableExampleForDocuments() {
             <TableHead>Location</TableHead>
             <TableHead>Status</TableHead>
             <TableHead className="text-right">Balance</TableHead>
+            <TableHead>Effectuer</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -170,6 +172,18 @@ export function TableExampleForDocuments() {
                 <TableCell>{item.location}</TableCell>
                 <TableCell>{item.status}</TableCell>
                 <TableCell className="text-right">{item.balance}</TableCell>
+                <TableCell className="">
+                  <div className='flex justify-center gap-2'>
+                    <Trash
+                      size={16}
+                      className="cursor-pointer hover:text-red-500"
+                    />
+                    <CircleArrowOutUpRight
+                      size={16}
+                      className="cursor-pointer hover:text-red-500"
+                    />
+                  </div>
+                </TableCell>
               </TableRow>
             ))
           ) : (

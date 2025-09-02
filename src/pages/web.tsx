@@ -6,11 +6,13 @@ import TableExample, { TableExampleForDocuments } from "@/components/TableExampl
 // import NavbarComponentLanding from "@/components/pages/Navbar";
 import NavbarApp from "@/components/pages/app/navbarApp";
 import { Settings, Trash2, Download } from 'lucide-react';
+
 import ToolitpPassword, { ToolitpCreditCards, ToolitpPasskeys, ToolitpButtonCreeFolder } from "@/components/comp-357";
 import MenuWithIcons from "@/components/MenuWithIcons";
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
+// import { Button } from "@/components/ui/button";
 import { DropdownMenuDemo } from "@/components/pages/app/DropdownMenuDemo";
+import SettingsDialog from "@/components/pages/app/SettingsDialog";
 
 
 export default function BolstSecurePage() {
@@ -58,7 +60,7 @@ export default function BolstSecurePage() {
                         animate={{ opacity: 1 }}
                         transition={{ delay: 0.5, duration: 1 }}
                     >
-                        Store, generate, and manage your passwords safely in one place. Fast, encrypted, and accessible anywhere.
+                        Stockez, générez et gérez vos mots de passe en toute sécurité en un seul endroit. Rapide, crypté et accessible partout.
                     </motion.p>
 
                     <motion.div className="flex gap-4"
@@ -174,7 +176,7 @@ export default function BolstSecurePage() {
                     </motion.div>
                 </motion.section>
 
-                <motion.section className="sm:px-10 lg:px-24 xl:px-36 w-full relative"
+                <motion.section className="lg:px-24 xl:px-36 w-full relative"
                 >
                     <motion.div className="mb-6"
                         initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.7 }}
