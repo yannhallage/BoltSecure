@@ -3,11 +3,24 @@
 import { useToast } from "@/hooks/use-toast"
 import { ToastAction } from "@/components/ui/toast"
 import { Button } from "@/components/ui/button"
+
 import { Input } from "@/components/ui/input"
 import { ClipLoader } from 'react-spinners';
 import { useState } from "react"
 import { useNavigate } from "react-router";
-// import { ToastProvider, ToastViewport } from "@/components/ui/toast"
+import { jwtDecode } from "jwt-decode";
+
+import { GoogleLogin } from "@react-oauth/google";
+
+
+interface GoogleJwtPayload {
+    email: string;
+    name: string;
+    picture: string;
+    sub: string;   // identifiant unique Google
+    exp: number;   // expiration (en secondes)
+    iat: number;   // issued at
+}
 
 const Register = () => {
     const { toast } = useToast()
@@ -91,6 +104,35 @@ const Register = () => {
             navigate('/web')
         }, 2000)
     }
+
+    const handleGoogleSuccess = (credentialResponse: any) => {
+        if (!credentialResponse.credential) return;
+
+        try {
+            // Décoder le JWT
+            const decoded = jwtDecode<GoogleJwtPayload>(credentialResponse.credential);
+
+            // Vérifier l’expiration
+            if (decoded.exp * 1000 < Date.now()) {
+                console.error("❌ Token expiré !");
+                return;
+            }
+
+            localStorage.setItem("auth_token", credentialResponse.credential);
+            localStorage.setItem("auth_user", JSON.stringify(decoded));
+
+            console.log("✅ Connexion réussie !");
+            console.log("Utilisateur :", decoded.email, decoded.name);
+        } catch (error) {
+            console.error("Erreur lors du décodage du token :", error);
+        }
+    };
+
+    const handleGoogleError = () => {
+        console.error("❌ Erreur Google Login");
+    };
+
+
     return (
         <div>
             <div className="bg-gray-900">
@@ -151,14 +193,15 @@ const Register = () => {
                                         </div>
 
                                         {/* Connexion avec Google */}
-                                        <Button className="items-center cursor-pointer bg-white text-black hover:bg-white hover:opacity-70 justify-center whitespace-nowrap font-medium" type="button">
+                                        {/* <Button className="items-center cursor-pointer bg-white text-black hover:bg-white hover:opacity-70 justify-center whitespace-nowrap font-medium" type="button">
                                             <svg stroke="currentColor" fill="currentColor" stroke-width="0" version="1.1" x="0px" y="0px" viewBox="0 0 48 48" enable-background="new 0 0 48 48" className="flex-shrink-0" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path fill="#FFC107" d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12
-                                c0-6.627,5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24
-                                c0,11.045,8.955,20,20,20c11.045,0,20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z"></path><path fill="#FF3D00" d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657
-                                C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z"></path><path fill="#4CAF50" d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36
-                                c-5.202,0-9.619-3.317-11.283-7.946l-6.522,5.025C9.505,39.556,16.227,44,24,44z"></path><path fill="#1976D2" d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571
-                                c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238C36.971,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z"></path></svg><span>Continuer avec Google</span>
-                                        </Button>
+                                            c0-6.627,5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24
+                                            c0,11.045,8.955,20,20,20c11.045,0,20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z"></path><path fill="#FF3D00" d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657
+                                            C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z"></path><path fill="#4CAF50" d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36
+                                            c-5.202,0-9.619-3.317-11.283-7.946l-6.522,5.025C9.505,39.556,16.227,44,24,44z"></path><path fill="#1976D2" d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571
+                                            c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238C36.971,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z"></path></svg><span>Continuer avec Google</span>
+                                        </Button> */}
+                                        <GoogleLogin onSuccess={handleGoogleSuccess} onError={handleGoogleError} />
                                         <p className="text-sm text-gray-400 text-center">
                                             Pas de compte ?{' '}
                                             <span className="font-semibold cursor-pointer text-white hover:text-gray-100" onClick={() => {

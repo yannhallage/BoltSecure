@@ -9,7 +9,7 @@ import { TextGenerateEffectDemo } from "../components/pages/TextGenerateEffectDe
 import 'animate.css';
 import HeaderSection from "../components/pages/HeaderSection";
 import SectionOther from "../components/pages/SectionOther";
-
+import { useAuth0 } from "@auth0/auth0-react";
 import SectionLogoCloud from "../components/pages/SectionLogoCloud";
 import { InfiniteMovingCardsDemo } from "../components/pages/InfiniteMovingCardsDemo";
 
@@ -20,6 +20,11 @@ const fadeUp = {
 
 const LandingPage = () => {
     const navigate = useNavigate();
+    const { isAuthenticated, user } = useAuth0();
+
+    if (isAuthenticated) {
+        console.log(user)
+    }
     return (
         <>
             <header>
@@ -92,7 +97,7 @@ const LandingPage = () => {
                         { title: "Stockage sécurisé", desc: "Tous vos mots de passe sont cryptés et stockés en toute sécurité dans le cloud." },
                         { title: "Remplissage automatique", desc: "Remplissez automatiquement les formulaires de connexion et gagnez du temps sur tous les appareils et navigateurs." },
                         { title: "Partage sécurisé", desc: "Partagez les mots de passe avec les membres de l’équipe en toute sécurité sans les exposer en texte clair." },
-                        { title: "Accès multi-appareils", desc: "Accédez à vos mots de passe sur ordinateur, mobile ou tablette en toute transparence. "},
+                        { title: "Accès multi-appareils", desc: "Accédez à vos mots de passe sur ordinateur, mobile ou tablette en toute transparence. " },
                         { title: "Alertes de sécurité", desc: "Soyez averti si l’un de vos mots de passe est compromis en ligne." },
                     ].map((feature, i) => (
                         <motion.div
