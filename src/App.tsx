@@ -5,6 +5,9 @@ import LandingPage from './pages/LandingPage';
 import Signin from './pages/Signin';
 import PersonalInfo from './pages/personal-info';
 import BolstSecurePage from './pages/web';
+import Register from './pages/register';
+import { ToastProvider, ToastViewport } from "@/components/ui/toast"
+
 
 function App() {
   return (
@@ -18,7 +21,13 @@ function App() {
           <main className="flex-1">
             <Routes>
               <Route path="/" element={<LandingPage />} />
-              <Route path="/Signin" element={<Signin />} />
+              <Route path="/auth" element={<Signin />} />
+              <Route path="/register" element={
+                <ToastProvider>
+                  <Register />
+                  <ToastViewport />
+                </ToastProvider>
+              } />
               <Route path="/personal-info" element={<PersonalInfo />} />
               <Route path="/web" element={<BolstSecurePage />} />
             </Routes>
