@@ -1,5 +1,10 @@
 import { useState } from "react";
+import { RegisterService } from "@/services/register/registerService";
+import type { IAuthMasterKeyInput } from "@/validations/register.zod";
 import { type UseMasterKeyResult } from "../../types/register/general.types";
+import { encrypt } from "@/lib/url/crypto";
+import { decrypt } from "@/lib/url/crypto";
+
 
 
 export const useMasterKey = (initialValue = ""): UseMasterKeyResult => {
@@ -8,13 +13,15 @@ export const useMasterKey = (initialValue = ""): UseMasterKeyResult => {
     const [loadingMasterKey, setLoadingMasterKey] = useState(false);
     const [errorMasterKey, setErrorMasterKey] = useState<string | null>(null);
 
+    // Vérifie si la master key est valide
     const checkValid = (val: string) => {
-        setValidMasterKey(val.length > 6)
+        setValidMasterKey(val.length > 6);
     };
 
+    // Soumission de la master key
     const submitMasterKey = async (): Promise<boolean> => {
         if (!validMasterKey) {
-            setErrorMasterKey("Le mot de passe master key doit etre plus de 6 caractères");
+            setErrorMasterKey("La master key doit contenir plus de 6 caractères");
             return false;
         }
 
@@ -22,21 +29,34 @@ export const useMasterKey = (initialValue = ""): UseMasterKeyResult => {
             setLoadingMasterKey(true);
             setErrorMasterKey(null);
 
-            // 🔥 Appel API simulé
-            // const res = await fetch("http://localhost:2001/api/verify-otp", {
-            //     method: "POST",
-            //     headers: { "Content-Type": "application/json" },
-            //     body: JSON.stringify({ otp: value }),
-            // });
+            const encryptedEmail = localStorage.getItem('xxml');
+            const encryptedOtp = localStorage.getItem('xxop');
+            const encryptedPassword = localStorage.getItem('xxpp');
+            if (!encryptedEmail || !encryptedOtp || !encryptedPassword) {
+                alert("Email introuvable");
+                return false;
+            }
 
-            // if (!res.ok) throw new Error("Erreur API");
+            const email = decrypt(encryptedEmail);
+            const opt = decrypt(encryptedOtp);
+            const motdepasse = decrypt(encryptedPassword);
 
-            // const data = await res.json();
-            const data = true
-            if (data) {
+            const payload: IAuthMasterKeyInput = {
+                masterKey: valueMasterKey,
+                email,
+                otp: opt,
+                motDePasse: motdepasse
+            };
+
+            const res = await RegisterService.MasterKey(payload);
+
+            const encryptedMasterKey = encrypt(valueMasterKey)
+            localStorage.setItem('xxxmm', encryptedMasterKey);
+
+            if ((res as any).success ?? true) { 
                 return true;
             } else {
-                setErrorMasterKey("MasterKey invalide");
+                setErrorMasterKey((res as any).message || "MasterKey invalide");
                 return false;
             }
         } catch (err: any) {
@@ -47,11 +67,18 @@ export const useMasterKey = (initialValue = ""): UseMasterKeyResult => {
         }
     };
 
-    // À chaque changement de valeur, on vérifie la validité
+    // À chaque changement, on valide la master key
     const handleChange = (val: string) => {
         setValueMasterKey(val);
         checkValid(val);
     };
 
-    return { valueMasterKey, validMasterKey, loadingMasterKey, errorMasterKey, setValueMasterKey: handleChange, submitMasterKey };
+    return {
+        valueMasterKey,
+        validMasterKey,
+        loadingMasterKey,
+        errorMasterKey,
+        setValueMasterKey: handleChange,
+        submitMasterKey,
+    };
 };

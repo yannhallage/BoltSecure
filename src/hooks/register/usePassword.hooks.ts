@@ -1,20 +1,23 @@
 import { useState } from "react";
-import { type UsePasswordResult } from "../../types/register/general.types";
+import { RegisterService } from "@/services/register/registerService";
+import type { IAuthmotDePasseInput } from "@/validations/register.zod";
+import { encrypt } from "@/lib/url/crypto";
+import { decrypt } from "@/lib/url/crypto";
 
 
-export const usePassword = (initialValue = ""): UsePasswordResult => {
+export const usePassword = (initialValue = "") => {
     const [valuePassword, setValuePassword] = useState(initialValue);
     const [validPassword, setValidPassword] = useState(false);
     const [loadingPassword, setLoadingPassword] = useState(false);
     const [errorPassword, setErrorPassword] = useState<string | null>(null);
 
     const checkValid = (val: string) => {
-        setValidPassword(val.length > 6)
+        setValidPassword(val.length > 6);
     };
 
     const submitPassword = async (): Promise<boolean> => {
         if (!validPassword) {
-            setErrorPassword("Le mot de passe doit etre plus de 6 caractères");
+            setErrorPassword("Le mot de passe doit être plus de 6 caractères");
             return false;
         }
 
@@ -22,36 +25,49 @@ export const usePassword = (initialValue = ""): UsePasswordResult => {
             setLoadingPassword(true);
             setErrorPassword(null);
 
-            // 🔥 Appel API simulé
-            // const res = await fetch("http://localhost:2001/api/verify-otp", {
-            //     method: "POST",
-            //     headers: { "Content-Type": "application/json" },
-            //     body: JSON.stringify({ otp: value }),
-            // });
+            const encryptedEmail = localStorage.getItem('xxml');
+            const encryptedOtp = localStorage.getItem('xxop');
+            if (!encryptedEmail || !encryptedOtp) {
+                alert("Email introuvable");
+                return false;
+            }
 
-            // if (!res.ok) throw new Error("Erreur API");
+            const email = decrypt(encryptedEmail);
+            const opt = decrypt(encryptedOtp);
 
-            // const data = await res.json();
-            const data = true
-            if (data) {
+            const payload: IAuthmotDePasseInput = { motDePasse: valuePassword, email, otp: opt };
+
+            const res = await RegisterService.Password(payload);
+
+            const encryptedPassword = encrypt(valuePassword)
+            localStorage.setItem('xxxpp', encryptedPassword);
+            
+            if ((res as any).success ?? true) {
                 return true;
             } else {
-                setErrorPassword("Password invalide");
+                setErrorPassword((res as any).message || "Mot de passe invalide");
                 return false;
             }
         } catch (err: any) {
-            setErrorPassword(err.message || "Erreur inconnue");
+            setErrorPassword(err?.message || "Erreur inconnue");
             return false;
         } finally {
             setLoadingPassword(false);
         }
     };
 
-    // À chaque changement de valeur, on vérifie la validité
+    // Gestion du changement de valeur
     const handleChange = (val: string) => {
         setValuePassword(val);
         checkValid(val);
     };
 
-    return { valuePassword, validPassword, loadingPassword, errorPassword, setValuePassword: handleChange, submitPassword };
+    return {
+        valuePassword,
+        validPassword,
+        loadingPassword,
+        errorPassword,
+        setValuePassword: handleChange,
+        submitPassword,
+    };
 };

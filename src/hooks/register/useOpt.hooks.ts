@@ -1,6 +1,9 @@
 import { useState } from "react";
-import { type UseOtpResult } from "../../types/register/general.types";
-
+import { RegisterService } from "@/services/register/registerService";
+import type { UseOtpResult } from "../../types/register/general.types";
+import type { IAuthOtpVerificationInput } from "@/validations/register.zod";
+import { encrypt } from "@/lib/url/crypto";
+import { decrypt } from "@/lib/url/crypto";
 
 export const useOtpCode = (initialValue = ""): UseOtpResult => {
     const [value, setValue] = useState(initialValue);
@@ -9,7 +12,7 @@ export const useOtpCode = (initialValue = ""): UseOtpResult => {
     const [error, setError] = useState<string | null>(null);
 
     const checkValid = (val: string) => {
-        setValid(val.length === 6)
+        setValid(/^\d{6}$/.test(val));
     };
 
     const submitOtp = async (): Promise<boolean> => {
@@ -22,32 +25,38 @@ export const useOtpCode = (initialValue = ""): UseOtpResult => {
             setLoading(true);
             setError(null);
 
-            // 🔥 Appel API simulé
-            // const res = await fetch("http://localhost:2001/api/verify-otp", {
-            //     method: "POST",
-            //     headers: { "Content-Type": "application/json" },
-            //     body: JSON.stringify({ otp: value }),
-            // });
+            const encryptedEmail = localStorage.getItem('xxml');
+            if (!encryptedEmail) {
+                setError("Email introuvable");
+                return false;
+            }
+            const email = decrypt(encryptedEmail);
 
-            // if (!res.ok) throw new Error("Erreur API");
+            const payload: IAuthOtpVerificationInput = {
+                email,
+                otp: value,
+            };
+            
+            const encryptedOtp = encrypt(value);
+            localStorage.setItem('xxxop', encryptedOtp);
 
-            // const data = await res.json();
-            const data = true
-            if (data) {
+            const res = await RegisterService.verifyOtp(payload);
+
+            if ((res as any).success) {
                 return true;
             } else {
-                setError("Code OTP invalide");
+                setError((res as any).message || "Code OTP invalide");
                 return false;
             }
         } catch (err: any) {
-            setError(err.message || "Erreur inconnue");
+            setError(err?.message || "Erreur inconnue");
             return false;
         } finally {
             setLoading(false);
         }
+
     };
 
-    // À chaque changement de valeur, on vérifie la validité
     const handleChange = (val: string) => {
         setValue(val);
         checkValid(val);

@@ -1,5 +1,12 @@
 import { useState } from "react";
-import { type UseEmailResult } from "../../types/register/general.types";
+import { RegisterService } from "@/services/register/registerService";
+import type { UseEmailResult } from "../../types/register/general.types";
+import { encrypt } from "@/lib/url/crypto";
+
+
+export interface AuthEmailResponse {
+    message: string;
+}
 
 
 export const useEmail = (initialValue = ""): UseEmailResult => {
@@ -9,12 +16,14 @@ export const useEmail = (initialValue = ""): UseEmailResult => {
     const [errorEmail, setErrorEmail] = useState<string | null>(null);
 
     const checkValid = (val: string) => {
-        setValidEmail(val.length > 6)
+        // simple validation longueur + regex basique email
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        setValidEmail(val.length > 6 && emailRegex.test(val));
     };
 
     const submitEmail = async (): Promise<boolean> => {
         if (!validEmail) {
-            setErrorEmail("Le mail doit contenir plus de 6 caractères");
+            setErrorEmail("Le mail est invalide ou trop court");
             return false;
         }
 
@@ -22,21 +31,15 @@ export const useEmail = (initialValue = ""): UseEmailResult => {
             setLoadingEmail(true);
             setErrorEmail(null);
 
-            // 🔥 Appel API simulé
-            // const res = await fetch("http://localhost:2001/api/verify-otp", {
-            //     method: "POST",
-            //     headers: { "Content-Type": "application/json" },
-            //     body: JSON.stringify({ otp: value }),
-            // });
+            const res: AuthEmailResponse = await RegisterService.Email({ email: valueEmail });
 
-            // if (!res.ok) throw new Error("Erreur API");
-
-            // const data = await res.json();
-            const data = true
-            if (data) {
+            if (res.message) {
+                console.log(res.message); // "OTP envoyé avec succès."
+                const encryptedEmail = encrypt(valueEmail);
+                localStorage.setItem('xxxml', encryptedEmail);
                 return true;
             } else {
-                setErrorEmail("email invalide");
+                setErrorEmail("Email non valide");
                 return false;
             }
         } catch (err: any) {
@@ -47,7 +50,6 @@ export const useEmail = (initialValue = ""): UseEmailResult => {
         }
     };
 
-    // À chaque changement de valeur, on vérifie la validité
     const handleChange = (val: string) => {
         setValueEmail(val);
         checkValid(val);
