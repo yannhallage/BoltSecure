@@ -6,47 +6,88 @@ import { Button } from "@/components/ui/button"
 
 import { Input } from "@/components/ui/input"
 import { ClipLoader } from 'react-spinners';
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useNavigate } from "react-router";
-import { jwtDecode } from "jwt-decode";
 
 import { GoogleLogin } from "@react-oauth/google";
+import { useGoogleAuth } from "@/hooks/register/useGoogle.hooks"
+import { useOtpCode } from "@/hooks/register/useOpt.hooks"
+import { useEmail } from "@/hooks/register/useEmail.hooks"
+import { usePassword } from "@/hooks/register/usePassword.hooks"
+import { useMasterKey } from "@/hooks/register/useMasterKey.hooks"
 
-
-interface GoogleJwtPayload {
-    email: string;
-    name: string;
-    picture: string;
-    sub: string;   // identifiant unique Google
-    exp: number;   // expiration (en secondes)
-    iat: number;   // issued at
-}
 
 const Register = () => {
     const { toast } = useToast()
     const [children, setChildren] = useState('CreerCompteAvecEmail')
-    const [textChange, setTextChange] = useState('Bienvenue à nouveau')
+    const [textChange, setTextChange] = useState('Obtenez un Compte')
+    const [buttonGoogle, setButtonGoogle] = useState('Continuer avec Google')
     const [text, setText] = useState("Obtenez un compte pour vous connecter à BoltSecure.")
     const [loadingSpinner, setLoadingSpinner] = useState(false)
     const [btnDisabled, setBtnDisabled] = useState(false)
-    const [email, setEmail] = useState<string>('')
-    const [optCode, setOptCode] = useState<string>('')
-    const [motDepasse, setMotDepasse] = useState<string>('')
-    const [masterKey, setMasterKey] = useState<string>('')
+    const [mailDisabled, setMailDisabled] = useState(false)
+    // const [email, setEmail] = useState<string>('')
+    // const [optCode, setOptCode] = useState<string>('')
+    // const [motDepasse, setMotDepasse] = useState<string>('')
+    // const [masterKey, setMasterKey] = useState<string>('')
     const navigate = useNavigate()
 
-    const handclickEmail = () => {
+    const { user,
+        loginWithGoogle } = useGoogleAuth();
+    const { value,
+        valid,
+        loading,
+        error,
+        setValue,
+        submitOtp
 
-        if (email) {
-            setBtnDisabled(true)
-            setLoadingSpinner(true)
-            setTimeout(() => {
-                setChildren('CreerCompteAvecOtp')
-                setTextChange("le code Otp pour continuez")
-                setText(`le code de confirmation est envoyé à votre email `)
-                setLoadingSpinner(false)
-                setBtnDisabled(false)
-            }, 2000)
+    } = useOtpCode("");
+    const { valueEmail,
+        validEmail,
+        loadingEmail
+        , errorEmail
+        , setValueEmail,
+        submitEmail
+
+    } = useEmail("");
+    const { valuePassword,
+        validPassword,
+        loadingPassword,
+        errorPassword,
+        setValuePassword,
+        submitPassword
+
+    } = usePassword("");
+    const { valueMasterKey,
+        validMasterKey,
+        loadingMasterKey,
+        errorMasterKey,
+        setValueMasterKey,
+        submitMasterKey
+
+    } = useMasterKey("");
+
+    const handclickEmail = async () => {
+        if (valueEmail) {
+            console.log(valueEmail)
+            const success = await submitEmail();
+
+            if (success) {
+                setBtnDisabled(true)
+                setLoadingSpinner(true)
+                setMailDisabled(true)
+                setTimeout(() => {
+                    setChildren('CreerCompteAvecOtp')
+                    setTextChange("le code Otp pour continuez")
+                    setText(`le code de confirmation est envoyé à votre email `)
+                    setLoadingSpinner(false)
+                    setBtnDisabled(false)
+                }, 2000)
+            }
+
+            if (errorEmail) {
+                console.log(errorEmail)
+            }
         } else {
             toast({
                 title: "We couldn't complete your request!",
@@ -56,17 +97,28 @@ const Register = () => {
         }
     }
 
-    const handclickPassword = () => {
-        if (motDepasse) {
-            setBtnDisabled(true)
-            setLoadingSpinner(true)
-            setTimeout(() => {
-                setChildren('motDepasse')
-                setTextChange("Creer un mot de passe")
-                setText(`entrez un mot de passe securisé pour votre compte `)
-                setLoadingSpinner(false)
-                setBtnDisabled(false)
-            }, 2000);
+    const handclickOtpCode = async () => {
+
+        if (value) {
+            console.log(value)
+            const success = await submitOtp();
+
+            if (success) {
+                console.log("OTP correct, continuer...");
+                setBtnDisabled(true)
+                setLoadingSpinner(true)
+                setTimeout(() => {
+                    setChildren('motDepasse')
+                    setTextChange("Creer un mot de passe")
+                    setText(`entrez un mot de passe securisé pour votre compte `)
+                    setLoadingSpinner(false)
+                    setBtnDisabled(false)
+                }, 2000)
+            }
+
+            if (error) {
+                console.log(error)
+            }
         } else {
             toast({
                 title: "We couldn't complete your request!",
@@ -76,17 +128,25 @@ const Register = () => {
         }
     }
 
-    const handclickMasterKey = () => {
-        if (masterKey) {
-            setBtnDisabled(true)
-            setLoadingSpinner(true)
-            setTimeout(() => {
-                setChildren('')
-                setTextChange("Creer un MasterKey")
-                setText("une clé d'acces est neccessaire pour vous connecter à BoltSecure.")
-                setBtnDisabled(false)
-                setLoadingSpinner(false)
-            }, 2000)
+    const handclickPassword = async () => {
+        if (valuePassword) {
+            console.log(valuePassword)
+            const success = await submitPassword();
+
+            if (success) {
+                setBtnDisabled(true)
+                setLoadingSpinner(true)
+                setTimeout(() => {
+                    setChildren('')
+                    setTextChange("Creer un MasterKey")
+                    setText("une clé d'acces est neccessaire pour vous connecter à BoltSecure.")
+                    setLoadingSpinner(false)
+                    setBtnDisabled(false)
+                }, 2000);
+            }
+            if (errorPassword) {
+                console.log(errorPassword)
+            }
         } else {
             toast({
                 title: "We couldn't complete your request!",
@@ -95,6 +155,34 @@ const Register = () => {
             })
         }
     }
+
+    const handclickMasterKey = async () => {
+        if (valueMasterKey) {
+            console.log(valueMasterKey)
+
+            const success = await submitMasterKey();
+            if (success) {
+                setBtnDisabled(true)
+                setLoadingSpinner(true)
+                setTimeout(() => {
+                    setChildren('')
+                    setBtnDisabled(false)
+                    setLoadingSpinner(false)
+                    handclickAccount()
+                }, 2000)
+            }
+            if (errorMasterKey) {
+                console.log(errorMasterKey)
+            }
+        } else {
+            toast({
+                title: "We couldn't complete your request!",
+                description: "There was a problem with your request.",
+                action: <ToastAction altText="Try again">Try again</ToastAction>,
+            })
+        }
+    }
+
     const handclickAccount = () => {
         setBtnDisabled(true)
         setLoadingSpinner(true)
@@ -102,36 +190,20 @@ const Register = () => {
             setBtnDisabled(false)
             setLoadingSpinner(false)
             navigate('/web')
-        }, 2000)
+        }, 100)
     }
 
-    const handleGoogleSuccess = (credentialResponse: any) => {
-        if (!credentialResponse.credential) return;
-
-        try {
-            // Décoder le JWT
-            const decoded = jwtDecode<GoogleJwtPayload>(credentialResponse.credential);
-
-            // Vérifier l’expiration
-            if (decoded.exp * 1000 < Date.now()) {
-                console.error("❌ Token expiré !");
-                return;
-            }
-
-            localStorage.setItem("auth_token", credentialResponse.credential);
-            localStorage.setItem("auth_user", JSON.stringify(decoded));
-
-            console.log("✅ Connexion réussie !");
-            console.log("Utilisateur :", decoded.email, decoded.name);
-        } catch (error) {
-            console.error("Erreur lors du décodage du token :", error);
+    useEffect(() => {
+        if (user) {
+            setButtonGoogle(user.email)
+            setMailDisabled(true)
+            setChildren('CreerCompteAvecOtp')
         }
-    };
+    }, [user])
 
     const handleGoogleError = () => {
         console.error("❌ Erreur Google Login");
     };
-
 
     return (
         <div>
@@ -166,8 +238,8 @@ const Register = () => {
                                     <div className="mt-10 flex flex-col space-y-4 sm:mt-12">
                                         <Input
                                             type="email"
-                                            value={email}
-                                            onChange={(e) => setEmail(e.target.value)}
+                                            value={valueEmail}
+                                            onChange={(e) => setValueEmail(e.target.value)}
                                             placeholder="Email"
                                             className="w-full rounded-md border border-gray-600 bg-gray-800 px-4 py-2 text-white placeholder-gray-400 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
                                         />
@@ -201,7 +273,10 @@ const Register = () => {
                                             c-5.202,0-9.619-3.317-11.283-7.946l-6.522,5.025C9.505,39.556,16.227,44,24,44z"></path><path fill="#1976D2" d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571
                                             c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238C36.971,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z"></path></svg><span>Continuer avec Google</span>
                                         </Button> */}
-                                        <GoogleLogin onSuccess={handleGoogleSuccess} onError={handleGoogleError} />
+                                        <GoogleLogin
+                                            onSuccess={loginWithGoogle}
+                                            onError={handleGoogleError}
+                                        />
                                         <p className="text-sm text-gray-400 text-center">
                                             Pas de compte ?{' '}
                                             <span className="font-semibold cursor-pointer text-white hover:text-gray-100" onClick={() => {
@@ -219,8 +294,8 @@ const Register = () => {
                                         {/* otp code */}
                                         <Input
                                             type="text"
-                                            value={optCode}
-                                            onChange={(e) => setOptCode(e.target.value)}
+                                            value={value}
+                                            onChange={(e) => setValue(e.target.value)}
                                             placeholder="otp code"
                                             className="w-full rounded-md border border-gray-600 bg-gray-800 px-4 py-2 text-white placeholder-gray-400 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
                                         />
@@ -228,7 +303,7 @@ const Register = () => {
                                         {/* Bouton de connexion */}
                                         <Button
                                             className="w-full rounded-md px-5 py-2.5 text-sm cursor-pointer font-semibold text-white hover:opacity-70 focus-visible:outline-2 focus-visible:outline-offset-2 "
-                                            onClick={handclickPassword}
+                                            onClick={handclickOtpCode}
                                             disabled={btnDisabled}
 
                                         >
@@ -249,13 +324,13 @@ const Register = () => {
                                         </div>
 
                                         {/* Connexion avec Google */}
-                                        <Button className="items-center cursor-pointer bg-white text-black hover:bg-white hover:opacity-70 justify-center whitespace-nowrap font-medium" type="button">
+                                        <Button disabled={mailDisabled} className="items-center cursor-pointer bg-white text-black hover:bg-white hover:opacity-70 justify-center whitespace-nowrap font-medium" type="button">
                                             <svg stroke="currentColor" fill="currentColor" stroke-width="0" version="1.1" x="0px" y="0px" viewBox="0 0 48 48" enable-background="new 0 0 48 48" className="flex-shrink-0" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path fill="#FFC107" d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12
                                                 c0-6.627,5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24
                                                 c0,11.045,8.955,20,20,20c11.045,0,20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z"></path><path fill="#FF3D00" d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657
                                                 C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z"></path><path fill="#4CAF50" d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36
                                                 c-5.202,0-9.619-3.317-11.283-7.946l-6.522,5.025C9.505,39.556,16.227,44,24,44z"></path><path fill="#1976D2" d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571
-                                                c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238C36.971,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z"></path></svg><span>Continuer avec Google</span>
+                                                c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238C36.971,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z"></path></svg><span>{buttonGoogle}</span>
                                         </Button>
 
                                         {/* Lien secondaire */}
@@ -277,14 +352,14 @@ const Register = () => {
                                         <Input
                                             type="password"
                                             placeholder="mot de passe"
-                                            value={motDepasse}
-                                            onChange={(e) => setMotDepasse(e.target.value)}
+                                            value={valuePassword}
+                                            onChange={(e) => setValuePassword(e.target.value)}
                                             className="w-full rounded-md border border-gray-600 bg-gray-800 px-4 py-2 text-white placeholder-gray-400 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
                                         />
                                         {/* Bouton de connexion */}
                                         <Button
                                             className="w-full rounded-md px-5 py-2.5 text-sm cursor-pointer font-semibold text-white hover:opacity-70 focus-visible:outline-2 focus-visible:outline-offset-2 "
-                                            onClick={handclickMasterKey}
+                                            onClick={handclickPassword}
                                             disabled={btnDisabled}
                                         >
                                             {loadingSpinner ? (
@@ -304,13 +379,13 @@ const Register = () => {
                                         </div>
 
                                         {/* Connexion avec Google */}
-                                        <Button className="items-center cursor-pointer bg-white text-black hover:bg-white hover:opacity-70 justify-center whitespace-nowrap font-medium" type="button">
+                                        <Button disabled={mailDisabled} className="items-center cursor-pointer bg-white text-black hover:bg-white hover:opacity-70 justify-center whitespace-nowrap font-medium" type="button">
                                             <svg stroke="currentColor" fill="currentColor" stroke-width="0" version="1.1" x="0px" y="0px" viewBox="0 0 48 48" enable-background="new 0 0 48 48" className="flex-shrink-0" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path fill="#FFC107" d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12
                                                 c0-6.627,5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24
                                                 c0,11.045,8.955,20,20,20c11.045,0,20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z"></path><path fill="#FF3D00" d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657
                                                 C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z"></path><path fill="#4CAF50" d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36
                                                 c-5.202,0-9.619-3.317-11.283-7.946l-6.522,5.025C9.505,39.556,16.227,44,24,44z"></path><path fill="#1976D2" d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571
-                                                c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238C36.971,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z"></path></svg><span>Continuer avec Google</span>
+                                                c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238C36.971,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z"></path></svg><span>{buttonGoogle}</span>
                                         </Button>
 
                                         {/* Lien secondaire */}
@@ -326,15 +401,15 @@ const Register = () => {
                                         {/* Email */}
                                         <Input
                                             type="password"
-                                            value={masterKey}
-                                            onChange={(e) => setMasterKey(e.target.value)}
+                                            value={valueMasterKey}
+                                            onChange={(e) => setValueMasterKey(e.target.value)}
                                             placeholder="MaterKey"
                                             className="w-full rounded-md border border-gray-600 bg-gray-800 px-4 py-2 text-white placeholder-gray-400 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
                                         />
                                         {/* Bouton de connexion */}
                                         <Button
                                             className="w-full rounded-md px-5 py-2.5 text-sm cursor-pointer font-semibold text-white hover:opacity-70 focus-visible:outline-2 focus-visible:outline-offset-2 "
-                                            onClick={handclickAccount}
+                                            onClick={handclickMasterKey}
                                             disabled={btnDisabled}
                                         >
                                             {loadingSpinner ? (
@@ -354,13 +429,13 @@ const Register = () => {
                                         </div>
 
                                         {/* Connexion avec Google */}
-                                        <Button className="items-center cursor-pointer bg-white text-black hover:bg-white hover:opacity-70 justify-center whitespace-nowrap font-medium" type="button">
+                                        <Button disabled={mailDisabled} className="items-center cursor-pointer bg-white text-black hover:bg-white hover:opacity-70 justify-center whitespace-nowrap font-medium" type="button">
                                             <svg stroke="currentColor" fill="currentColor" stroke-width="0" version="1.1" x="0px" y="0px" viewBox="0 0 48 48" enable-background="new 0 0 48 48" className="flex-shrink-0" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path fill="#FFC107" d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12
                                 c0-6.627,5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24
                                 c0,11.045,8.955,20,20,20c11.045,0,20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z"></path><path fill="#FF3D00" d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657
                                 C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z"></path><path fill="#4CAF50" d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36
                                 c-5.202,0-9.619-3.317-11.283-7.946l-6.522,5.025C9.505,39.556,16.227,44,24,44z"></path><path fill="#1976D2" d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571
-                                c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238C36.971,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z"></path></svg><span>Continuer avec Google</span>
+                                c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238C36.971,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z"></path></svg><span>{buttonGoogle}</span>
                                         </Button>
 
                                         {/* Lien secondaire */}
