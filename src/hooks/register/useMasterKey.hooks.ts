@@ -29,31 +29,29 @@ export const useMasterKey = (initialValue = ""): UseMasterKeyResult => {
             setLoadingMasterKey(true);
             setErrorMasterKey(null);
 
-            const encryptedEmail = localStorage.getItem('xxml');
-            const encryptedOtp = localStorage.getItem('xxop');
-            const encryptedPassword = localStorage.getItem('xxpp');
+            const encryptedEmail = localStorage.getItem('xxxml');
+            const encryptedOtp = localStorage.getItem('xxxop');
+            const encryptedPassword = localStorage.getItem('xxxpp');
             if (!encryptedEmail || !encryptedOtp || !encryptedPassword) {
-                alert("Email introuvable");
+                alert("un problème est survenu lors de la récupération des données");
                 return false;
             }
 
             const email = decrypt(encryptedEmail);
-            const opt = decrypt(encryptedOtp);
+            const otp = decrypt(encryptedOtp);
             const motdepasse = decrypt(encryptedPassword);
 
-            const payload: IAuthMasterKeyInput = {
-                masterKey: valueMasterKey,
-                email,
-                otp: opt,
-                motDePasse: motdepasse
-            };
+            const res = await RegisterService.MasterKey(
+                email.trim(),
+                motdepasse.trim(),
+                otp.trim(),
+                valueMasterKey.trim()
+            );
 
-            const res = await RegisterService.MasterKey(payload);
-
-            const encryptedMasterKey = encrypt(valueMasterKey)
+            const encryptedMasterKey = encrypt(valueMasterKey);
             localStorage.setItem('xxxmm', encryptedMasterKey);
 
-            if ((res as any).success ?? true) { 
+            if ((res as any).success ?? true) {
                 return true;
             } else {
                 setErrorMasterKey((res as any).message || "MasterKey invalide");
@@ -66,6 +64,7 @@ export const useMasterKey = (initialValue = ""): UseMasterKeyResult => {
             setLoadingMasterKey(false);
         }
     };
+
 
     // À chaque changement, on valide la master key
     const handleChange = (val: string) => {

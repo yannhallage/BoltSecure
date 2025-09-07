@@ -2,6 +2,7 @@
 import { Http } from "@/api/http";
 import { ENDPOINTS } from "@/api/register/Endpoint";
 import type { IAuthEmailInput, IAuthmotDePasseInput, IAuthResponseUser, IAuthOtpVerificationInput, IAuthMasterKeyInput } from "@/validations/register.zod";
+import { email } from 'zod';
 
 
 export interface AuthEmailResponse {
@@ -16,10 +17,13 @@ export class RegisterService {
             method: "POST",
             body: { email, otp },
         });
-        return data as IAuthOtpVerificationInput;
+        // return data as IAuthOtpVerificationInput;
+        const user = data as IAuthResponseUser;
+        if (user) console.log('user: ', user.userId)
+        return data
     }
 
-    static async Email(email: IAuthEmailInput): Promise<AuthEmailResponse> {
+    static async Email(email: string): Promise<AuthEmailResponse> {
         const data = await Http(ENDPOINTS.email, {
             method: "POST",
             body: { email },
@@ -27,20 +31,35 @@ export class RegisterService {
         return data as AuthEmailResponse;
     }
 
-    static async Password(password: IAuthmotDePasseInput): Promise<IAuthResponseUser> {
+    static async Password( email: string, motDePasse :string,otp:string): Promise<IAuthResponseUser> {
         const data = await Http(ENDPOINTS.password, {
             method: "POST",
-            body: { password },
+            body: { 
+                email,
+                motDePasse,
+                otp,
+             },
         });
-        return data as IAuthResponseUser;
+        const user = data as IAuthResponseUser;
+        if (user) console.log('user: ', user.userId)
+        return data
     }
-    static async MasterKey(masterKey: IAuthMasterKeyInput): Promise<IAuthResponseUser> {
+    
+    static async MasterKey(email: string, motDePasse: string, otp: string, masterKey: string): Promise<IAuthResponseUser> {
         const data = await Http(ENDPOINTS.masterKey, {
             method: "POST",
-            body: { masterKey },
+            body: {
+                email,
+                motDePasse,
+                otp,
+                masterKey, // ✅ camelCase exact
+            },
         });
-        return data as IAuthResponseUser;
+        const user = data as IAuthResponseUser;
+        if (user) console.log('user: ', user.userId)
+        return data;
     }
+
 
     // -----------------------
     // Placeholder pour d'autres méthodes d'inscription

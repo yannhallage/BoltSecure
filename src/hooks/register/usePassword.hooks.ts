@@ -25,24 +25,30 @@ export const usePassword = (initialValue = "") => {
             setLoadingPassword(true);
             setErrorPassword(null);
 
-            const encryptedEmail = localStorage.getItem('xxml');
-            const encryptedOtp = localStorage.getItem('xxop');
+            const encryptedEmail = localStorage.getItem('xxxml');
+            const encryptedOtp = localStorage.getItem('xxxop');
             if (!encryptedEmail || !encryptedOtp) {
-                alert("Email introuvable");
+                alert("mot de passe introuvable");
                 return false;
             }
 
             const email = decrypt(encryptedEmail);
             const opt = decrypt(encryptedOtp);
 
-            const payload: IAuthmotDePasseInput = { motDePasse: valuePassword, email, otp: opt };
-
-            const res = await RegisterService.Password(payload);
+            console.log(email.trim(),
+                opt.trim(),
+                valuePassword.trim(),)
+            
+            const res = await RegisterService.Password(
+                email.trim(),
+                valuePassword.trim(),
+                opt.trim(),
+            );
 
             const encryptedPassword = encrypt(valuePassword)
             localStorage.setItem('xxxpp', encryptedPassword);
-            
-            if ((res as any).success ?? true) {
+
+            if ((res as any).data ?? true) {
                 return true;
             } else {
                 setErrorPassword((res as any).message || "Mot de passe invalide");

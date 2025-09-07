@@ -30,8 +30,8 @@ export const useEmail = (initialValue = ""): UseEmailResult => {
         try {
             setLoadingEmail(true);
             setErrorEmail(null);
-
-            const res: AuthEmailResponse = await RegisterService.Email({ email: valueEmail });
+            console.log(valueEmail)
+            const res: AuthEmailResponse = await RegisterService.Email(valueEmail);
 
             if (res.message) {
                 console.log(res.message); // "OTP envoyé avec succès."

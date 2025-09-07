@@ -25,7 +25,7 @@ export const useOtpCode = (initialValue = ""): UseOtpResult => {
             setLoading(true);
             setError(null);
 
-            const encryptedEmail = localStorage.getItem('xxml');
+            const encryptedEmail = localStorage.getItem('xxxml');
             if (!encryptedEmail) {
                 setError("Email introuvable");
                 return false;
@@ -42,7 +42,7 @@ export const useOtpCode = (initialValue = ""): UseOtpResult => {
 
             const res = await RegisterService.verifyOtp(payload);
 
-            if ((res as any).success) {
+            if ((res)) {
                 return true;
             } else {
                 setError((res as any).message || "Code OTP invalide");
