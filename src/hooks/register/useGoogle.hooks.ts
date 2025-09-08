@@ -1,10 +1,13 @@
 import { useState } from "react";
+import { encrypt } from "@/lib/url/crypto";
 import { jwtDecode } from "jwt-decode";
 import { type GoogleJwtPayload, type GoogleUser } from "../../types/register/google.type";
 
 
+
 export function useGoogleAuth() {
     const [user, setUser] = useState<GoogleUser | null>(null);
+    const [resultMailing, setResultMailing] = useState<boolean>(false);
     // const [loading, setLoading] = useState(false);
     // const [error, setError] = useState<string | null>(null);
 
@@ -31,10 +34,16 @@ export function useGoogleAuth() {
 
             const data = await res.json();
 
+            if (data.user) {
+                console.log(data.user.email)
+                const encryptedEmail = encrypt(data.user.email);
+                localStorage.setItem('xxxml', encryptedEmail);
+                setResultMailing(true);
+            }
             // 4. Sauvegarder et mettre à jour l’état
             // localStorage.setItem("auth_token", data.token);
             // localStorage.setItem("auth_user", JSON.stringify(data.user));
-
+            
             setUser(data.user);
 
             console.log("✅ Utilisateur authentifié via Google:", data.user);
@@ -47,5 +56,5 @@ export function useGoogleAuth() {
         }
     };
 
-    return { user, loginWithGoogle };
+    return { user, loginWithGoogle, resultMailing };
 }

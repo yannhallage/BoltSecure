@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { RegisterService } from "@/services/register/registerService";
+import { AuthService } from "@/services/auth/authService";
 import type { UseEmailResult } from "../../types/register/general.types";
 import { encrypt } from "@/lib/url/crypto";
 
@@ -32,7 +32,7 @@ export const useEmail = (initialValue = ""): UseEmailResult => {
             setErrorEmail(null);
             
             console.log(valueEmail)
-            const res: AuthEmailResponse = await RegisterService.Email(valueEmail);
+            const res: AuthEmailResponse = await AuthService.Email(valueEmail);
 
             if (res.message) {
                 console.log(res.message);

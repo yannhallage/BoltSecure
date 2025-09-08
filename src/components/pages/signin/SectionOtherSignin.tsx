@@ -7,7 +7,10 @@ import { Input } from "@/components/ui/input"
 import { ClipLoader } from 'react-spinners';
 import { useState } from "react"
 import { useNavigate } from "react-router";
-// import { ToastProvider, ToastViewport } from "@/components/ui/toast"
+
+import { useEmail } from "@/hooks/auth/useEmail.hooks"
+import { usePassword } from "@/hooks/auth/usePassword.hooks"
+import { useMasterKey } from "@/hooks/auth/useMasterKey.hooks"
 
 const SectionOtherSignin = () => {
     const { toast } = useToast()
@@ -16,24 +19,54 @@ const SectionOtherSignin = () => {
     const [text, setText] = useState("Obtenez un compte pour vous connecter à BoltSecure.")
     const [loadingSpinner, setLoadingSpinner] = useState(false)
     const [btnDisabled, setBtnDisabled] = useState(false)
-    const [email, setEmail] = useState<string>('')
-    // const [optCode, setOptCode] = useState<string>('')
-    const [motDepasse, setMotDepasse] = useState<string>('')
-    const [masterKey, setMasterKey] = useState<string>('')
     const navigate = useNavigate()
 
-    const handclickEmail = () => {
+    const { valueEmail,
+        validEmail,
+        loadingEmail
+        , errorEmail
+        , setValueEmail,
+        submitEmail
 
-        if (email) {
-            setBtnDisabled(true)
-            setLoadingSpinner(true)
-            setTimeout(() => {
-                setChildren('motDepasse')
-                setTextChange("Creer un mot de passe")
-                setText(`entrez un mot de passe securisé pour votre compte `)
-                setLoadingSpinner(false)
-                setBtnDisabled(false)
-            }, 2000)
+    } = useEmail("");
+    const { valuePassword,
+        validPassword,
+        loadingPassword,
+        errorPassword,
+        setValuePassword,
+        submitPassword
+
+    } = usePassword("");
+    const { valueMasterKey,
+        validMasterKey,
+        loadingMasterKey,
+        errorMasterKey,
+        setValueMasterKey,
+        submitMasterKey
+
+    } = useMasterKey("");
+
+
+    const handclickEmail = async () => {
+
+        if (valueEmail) {
+            console.log(valueEmail)
+            const succes = await submitEmail()
+
+            if (succes) {
+                setBtnDisabled(true)
+                setLoadingSpinner(true)
+                setTimeout(() => {
+                    setChildren('motDepasse')
+                    setTextChange("Creer un mot de passe")
+                    setText(`entrez un mot de passe securisé pour votre compte `)
+                    setLoadingSpinner(false)
+                    setBtnDisabled(false)
+                }, 2000)
+            }
+            if (errorEmail) {
+                console.log(errorEmail)
+            }
         } else {
             toast({
                 title: "We couldn't complete your request!",
@@ -43,17 +76,25 @@ const SectionOtherSignin = () => {
         }
     }
 
-    const handclickPassword = () => {
-        if (motDepasse) {
-            setBtnDisabled(true)
-            setLoadingSpinner(true)
-            setTimeout(() => {
-                setChildren('masterKey')
-                setTextChange("Creer une clé de connexion")
-                setText(`entrez une clé de connexion pour votre compte `)
-                setLoadingSpinner(false)
-                setBtnDisabled(false)
-            }, 2000);
+    const handclickPassword = async () => {
+        if (valuePassword) {
+            console.log(valuePassword)
+            const success = await submitPassword()
+
+            if (success) {
+                setBtnDisabled(true)
+                setLoadingSpinner(true)
+                setTimeout(() => {
+                    setChildren('masterKey')
+                    setTextChange("Creer une clé de connexion")
+                    setText(`entrez une clé de connexion pour votre compte `)
+                    setLoadingSpinner(false)
+                    setBtnDisabled(false)
+                }, 2000);
+            }
+            if (errorPassword) {
+                console.log(errorPassword)
+            }
         } else {
             toast({
                 title: "We couldn't complete your request!",
@@ -63,16 +104,24 @@ const SectionOtherSignin = () => {
         }
     }
 
-    const handclickMasterKey = () => {
-        if (masterKey) {
-            setBtnDisabled(true)
-            setLoadingSpinner(true)
-            setTimeout(() => {
-                setChildren('')
-                setBtnDisabled(false)
-                setLoadingSpinner(false)
-                navigate('/web')
-            }, 2000)
+    const handclickMasterKey = async () => {
+        if (valueMasterKey) {
+            console.log(valueMasterKey)
+            const success = await submitMasterKey()
+
+            if (success) {
+                setBtnDisabled(true)
+                setLoadingSpinner(true)
+                setTimeout(() => {
+                    setChildren('')
+                    setBtnDisabled(false)
+                    setLoadingSpinner(false)
+                    navigate('/web')
+                }, 2000)
+            }
+            if (errorMasterKey) {
+                console.log(errorMasterKey)
+            }
         } else {
             toast({
                 title: "We couldn't complete your request!",
@@ -115,8 +164,8 @@ const SectionOtherSignin = () => {
                                     <div className="mt-10 flex flex-col space-y-4 sm:mt-12">
                                         <Input
                                             type="email"
-                                            value={email}
-                                            onChange={(e) => setEmail(e.target.value)}
+                                            value={valueEmail}
+                                            onChange={(e) => setValueEmail(e.target.value)}
                                             placeholder="Email"
                                             className="w-full rounded-md border border-gray-600 bg-gray-800 px-4 py-2 text-white placeholder-gray-400 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
                                         />
@@ -168,14 +217,14 @@ const SectionOtherSignin = () => {
                                         <Input
                                             type="password"
                                             placeholder="mot de passe"
-                                            value={motDepasse}
-                                            onChange={(e) => setMotDepasse(e.target.value)}
+                                            value={valuePassword}
+                                            onChange={(e) => setValuePassword(e.target.value)}
                                             className="w-full rounded-md border border-gray-600 bg-gray-800 px-4 py-2 text-white placeholder-gray-400 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
                                         />
                                         {/* Bouton de connexion */}
                                         <Button
                                             className="w-full rounded-md px-5 py-2.5 text-sm cursor-pointer font-semibold text-white hover:opacity-70 focus-visible:outline-2 focus-visible:outline-offset-2 "
-                                                onClick={handclickPassword}
+                                            onClick={handclickPassword}
                                             disabled={btnDisabled}
                                         >
                                             {loadingSpinner ? (
@@ -217,15 +266,15 @@ const SectionOtherSignin = () => {
                                         {/* Email */}
                                         <Input
                                             type="password"
-                                            value={masterKey}
-                                            onChange={(e) => setMasterKey(e.target.value)}
+                                            value={valueMasterKey}
+                                            onChange={(e) => setValueMasterKey(e.target.value)}
                                             placeholder="MaterKey"
                                             className="w-full rounded-md border border-gray-600 bg-gray-800 px-4 py-2 text-white placeholder-gray-400 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
                                         />
                                         {/* Bouton de connexion */}
                                         <Button
                                             className="w-full rounded-md px-5 py-2.5 text-sm cursor-pointer font-semibold text-white hover:opacity-70 focus-visible:outline-2 focus-visible:outline-offset-2 "
-                                                    onClick={handclickMasterKey}
+                                            onClick={handclickMasterKey}
                                             disabled={btnDisabled}
                                         >
                                             {loadingSpinner ? (
@@ -247,11 +296,11 @@ const SectionOtherSignin = () => {
                                         {/* Connexion avec Google */}
                                         <Button className="items-center cursor-pointer bg-white text-black hover:bg-white hover:opacity-70 justify-center whitespace-nowrap font-medium" type="button">
                                             <svg stroke="currentColor" fill="currentColor" stroke-width="0" version="1.1" x="0px" y="0px" viewBox="0 0 48 48" enable-background="new 0 0 48 48" className="flex-shrink-0" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path fill="#FFC107" d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12
-                                c0-6.627,5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24
-                                c0,11.045,8.955,20,20,20c11.045,0,20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z"></path><path fill="#FF3D00" d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657
-                                C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z"></path><path fill="#4CAF50" d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36
-                                c-5.202,0-9.619-3.317-11.283-7.946l-6.522,5.025C9.505,39.556,16.227,44,24,44z"></path><path fill="#1976D2" d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571
-                                c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238C36.971,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z"></path></svg><span>Continuer avec Google</span>
+                                                c0-6.627,5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24
+                                                c0,11.045,8.955,20,20,20c11.045,0,20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z"></path><path fill="#FF3D00" d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657
+                                                C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z"></path><path fill="#4CAF50" d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36
+                                                c-5.202,0-9.619-3.317-11.283-7.946l-6.522,5.025C9.505,39.556,16.227,44,24,44z"></path><path fill="#1976D2" d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571
+                                                c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238C36.971,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z"></path></svg><span>Continuer avec Google</span>
                                         </Button>
 
                                         {/* Lien secondaire */}

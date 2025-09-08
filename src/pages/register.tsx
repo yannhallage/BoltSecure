@@ -26,10 +26,7 @@ const Register = () => {
     const [loadingSpinner, setLoadingSpinner] = useState(false)
     const [btnDisabled, setBtnDisabled] = useState(false)
     const [mailDisabled, setMailDisabled] = useState(false)
-    // const [email, setEmail] = useState<string>('')
-    // const [optCode, setOptCode] = useState<string>('')
-    // const [motDepasse, setMotDepasse] = useState<string>('')
-    // const [masterKey, setMasterKey] = useState<string>('')
+
     const navigate = useNavigate()
 
     const { user,
@@ -195,9 +192,16 @@ const Register = () => {
 
     useEffect(() => {
         if (user) {
-            setButtonGoogle(user.email)
-            setMailDisabled(true)
-            setChildren('CreerCompteAvecOtp')
+            console.log(user.email)
+            setLoadingSpinner(false)
+            setTimeout(() => {
+                setButtonGoogle(user.email)
+                setMailDisabled(true)
+                setTextChange("le code Otp pour continuez")
+                setText(`le code de confirmation est envoyé à votre email `)
+                setBtnDisabled(false)
+                setChildren('CreerCompteAvecOtp')
+            },2000)
         }
     }, [user])
 
