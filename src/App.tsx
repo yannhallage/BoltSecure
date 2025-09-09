@@ -6,7 +6,7 @@ import PersonalInfo from './pages/personal-info';
 import BolstSecurePage from './pages/web';
 import Register from './pages/register';
 import { ToastProvider, ToastViewport } from "@/components/ui/toast"
-import ProtectedRoute from './secure/ProtectedRoute';
+// import ProtectedRoute from './secure/ProtectedRoute';
 import PublicRoute from './secure/PublicRoute';
 
 function App() {
@@ -21,17 +21,13 @@ function App() {
           <main className="flex-1">
             <Routes>
               <Route path="/auth" element={
-                <PublicRoute>
                   <Signin />
-                </PublicRoute>
               } />
               <Route path="/register" element={
-                <PublicRoute>
                   <ToastProvider>
                     <Register />
                     <ToastViewport />
                   </ToastProvider>
-                </PublicRoute>
               } />
               <Route path="/personal-info" element={
                 <PublicRoute>
@@ -40,14 +36,10 @@ function App() {
               } />
 
               <Route path="/" element={
-                <ProtectedRoute>
                   <LandingPage />
-                </ProtectedRoute>
               } />
               <Route path="/web" element={
-                <ProtectedRoute>
                   <BolstSecurePage />
-                </ProtectedRoute>
               } />
             </Routes>
           </main>
