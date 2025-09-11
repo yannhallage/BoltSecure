@@ -1,9 +1,10 @@
 import { jwtDecode } from 'jwt-decode';
+import { getSession } from "@/lib/localstorage";
 import { Navigate } from 'react-router-dom';
 
-const isTokenValid = (token) => {
+const isTokenValid = (token: string): unknown => {
     try {
-        const decoded = jwtDecode(token);
+        const decoded: any = jwtDecode(token);
         const now = Date.now() / 1000;
         return decoded.exp > now;
     } catch {
@@ -11,12 +12,13 @@ const isTokenValid = (token) => {
     }
 };
 
-const RedirectIfAuth = ({ children }) => {
-    const token = localStorage.getItem('token');
+const RedirectIfAuth = ({ children }: { children: React.ReactNode }) => {
+    const session = getSession();
 
-    if (token && isTokenValid(token)) {
-        return <Navigate to="/myaccount" replace />;
+    if (!session.token_connexion || !isTokenValid(session.token_connexion)) {
+        return <Navigate to="/web" replace />;
     }
+
 
     return children;
 };

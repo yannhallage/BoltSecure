@@ -1,20 +1,28 @@
 
 
 export const setSession = (data: string, type: string) => {
-    if (type === 'email'){
+    if (type === 'email') {
         localStorage.setItem('email', data);
-    }else{
+    } else {
         localStorage.setItem('utilisateur', data);
     }
-    console.log('session créée')
-};  
 
-export const LocalStorage = (response: string , type:string) => {
+    if (type === 'token_connexion') {
+        localStorage.setItem('token_connexion', data);
+    }
+    console.log('session créée', Date.now())
+};
 
-    if(type === 'email'){
-        return setSession(response , 'email')
-    }else{
-        return setSession(response , 'utilisateur')
+export const LocalStorage = (response: string, type: string) => {
+
+    if (type === 'email') {
+        return setSession(response, 'email');
+    } else if (type === 'utilisateur') {
+        return setSession(response, 'utilisateur');
+    } else if (type === 'token_connexion') {
+        return setSession(response, 'token_connexion');
+    } else {
+        return console.log('impossible de créer une session');
     }
 
 }
@@ -24,13 +32,15 @@ export const removeSession = () => {
     console.log('session suppremée')
 };
 
-
 export const getSession = () => {
     const email = localStorage.getItem('email');
     const user = localStorage.getItem('utilisateur');
+    const token_connexion = localStorage.getItem('token_connexion');
+
 
     return {
         email: email,
-        user: user
+        user: user,
+        token_connexion
     }
 };

@@ -1,8 +1,9 @@
 // src/services/register/register.service.ts
 import { Http } from "@/api/http";
 import { ENDPOINTS_REGISTER } from "@/api/register/Endpoint";
+import { LocalStorage } from "@/lib/localstorage";
 import type { IAuthEmailInput, IAuthmotDePasseInput, IAuthResponseUser, IAuthOtpVerificationInput, IAuthMasterKeyInput } from "@/validations/register.zod";
-import { email } from 'zod';
+// import { email } from 'zod';
 
 
 export interface AuthEmailResponse {
@@ -31,20 +32,20 @@ export class RegisterService {
         return data as AuthEmailResponse;
     }
 
-    static async Password( email: string, motDePasse :string,otp:string): Promise<IAuthResponseUser> {
+    static async Password(email: string, motDePasse: string, otp: string): Promise<IAuthResponseUser> {
         const data = await Http(ENDPOINTS_REGISTER.password, {
             method: "POST",
-            body: { 
+            body: {
                 email,
                 motDePasse,
                 otp,
-             },
+            },
         });
         const user = data as IAuthResponseUser;
         if (user) console.log('user: ', user.userId)
         return data
     }
-    
+
     static async MasterKey(email: string, motDePasse: string, otp: string, masterKey: string): Promise<IAuthResponseUser> {
         const data = await Http(ENDPOINTS_REGISTER.masterKey, {
             method: "POST",
@@ -55,8 +56,9 @@ export class RegisterService {
                 masterKey,
             },
         });
-        const user = data as IAuthResponseUser;
-        if (user) console.log('user: ', user.userId)
+        // const user = data;
+        if (data) console.log('user: ', data.user._id, data.token_connexion)
+        LocalStorage(data.user.token_connexion, 'token_connexion')
         return data;
     }
 }

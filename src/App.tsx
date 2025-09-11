@@ -6,8 +6,9 @@ import PersonalInfo from './pages/personal-info';
 import BolstSecurePage from './pages/web';
 import Register from './pages/register';
 import { ToastProvider, ToastViewport } from "@/components/ui/toast"
-// import ProtectedRoute from './secure/ProtectedRoute';
+import ProtectedRoute from './secure/ProtectedRoute';
 import PublicRoute from './secure/PublicRoute';
+import RedirectIfAuth from './secure/RedirectIfAuth';
 
 function App() {
   return (
@@ -30,13 +31,14 @@ function App() {
                   </ToastProvider>
               } />
               <Route path="/personal-info" element={
-                <PublicRoute>
-                  <PersonalInfo />
-                </PublicRoute>
+
+                  <PublicRoute>
+                    <PersonalInfo />
+                  </PublicRoute>
               } />
 
               <Route path="/" element={
-                  <LandingPage />
+                <LandingPage />
               } />
               <Route path="/web" element={
                   <BolstSecurePage />
