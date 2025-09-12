@@ -1,17 +1,19 @@
 "use client";
 
 import { useState } from "react";
+
 import {
     Home,
-    BarChart3,
+    Lock,
     Folder,
-    FileBarChart,
+    CreditCard,
     Settings,
     HelpCircle,
-    Globe,
+    Download,
     ChevronDown,
     LogOut,
     User,
+    Trash2,
     BookOpen,
     Repeat,
 } from "lucide-react";
@@ -31,24 +33,25 @@ export function Sidebar() {
     const [openFolders, setOpenFolders] = useState(false);
 
     return (
-        <aside className="w-64 border-r bg-card p-4 flex flex-col justify-between fixed inset-y-0 left-0">
+        <aside className="w-64 border rounded-2xl mx-1 bg-card p-4 flex flex-col justify-between fixed inset-y-0 left-0">
             {/* Top: Logo + Navigation */}
             <div className="overflow-y-auto">
                 <h1 className="text-xl font-bold mb-6">Untitled UI</h1>
 
                 <nav className="space-y-2">
-                    <Button variant="ghost" className="w-full justify-start">
+                    <Button variant="ghost" className="w-full justify-start ">
                         <Home className="mr-2 h-4 w-4" /> Home
                     </Button>
 
                     <Button variant="ghost" className="w-full justify-start">
-                        <BarChart3 className="mr-2 h-4 w-4" /> Dashboard
+                        <Lock className="mr-2 h-4 w-4" /> Passwords
                     </Button>
 
                     <Button variant="ghost" className="w-full justify-start">
-                        <Folder className="mr-2 h-4 w-4" /> Projects
+                        <CreditCard className="mr-2 h-4 w-4" /> Credit Cards
                     </Button>
 
+                        <Separator className="my-2" />
                     {/* Folders avec toggle */}
                     <div>
                         <Button
@@ -75,13 +78,14 @@ export function Sidebar() {
                             </div>
                         )}
                     </div>
+                    <Separator className="my-2" />
 
                     <Button variant="ghost" className="w-full justify-start">
-                        <FileBarChart className="mr-2 h-4 w-4" /> Reporting
+                        <Download className="mr-2 h-4 w-4" /> download
                     </Button>
 
                     <Button variant="ghost" className="w-full justify-start">
-                        <Settings className="mr-2 h-4 w-4" /> Settings
+                        <Settings className="mr-2 h-4 w-4" /> settings
                     </Button>
 
                     <Button variant="ghost" className="w-full justify-start">
@@ -91,13 +95,13 @@ export function Sidebar() {
                     <Separator className="my-2" />
 
                     <Button variant="ghost" className="w-full justify-start">
-                        <Globe className="mr-2 h-4 w-4" /> Open in browser
+                        <Trash2 className="mr-2 h-4 w-4" /> Trash
                     </Button>
                 </nav>
             </div>
 
             {/* Bottom: Profil utilisateur */}
-            <div className="mt-6">
+            <div className="mt-6 border rounded-2xl p-1 hover:bg-gray-50">
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                         <Button

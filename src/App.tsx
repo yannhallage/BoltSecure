@@ -50,6 +50,11 @@ function App() {
                   <Dashboard />
                 </ProtectedRoute>
               } />
+              <Route path="/web2" element={
+                <ProtectedRoute>
+                  <BolstSecurePage />
+                </ProtectedRoute>
+              } />
             </Routes>
 
           </main>
