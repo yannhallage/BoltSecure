@@ -9,6 +9,7 @@ import { ToastProvider, ToastViewport } from "@/components/ui/toast"
 import ProtectedRoute from './secure/ProtectedRoute';
 import PublicRoute from './secure/PublicRoute';
 import RedirectIfAuth from './secure/RedirectIfAuth';
+import Dashboard from './pages/Dashboard';
 
 function App() {
   return (
@@ -46,7 +47,7 @@ function App() {
 
               <Route path="/web" element={
                 <ProtectedRoute>
-                  <BolstSecurePage />
+                  <Dashboard />
                 </ProtectedRoute>
               } />
             </Routes>

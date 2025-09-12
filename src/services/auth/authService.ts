@@ -47,14 +47,11 @@ export class AuthService {
         if (data) {
             LocalStorage(data.user._id, 'utilisateur');
             LocalStorage(data.user.email, 'email');
-            console.log('sesssion ouverte !' + Date.now());
+            console.log('sesssion ouverte !');
         } else {
-            console.log('un porbleme d\'ouverture de session !' + Date())
+            console.log('un porbleme d\'ouverture de session !')
         }
-
-        if (data) console.log('data: ', data.user.user._id)
-        // console.log(data.user.token_connexion)
-        LocalStorage(data.user.token_connexion, 'token_connexion')
+        LocalStorage(data.token_connexion, 'token_connexion')
         return data;
     }
 }

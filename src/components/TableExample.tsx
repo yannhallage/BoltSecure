@@ -73,7 +73,10 @@ const itemsDocuments = [
 
 export default function TableExample() {
   return (
-    <div>
+    <motion.div
+      initial={{ opacity: 0, y: 10 }
+      } animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}
+    >
       <Table>
         <TableHeader>
           <TableRow className="hover:bg-transparent">
@@ -127,7 +130,7 @@ export default function TableExample() {
             : ""
         }
       </p>
-    </div>
+    </motion.div>
   )
 }
 
