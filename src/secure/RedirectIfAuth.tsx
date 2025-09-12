@@ -14,13 +14,14 @@ const isTokenValid = (token: string): unknown => {
 
 const RedirectIfAuth = ({ children }: { children: React.ReactNode }) => {
     const session = getSession();
+    const token = session.token_connexion;
 
-    if (!session.token_connexion || !isTokenValid(session.token_connexion)) {
+    if (token && isTokenValid(token)) {
         return <Navigate to="/web" replace />;
     }
 
-
-    return children;
+    return <>{children}</>;
 };
+
 
 export default RedirectIfAuth;

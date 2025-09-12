@@ -14,14 +14,14 @@ const isTokenValid = (token: unknown): boolean => {
 
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
     const session = getSession();
+    const token = session.token_connexion;
 
-    if (!localStorage.getItem("token_connexion") || !isTokenValid(localStorage.getItem("token_connexion")))) {
+    if (!token || !isTokenValid(token)) {
         return <Navigate to="/auth" replace />;
-    } else {
-        return <Navigate to="/" replace />;
     }
 
     return <>{children}</>;
 };
+
 
 export default ProtectedRoute;

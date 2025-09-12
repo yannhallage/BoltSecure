@@ -22,28 +22,35 @@ function App() {
           <main className="flex-1">
             <Routes>
               <Route path="/auth" element={
+                <RedirectIfAuth>
                   <Signin />
+                </RedirectIfAuth>
               } />
+
               <Route path="/register" element={
+                <RedirectIfAuth>
                   <ToastProvider>
                     <Register />
                     <ToastViewport />
                   </ToastProvider>
+                </RedirectIfAuth>
               } />
+
               <Route path="/personal-info" element={
-
-                  <PublicRoute>
-                    <PersonalInfo />
-                  </PublicRoute>
+                <PublicRoute>
+                  <PersonalInfo />
+                </PublicRoute>
               } />
 
-              <Route path="/" element={
-                <LandingPage />
-              } />
+              <Route path="/" element={<LandingPage />} />
+
               <Route path="/web" element={
+                <ProtectedRoute>
                   <BolstSecurePage />
+                </ProtectedRoute>
               } />
             </Routes>
+
           </main>
         </div>
       </Router>
