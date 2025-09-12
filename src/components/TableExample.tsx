@@ -74,8 +74,8 @@ const itemsDocuments = [
 export default function TableExample() {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 10 }
-      } animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}
+      initial = {{ opacity: 0, y: 10 }
+} animate = {{ opacity: 1, y: 0 }} transition = {{ delay: 0.2 }}
     >
       <Table>
         <TableHeader>
