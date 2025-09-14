@@ -1,7 +1,10 @@
 "use client";
 import { Label } from "@/components/ui/label"
+import { XCircle, Save } from "lucide-react";
+import { toast } from 'react-toastify';
 import { useEffect, useRef, useState } from 'react';
 import { Input } from "@/components/ui/input";
+
 import {
     Select,
     SelectContent,
@@ -42,12 +45,15 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import TableExample, { TableExampleForDocuments } from "@/components/TableExample";
 
 import { Checkbox } from "@/components/ui/checkbox";
+import CreerFolders from "@/components/CreerFolders";
+import { motion } from "framer-motion";
 
 enum View {
     Main = "MainComponent",
     AddPassword = "AddPassword",
     Passwords = "PassordsComponent",
     CrediCards = "CreditCardsComponent",
+    TrashComponent = "TrashComponent",
     CreditCard = "CreditCardAdd",
 }
 
@@ -60,6 +66,7 @@ export default function Layout() {
     const handleclickHome = () => setStateOfChange(View.Main);
     const handleclickPassword = () => setStateOfChange(View.AddPassword);
     const handleclickCreditCards = () => setStateOfChange(View.CreditCard);
+    const handleclickTrash = () => setStateOfChange(View.TrashComponent);
 
     useEffect(() => {
         if (message === "PassordsComponent") {
@@ -139,7 +146,7 @@ export default function Layout() {
 
                         <Separator className="my-2" />
 
-                        <Button variant="ghost" className="w-full justify-start">
+                        <Button variant="ghost" className="w-full justify-start cursor-pointer" onClick={handleclickTrash}>
                             <Trash2 className="mr-2 h-4 w-4" /> Trash
                         </Button>
                     </nav>
@@ -213,7 +220,8 @@ export default function Layout() {
             <main className="ml-64 flex-1 h-screen overflow-y-auto p-6 space-y-6">
                 {stateOfChange === 'MainComponent' && <MainComponent />}
                 {stateOfChange === 'AddPassword' && <AddPassword setMessage={setMessage} />}
-                {stateOfChange === 'PassordsComponent' && <PassordsComponent />}
+                {stateOfChange === 'PassordsComponent' && <PasswordsComponent />}
+                {stateOfChange === 'TrashComponent' && <TrashComponent />}
                 {stateOfChange === 'CreditCardsComponent' && <CreditCardAddComponent />}
                 {stateOfChange === 'CreditCardAdd' && <CreditCardAdd setMessage={setMessage} />}
             </main>
@@ -295,57 +303,83 @@ function CreditCardAdd({ setMessage }: { setMessage: (msg: string) => void }) {
 
 function MainComponent() {
 
-    // const sessions = [
-    //     { name: "Documentation", sessions: 4288, avg: "1m 24s", percent: "62.4%" },
-    //     { name: "Projects", sessions: 582, avg: "1m 08s", percent: "8.2%" },
-    //     { name: "Reports", sessions: 464, avg: "1m 12s", percent: "7.6%" },
-    //     { name: "Accounts", sessions: 446, avg: "2m 22s", percent: "7.2%" },
-    // ];
+    const dossiersCree = [
+        {
+            title: "Pages per session",
+            value: "316",
+            growth: "+6.0%",
+            growthColor: "text-green-600 bg-green-100",
+            icon: "https://www.thiings.co/_next/image?url=https%3A%2F%2Flftz25oez4aqbxpq.public.blob.vercel-storage.com%2Fimage-6TJq3TblGrgJLKvMLFj3N2YcDEXG2A.png&w=500&q=75"
+        },
+        {
+            title: "Users online",
+            value: "120",
+            growth: "-3.5%",
+            growthColor: "text-red-600 bg-red-100",
+            icon: "https://cdn-icons-png.flaticon.com/512/1077/1077012.png"
+        },
+        {
+            title: "Conversions",
+            value: "58",
+            growth: "+12.4%",
+            growthColor: "text-green-600 bg-green-100",
+            icon: "https://cdn-icons-png.flaticon.com/512/684/684908.png"
+        },
+    ]
     return (
         <>
             {/* Header */}
             <div className="flex items-center justify-between">
                 <h2 className="text-2xl font-bold">Site traffic</h2>
                 <div className="space-x-2">
-                    <Button variant="outline">Switch dashboard</Button>
-                    <Button>Export report</Button>
+                    {/* <Button variant="outline" className="cursor-pointer">Ajouter un dossier</Button> */}
+                    <CreerFolders />
+                    <Button className="cursor-pointer">Export report</Button>
                 </div>
             </div>
 
             {/* Stats cards */}
-            <div className="grid grid-cols-3 gap-4">
-                <Card>
-                    <CardHeader><CardTitle>Total sessions</CardTitle></CardHeader>
-                    <CardContent>
-                        {/* <p className="text-2xl font-bold">526</p> */}
-                        <img width={40}
-                            src="https://www.thiings.co/_next/image?url=https%3A%2F%2Flftz25oez4aqbxpq.public.blob.vercel-storage.com%2Fimage-6TJq3TblGrgJLKvMLFj3N2YcDEXG2A.png&w=500&q=75"
-                            alt="" />
-                        <p className="text-sm text-green-500">+2.4% vs last month</p>
-                    </CardContent>
-                </Card>
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                {dossiersCree.length > 0 &&
+                    dossiersCree.map((item, index) => (
+                        <motion.div 
+                            // initial={{ opacity: 0, y: 10 }
+                            // } animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}
+                        > 
+                            <Card
+                                key={index}
+                                className="shadow-md rounded-xl bg-white backdrop-blur-sm hover:shadow-lg transition duration-300"
+                            >
+                                {/* Header */}
+                                <CardHeader className="flex items-center justify-between">
+                                    <CardTitle className="text-base font-medium text-gray-700">
+                                        {item.title}
+                                    </CardTitle>
+                                    <button className="p-1 rounded-full hover:bg-red-100">
+                                        <Trash2 className="w-5 h-5 cursor-pointer text-gray-500 hover:text-red-700" />
+                                    </button>
+                                </CardHeader>
 
-                <Card>
-                    <CardHeader><CardTitle>Session duration</CardTitle></CardHeader>
-                    <CardContent>
-                        {/* <p className="text-2xl font-bold">2:24</p> */}
-                        <img width={40}
-                            src="https://www.thiings.co/_next/image?url=https%3A%2F%2Flftz25oez4aqbxpq.public.blob.vercel-storage.com%2Fimage-6TJq3TblGrgJLKvMLFj3N2YcDEXG2A.png&w=500&q=75"
-                            alt="" />
-                        <p className="text-sm text-green-500">+8.6% vs last month</p>
-                    </CardContent>
-                </Card>
+                                {/* Content */}
+                                <CardContent className="flex items-center justify-between">
+                                    <div className="flex items-center gap-3">
+                                        <div className="bg-lime-100 rounded-full p-2 flex items-center justify-center">
+                                            <img
+                                                width={28}
+                                                src="https://www.thiings.co/_next/image?url=https%3A%2F%2Flftz25oez4aqbxpq.public.blob.vercel-storage.com%2Fimage-6TJq3TblGrgJLKvMLFj3N2YcDEXG2A.png&w=500&q=75"
+                                                alt="pages"
+                                            />
+                                        </div>
+                                        <p className="text-xl font-bold">{item.value}</p>
+                                    </div>
 
-                <Card>
-                    <CardHeader><CardTitle>Pages per session</CardTitle></CardHeader>
-                    <CardContent>
-                        {/* <p className="text-2xl font-bold">316</p> */}
-                        <img width={40}
-                            src="https://www.thiings.co/_next/image?url=https%3A%2F%2Flftz25oez4aqbxpq.public.blob.vercel-storage.com%2Fimage-6TJq3TblGrgJLKvMLFj3N2YcDEXG2A.png&w=500&q=75"
-                            alt="" />
-                        <p className="text-sm text-green-500">+6.0% vs last month</p>
-                    </CardContent>
-                </Card>
+                                    <p className="text-sm font-medium text-green-600 bg-green-100 px-2 py-1 rounded-lg">
+                                        {item.growth}
+                                    </p>
+                                </CardContent>
+                            </Card>
+                        </motion.div>
+                    ))}
             </div>
 
             {/* Table */}
@@ -363,7 +397,7 @@ function MainComponent() {
     )
 }
 
-function PassordsComponent() {
+function PasswordsComponent() {
     const [title, setTitle] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -378,116 +412,122 @@ function PassordsComponent() {
         setPassword("");
         setWebsite("");
         setFolder("");
+        window.location.reload()
+        // toast("Formulaire réinitialisé ❌", { icon: "⚠️" });
     };
 
     const handleSave = () => {
         setLoading(true);
         setTimeout(() => {
             setLoading(false);
+            toast.success("Mot de passe enregistré");
             handleCancel();
-        }, 2000);
+        }, 1500);
     };
 
     return (
-        <div className="flex flex-col items-center justify-center min-h-[600px] gap-6 px-4">
-            {/* Icône en haut */}
-            <div className="bg-lime-400 rounded-xl p-4 flex items-center justify-center">
-                <Lock className="w-8 h-8 text-black" />
+        <div className="flex items-center justify-center min-h-[600px] px-4">
+            <div className="bg-white shadow-lg rounded-2xl w-full max-w-lg p-6 space-y-6">
+                <div className="flex justify-center">
+                    <div className="bg-lime-400 rounded-full p-4 shadow-md">
+                        <Lock className="w-8 h-8 text-black" />
+                    </div>
+                </div>
+                <div className="text-center">
+                    <h2 className="text-xl font-semibold">Ajouter un mot de passe</h2>
+                </div>
+
+                <form className="space-y-5">
+                    <div className="flex flex-col space-y-1">
+                        <Label htmlFor="title">Titre</Label>
+                        <Input
+                            id="title"
+                            className="h-11"
+                            placeholder="ex: Compte Facebook"
+                            value={title}
+                            onChange={(e) => setTitle(e.target.value)}
+                        />
+                    </div>
+
+                    <div className="flex flex-col space-y-1">
+                        <Label htmlFor="email">Email / Identifiant</Label>
+                        <Input
+                            id="email"
+                            className="h-11"
+                            placeholder="ex: jean.dupont@gmail.com"
+                            type="text"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                        />
+                    </div>
+                    <div className="flex flex-col space-y-1">
+                        <Label htmlFor="password">Mot de passe</Label>
+                        <Input
+                            id="password"
+                            className="h-11"
+                            placeholder="********"
+                            type="password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            ref={inputRef}
+                        />
+                    </div>
+
+                    <div className="flex flex-col space-y-1">
+                        <Label htmlFor="website">Site web</Label>
+                        <Input
+                            id="website"
+                            className="h-11"
+                            placeholder="https://facebook.com"
+                            type="url"
+                            value={website}
+                            onChange={(e) => setWebsite(e.target.value)}
+                        />
+                    </div>
+
+                    <div className="flex flex-col space-y-1">
+                        <Label htmlFor="folder">Dossier associé</Label>
+                        <Select value={folder} onValueChange={setFolder}>
+                            <SelectTrigger className="h-14 w-full ">
+                                <SelectValue placeholder="Choisir un dossier d'emplacement" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="perso">Personnel</SelectItem>
+                                <SelectItem value="travail">Travail</SelectItem>
+                                <SelectItem value="banque">Banque</SelectItem>
+                            </SelectContent>
+                        </Select>
+                    </div>
+
+                    <div className="flex justify-end gap-3 pt-4">
+                        <Button
+                            type="button"
+                            variant="outline"
+                            className="flex items-center gap-2 cursor-pointer"
+                            onClick={handleCancel}
+                        >
+                            <XCircle className="w-4 h-4" /> Annuler
+                        </Button>
+                        <Button
+                            type="button"
+                            onClick={handleSave}
+                            disabled={loading}
+                            className="bg-lime-500 hover:bg-lime-600 cursor-pointer text-white flex items-center gap-2"
+                        >
+                            {loading ? (
+                                <ClipLoader color="#fff" size={15} speedMultiplier={1.5} />
+                            ) : (
+                                <>
+                                    <Save className="w-4 h-4" /> Enregistrer
+                                </>
+                            )}
+                        </Button>
+                    </div>
+                </form>
             </div>
-
-            {/* Formulaire */}
-            <form className="space-y-4 w-full max-w-md">
-                {/* Titre */}
-                <div className="flex flex-col space-y-1">
-                    <Label htmlFor="title">Titre</Label>
-                    <Input
-                        id="title"
-                        className="h-12"
-                        placeholder="ex: Compte Facebook"
-                        value={title}
-                        onChange={(e) => setTitle(e.target.value)}
-                    />
-                </div>
-
-                {/* Email / Identifiant */}
-                <div className="flex flex-col space-y-1">
-                    <Label htmlFor="email">Email / Identifiant</Label>
-                    <Input
-                        id="email"
-                        className="h-12"
-                        placeholder="ex: jean.dupont@gmail.com"
-                        type="text"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                    />
-                </div>
-
-                {/* Mot de passe */}
-                <div className="flex flex-col space-y-1">
-                    <Label htmlFor="password">Mot de passe</Label>
-                    <Input
-                        id="password"
-                        className="h-12"
-                        placeholder="********"
-                        type="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        ref={inputRef}
-                    />
-                </div>
-
-                {/* Site web */}
-                <div className="flex flex-col space-y-1">
-                    <Label htmlFor="website">Site web</Label>
-                    <Input
-                        id="website"
-                        className="h-12"
-                        placeholder="https://facebook.com"
-                        type="url"
-                        value={website}
-                        onChange={(e) => setWebsite(e.target.value)}
-                    />
-                </div>
-
-                {/* Dossier associé */}
-                <div className="flex flex-col space-y-1">
-                    <Label htmlFor="folder">Dossier associé</Label>
-                    <Select value={folder} onValueChange={setFolder}>
-                        <SelectTrigger>
-                            <SelectValue placeholder="Choisir un dossier" className="w-full" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            <SelectItem value="perso">Personnel</SelectItem>
-                            <SelectItem value="travail">Travail</SelectItem>
-                            <SelectItem value="banque">Banque</SelectItem>
-                        </SelectContent>
-                    </Select>
-                </div>
-
-                {/* Boutons */}
-                <div className="flex justify-end gap-2 pt-4">
-                    <Button type="button" variant="outline" onClick={handleCancel}>
-                        Annuler
-                    </Button>
-                    <Button
-                        type="button"
-                        onClick={handleSave}
-                        disabled={loading}
-                        className="cursor-pointer"
-                    >
-                        {loading ? (
-                            <ClipLoader color="#ffff" size={13} speedMultiplier={2} />
-                        ) : (
-                            "Enregistrer"
-                        )}
-                    </Button>
-                </div>
-            </form>
         </div>
     );
 }
-
-
 
 
 interface CreditCardFormProps {
@@ -513,36 +553,38 @@ function CreditCardAddComponent({ setMessage }: CreditCardFormProps) {
             setExpiry("");
             setCVC("");
             setSetAsDefault(false);
-            if (setMessage) setMessage("MainComponent"); // exemple retour
-        }, 2000);
+            if (setMessage) setMessage("MainComponent");
+            toast.success("Carde de credit enregistrée ! ");
+        }, 1500);
     };
 
     return (
-        <div className="flex flex-col items-center justify-center min-h-[500px] gap-4">
+        <div className="flex flex-col items-center justify-center min-h-[500px] px-4">
             {/* Header + Image */}
-            <div className="flex flex-col gap-2 items-center">
-                <div className="flex items-center justify-center rounded-full w-16 h-16 bg-lime-400">
+            <div className="flex flex-col gap-2 items-center mb-4">
+                <div className="flex items-center justify-center rounded-full w-16 h-16 bg-lime-400 shadow-md">
                     <CreditCard className="w-8 h-8 text-black" />
                 </div>
-                <div className="text-center">
+                <div className="text-center space-y-1">
                     <h2 className="text-xl font-semibold">Ajouter une carte de crédit</h2>
-                    <p className="text-sm text-gray-400">
-                        Ajoutez les détails de votre carte pour remplir <br /> automatiquement lors de vos achats en ligne.
+                    <p className="text-sm text-gray-500 leading-relaxed">
+                        Ajoutez les détails de votre carte pour remplir automatiquement vos paiements en ligne.
                     </p>
                 </div>
             </div>
 
             {/* Formulaire */}
-            <Card className="w-full max-w-md shadow-xl border-none">
-                <CardContent className="space-y-4">
+            <Card className="w-full max-w-md shadow-lg border-none rounded-2xl">
+                <CardContent className="space-y-5 p-6">
                     <div className="space-y-2">
                         <Label htmlFor="title">Titre</Label>
                         <Input
                             id="title"
-                            placeholder="Titre Obligatoire"
+                            placeholder="ex: Carte Perso"
                             value={title}
                             onChange={(e) => setTitle(e.target.value)}
                             required
+                            className="h-11"
                         />
                     </div>
 
@@ -550,10 +592,11 @@ function CreditCardAddComponent({ setMessage }: CreditCardFormProps) {
                         <Label htmlFor="holderName">Nom du titulaire</Label>
                         <Input
                             id="holderName"
-                            placeholder="Nom du titulaire Obligatoire"
+                            placeholder="ex: Jean Dupont"
                             value={holderName}
                             onChange={(e) => setHolderName(e.target.value)}
                             required
+                            className="h-11"
                         />
                     </div>
 
@@ -561,6 +604,7 @@ function CreditCardAddComponent({ setMessage }: CreditCardFormProps) {
                         <Label htmlFor="cardNumber">Numéro de carte</Label>
                         <Input
                             id="cardNumber"
+                            className="h-11"
                             placeholder="0000 0000 0000 0000"
                             value={cardNumber}
                             onChange={(e) => setCardNumber(e.target.value)}
@@ -569,10 +613,11 @@ function CreditCardAddComponent({ setMessage }: CreditCardFormProps) {
 
                     <div className="flex gap-4">
                         <div className="flex-1 space-y-2">
-                            <Label htmlFor="expiry">Expiry date</Label>
+                            <Label htmlFor="expiry">Date d'expiration</Label>
                             <Input
                                 id="expiry"
-                                placeholder="MM/YY"
+                                className="h-11"
+                                placeholder="MM/AA"
                                 value={expiry}
                                 onChange={(e) => setExpiry(e.target.value)}
                             />
@@ -581,6 +626,7 @@ function CreditCardAddComponent({ setMessage }: CreditCardFormProps) {
                             <Label htmlFor="cvc">CVC</Label>
                             <Input
                                 id="cvc"
+                                className="h-11"
                                 placeholder="123"
                                 value={cvc}
                                 onChange={(e) => setCVC(e.target.value)}
@@ -595,20 +641,50 @@ function CreditCardAddComponent({ setMessage }: CreditCardFormProps) {
                             onCheckedChange={(val) => setSetAsDefault(Boolean(val))}
                         />
                         <Label htmlFor="primary" className="text-muted-foreground font-normal">
-                            Set as default payment method
+                            Définir comme méthode de paiement par défaut
                         </Label>
                     </div>
 
                     <Button
                         type="button"
-                        className="w-full cursor-pointer"
+                        className="w-full cursor-pointer bg-lime-500 hover:bg-lime-600 text-white"
                         onClick={handleSave}
                         disabled={loading}
                     >
-                        {loading ? <ClipLoader color="#ffff" size={13} speedMultiplier={2} /> : "Enregistrer"}
+                        {loading ? (
+                            <ClipLoader color="#fff" size={15} speedMultiplier={1.5} />
+                        ) : (
+                            "Enregistrer"
+                        )}
                     </Button>
                 </CardContent>
             </Card>
         </div>
     );
+}
+
+function TrashComponent() {
+    return (
+        <div className="flex items-center justify-center h-[500px]">
+            <div className="text-center">
+                <div className="flex flex-col items-center gap-4 p-8">
+                    {/* Icône */}
+                    <div className="bg-lime-400 rounded-xl p-4 flex items-center justify-center">
+                        <Trash2 className="w-8 h-8 text-black" />
+                    </div>
+
+                    {/* Texte */}
+                    <div>
+                        <h2 className="text-black text-lg font-semibold mt-4">
+                            La corbeille est vide
+                        </h2>
+                        <p className="text-gray-400 text-[16px] mt-1">
+                            Tous les elements deplacés vers la corbeille peuvent etre restaurés jusqu'a ce que vous <br />
+                            les supprimiez définitivement
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    )
 }

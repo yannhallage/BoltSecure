@@ -1,6 +1,8 @@
 import { Helmet } from 'react-helmet';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import LandingPage from './pages/LandingPage';
+import { ToastContainer } from 'react-toastify';
+
 import Signin from './pages/Signin';
 import PersonalInfo from './pages/personal-info';
 import BolstSecurePage from './pages/web';
@@ -48,6 +50,18 @@ function App() {
               <Route path="/web" element={
                 <ProtectedRoute>
                   <Dashboard />
+                  <ToastContainer
+                    position="top-right"
+                    autoClose={2000}
+                    hideProgressBar={false}
+                    newestOnTop={false}
+                    closeOnClick={false}
+                    rtl={false}
+                    pauseOnFocusLoss
+                    draggable
+                    pauseOnHover
+                    theme="dark"
+                  />
                 </ProtectedRoute>
               } />
               <Route path="/web2" element={

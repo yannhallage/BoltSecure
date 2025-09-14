@@ -63,7 +63,7 @@ const LandingPage = () => {
                     </Button>
                     <Button className="rounded-full text-white bg-[#112E70] cursor-pointer"
                         onClick={() => {
-                            navigate("/Signin");
+                            navigate("/auth");
                         }}
                     >
                         Commencer
