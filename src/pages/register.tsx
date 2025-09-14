@@ -445,9 +445,9 @@ const Register = () => {
                                         {/* Lien secondaire */}
                                         <p className="text-sm text-gray-400 text-center">
                                             Pas de compte ?{' '}
-                                            <a href="#" className="font-semibold text-white hover:text-gray-100">
+                                            <span className="font-semibold text-white hover:text-gray-100">
                                                 Inscrivez-vous
-                                            </a>
+                                            </span>
                                         </p>
                                     </div>
                                 )

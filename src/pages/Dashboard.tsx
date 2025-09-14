@@ -1,5 +1,8 @@
 "use client";
 import { Label } from "@/components/ui/label"
+
+import { PasswordZod } from "@/types/web/interface.type";
+import { z } from "zod";
 import { XCircle, Save } from "lucide-react";
 import { toast } from 'react-toastify';
 import { useEffect, useRef, useState } from 'react';
@@ -47,6 +50,8 @@ import TableExample, { TableExampleForDocuments } from "@/components/TableExampl
 import { Checkbox } from "@/components/ui/checkbox";
 import CreerFolders from "@/components/CreerFolders";
 import { motion } from "framer-motion";
+import { createPassword } from "@/hooks/web/useCreatePassword";
+import { getSession } from "@/lib/localstorage";
 
 enum View {
     Main = "MainComponent",
@@ -84,31 +89,43 @@ export default function Layout() {
     return (
         <div className="flex h-screen">
             {/* Sidebar fixe */}
-            <aside className="w-64 border rounded-2xl mx-1 bg-card p-4 flex flex-col justify-between fixed inset-y-0 left-0">
+            <aside className="w-64 border-r rounded-r-2xl bg-gradient-to-b from-gray-50 via-white to-gray-100 p-4 flex flex-col justify-between fixed inset-y-0 left-0 shadow-md">
                 {/* Top: Logo + Navigation */}
                 <div className="overflow-y-auto">
-                    <h1 className="text-xl font-bold mb-6">Untitled UI</h1>
+                    <h1 className="text-xl font-bold mb-6 text-gray-800">Untitled UI</h1>
 
                     <nav className="space-y-2">
-                        <Button variant="ghost" className="w-full justify-start cursor-pointer " onClick={handleclickHome} >
-                            <Home className="mr-2 h-4 w-4"
-                            />Home
+                        <Button
+                            variant="ghost"
+                            className="w-full justify-start cursor-pointer hover:bg-gray-100 rounded-lg"
+                            onClick={handleclickHome}
+                        >
+                            <Home className="mr-2 h-4 w-4" /> Home
                         </Button>
 
-                        <Button variant="ghost" className="w-full justify-start cursor-pointer" onClick={handleclickPassword}>
+                        <Button
+                            variant="ghost"
+                            className="w-full justify-start cursor-pointer hover:bg-gray-100 rounded-lg"
+                            onClick={handleclickPassword}
+                        >
                             <Lock className="mr-2 h-4 w-4" /> Passwords
                         </Button>
 
-                        <Button variant="ghost" className="w-full justify-start cursor-pointer" onClick={handleclickCreditCards}>
+                        <Button
+                            variant="ghost"
+                            className="w-full justify-start cursor-pointer hover:bg-gray-100 rounded-lg"
+                            onClick={handleclickCreditCards}
+                        >
                             <CreditCard className="mr-2 h-4 w-4" /> Credit Cards
                         </Button>
 
                         <Separator className="my-2" />
+
                         {/* Folders avec toggle */}
                         <div>
                             <Button
                                 variant="ghost"
-                                className="w-full justify-between"
+                                className="w-full justify-between hover:bg-gray-100 rounded-lg"
                                 onClick={() => setOpenFolders(!openFolders)}
                             >
                                 <span className="flex items-center">
@@ -121,39 +138,59 @@ export default function Layout() {
                             </Button>
                             {openFolders && (
                                 <div className="ml-6 mt-1 space-y-1">
-                                    <Button variant="ghost" className="w-full justify-start text-sm">
+                                    <Button
+                                        variant="ghost"
+                                        className="w-full justify-start text-sm hover:bg-gray-100 rounded-md"
+                                    >
                                         Folder 1
                                     </Button>
-                                    <Button variant="ghost" className="w-full justify-start text-sm">
+                                    <Button
+                                        variant="ghost"
+                                        className="w-full justify-start text-sm hover:bg-gray-100 rounded-md"
+                                    >
                                         Folder 2
                                     </Button>
                                 </div>
                             )}
                         </div>
+
                         <Separator className="my-2" />
 
-                        <Button variant="ghost" className="w-full justify-start">
-                            <Download className="mr-2 h-4 w-4" /> download
+                        <Button
+                            variant="ghost"
+                            className="w-full justify-start hover:bg-gray-100 rounded-lg"
+                        >
+                            <Download className="mr-2 h-4 w-4" /> Download
                         </Button>
 
-                        <Button variant="ghost" className="w-full justify-start">
-                            <Settings className="mr-2 h-4 w-4" /> settings
+                        <Button
+                            variant="ghost"
+                            className="w-full justify-start hover:bg-gray-100 rounded-lg"
+                        >
+                            <Settings className="mr-2 h-4 w-4" /> Settings
                         </Button>
 
-                        <Button variant="ghost" className="w-full justify-start">
+                        <Button
+                            variant="ghost"
+                            className="w-full justify-start hover:bg-gray-100 rounded-lg"
+                        >
                             <HelpCircle className="mr-2 h-4 w-4" /> Support
                         </Button>
 
                         <Separator className="my-2" />
 
-                        <Button variant="ghost" className="w-full justify-start cursor-pointer" onClick={handleclickTrash}>
+                        <Button
+                            variant="ghost"
+                            className="w-full justify-start cursor-pointer hover:bg-red-100 rounded-lg"
+                            onClick={handleclickTrash}
+                        >
                             <Trash2 className="mr-2 h-4 w-4" /> Trash
                         </Button>
                     </nav>
                 </div>
 
                 {/* Bottom: Profil utilisateur */}
-                <div className="mt-6 border rounded-2xl p-1 hover:bg-gray-50">
+                <div className="mt-6 border rounded-2xl p-1 bg-white/70 backdrop-blur-sm hover:bg-white/90 transition shadow-sm">
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                             <Button
@@ -166,8 +203,10 @@ export default function Layout() {
                                         <AvatarFallback>OR</AvatarFallback>
                                     </Avatar>
                                     <div className="flex flex-col text-left">
-                                        <span className="text-sm font-medium">Olivia Rhye</span>
-                                        <span className="text-xs text-muted-foreground">
+                                        <span className="text-sm font-medium text-gray-800">
+                                            Olivia Rhye
+                                        </span>
+                                        <span className="text-xs text-gray-500">
                                             olivia@untitledui.com
                                         </span>
                                     </div>
@@ -330,7 +369,7 @@ function MainComponent() {
         <>
             {/* Header */}
             <div className="flex items-center justify-between">
-                <h2 className="text-2xl font-bold">Site traffic</h2>
+                <h2 className="text-lg font-bold">Site traffic</h2>
                 <div className="space-x-2">
                     {/* <Button variant="outline" className="cursor-pointer">Ajouter un dossier</Button> */}
                     <CreerFolders />
@@ -342,10 +381,10 @@ function MainComponent() {
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                 {dossiersCree.length > 0 &&
                     dossiersCree.map((item, index) => (
-                        <motion.div 
-                            // initial={{ opacity: 0, y: 10 }
-                            // } animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}
-                        > 
+                        <motion.div
+                        // initial={{ opacity: 0, y: 10 }
+                        // } animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}
+                        >
                             <Card
                                 key={index}
                                 className="shadow-md rounded-xl bg-white backdrop-blur-sm hover:shadow-lg transition duration-300"
@@ -405,6 +444,7 @@ function PasswordsComponent() {
     const [folder, setFolder] = useState("");
     const inputRef = useRef<HTMLInputElement>(null);
     const [loading, setLoading] = useState(false);
+    const { user } = getSession()
 
     const handleCancel = () => {
         setTitle("");
@@ -413,16 +453,36 @@ function PasswordsComponent() {
         setWebsite("");
         setFolder("");
         window.location.reload()
-        // toast("Formulaire réinitialisé ❌", { icon: "⚠️" });
     };
 
-    const handleSave = () => {
-        setLoading(true);
-        setTimeout(() => {
-            setLoading(false);
-            toast.success("Mot de passe enregistré");
-            handleCancel();
-        }, 1500);
+    const handleSave = async () => {
+
+        if (user) {
+            const dataSending: z.infer<typeof PasswordZod> = {
+                titre: title,
+                identifiant: email,
+                motDePasse: password,
+                proprietaireId: user,
+                dossierId: folder || undefined,
+                reference: website
+                    ? { type: "autre", valeur: website }
+                    : undefined,
+                dateCreation: new Date(),
+                dateModification: new Date(),
+            };
+
+            try {
+                setLoading(true);
+                await createPassword(user, dataSending);
+                toast.success("Mot de passe enregistré !");
+                handleCancel();
+            } catch (err: any) {
+                console.error("Erreur:", err.message);
+                toast.error("Erreur lors de l'enregistrement !");
+            } finally {
+                setLoading(false);
+            }
+        }
     };
 
     return (

@@ -39,7 +39,7 @@ export const getSession = () => {
 
 
     return {
-        email: email,
+        Email: email,
         user: user,
         token_connexion
     }
