@@ -452,28 +452,46 @@ function PasswordsComponent() {
         setPassword("");
         setWebsite("");
         setFolder("");
-        
+
         setTimeout(() => {
             window.location.reload()
-        },900)
+        }, 900)
     };
 
     const handleSave = async () => {
         if (!user) return;
 
+        // Vérification des champs vides
+        if (!title.trim() || !email.trim() || !password.trim()) {
+            toast.error("Titre, email et mot de passe sont obligatoires !");
+            return;
+        }
+
+        if (password.trim().length < 6) {
+            toast.error("Le mot de passe doit contenir au moins 6 caractères !");
+            return;
+        }
+
         const dataSending: z.infer<typeof PasswordZod> = {
-            titre: title,
-            identifiant: email,
-            motDePasse: password,
+            titre: title.trim(),
+            identifiant: email.trim(),
+            motDePasse: password.trim(),
             proprietaireId: user,
             dossierId: folder || undefined,
-            reference: website ? { type: "autre", valeur: website } : undefined,
-            // dateCreation: new Date(),
-            // dateModification: new Date(),
+            reference: website ? { type: "autre", valeur: website.trim() } : undefined,
         };
+
+        const parseResult = PasswordZod.safeParse(dataSending);
+        if (!parseResult.success) {
+            parseResult.error.errors.forEach((err) => {
+                toast.error(`Erreur: ${err.path.join(".")} - ${err.message}`);
+            });
+            return;
+        }
+
         setLoading(true);
         try {
-            await createPassword(user, dataSending);
+            await createPassword(user, parseResult.data); 
             toast.success("Mot de passe enregistré !");
             handleCancel();
         } catch (err: any) {
@@ -483,7 +501,6 @@ function PasswordsComponent() {
             setLoading(false);
         }
     };
-
 
     return (
         <div className="flex items-center justify-center min-h-[600px]">

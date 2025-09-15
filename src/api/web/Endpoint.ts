@@ -1,7 +1,7 @@
 
 export const ENDPOINTS_PASSWORDS = {
     CreerMotDePasse: "/operations/:id",
-    ObtenirMotDePasseID: '/operations/:id',
+    ObtenirMotDePasseID: '/operations/user/:userId',
     UpdateMotDePasseID: '/operations/:id',
     DeleteMotDePasseID: '/operations/:id',
 };

@@ -16,7 +16,7 @@ export class PasswordService {
 
     // Récupérer tous les mots de passe d'un utilisateur
     static async getAll(userId: string): Promise<string[]> {
-        return Http(ENDPOINTS_PASSWORDS.ObtenirMotDePasseID.replace(":id", userId), {
+        return Http(ENDPOINTS_PASSWORDS.ObtenirMotDePasseID.replace(":userId", userId), {
             method: "GET",
         }) as Promise<string[]>;
     }
