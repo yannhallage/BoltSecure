@@ -21,6 +21,7 @@ import { motion } from "framer-motion"
 import { useGetPasswords } from '@/hooks/web/useGetPasswords';
 import { getSession } from '@/lib/localstorage';
 import { socialAccounts } from '@/data/socialAccounts';
+import AlertComponent from "./pages/app/AlertComponent"
 
 
 
@@ -134,14 +135,17 @@ export default function TableExample() {
                   <TableCell className="text-right text-[13px] text-gray-700">
                     {pwd.dateCreation ? new Date(pwd.dateCreation).toLocaleDateString() : "-"}
                   </TableCell>
-                  <TableCell className="text-right text-[13px] text-gray-700">
+                  <TableCell className="text-right flex space-x-3 text-[13px] text-gray-700">
                     {/* {pwd.dateCreation ? new Date(pwd.dateCreation).toLocaleDateString() : "-"} */}
-                    <span>
+                    <span className="mt-3">
                       <EditDialog
                         password={pwd.identifiant}
                         email={pwd.identifiant}
                         title={pwd.titre}
                       />
+                    </span>
+                    <span>
+                      <AlertComponent />
                     </span>
                   </TableCell>
                 </TableRow>
