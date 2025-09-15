@@ -452,41 +452,41 @@ function PasswordsComponent() {
         setPassword("");
         setWebsite("");
         setFolder("");
-        window.location.reload()
+        
+        setTimeout(() => {
+            window.location.reload()
+        },900)
     };
 
     const handleSave = async () => {
+        if (!user) return;
 
-        if (user) {
-            const dataSending: z.infer<typeof PasswordZod> = {
-                titre: title,
-                identifiant: email,
-                motDePasse: password,
-                proprietaireId: user,
-                dossierId: folder || undefined,
-                reference: website
-                    ? { type: "autre", valeur: website }
-                    : undefined,
-                dateCreation: new Date(),
-                dateModification: new Date(),
-            };
-
-            try {
-                setLoading(true);
-                await createPassword(user, dataSending);
-                toast.success("Mot de passe enregistré !");
-                handleCancel();
-            } catch (err: any) {
-                console.error("Erreur:", err.message);
-                toast.error("Erreur lors de l'enregistrement !");
-            } finally {
-                setLoading(false);
-            }
+        const dataSending: z.infer<typeof PasswordZod> = {
+            titre: title,
+            identifiant: email,
+            motDePasse: password,
+            proprietaireId: user,
+            dossierId: folder || undefined,
+            reference: website ? { type: "autre", valeur: website } : undefined,
+            // dateCreation: new Date(),
+            // dateModification: new Date(),
+        };
+        setLoading(true);
+        try {
+            await createPassword(user, dataSending);
+            toast.success("Mot de passe enregistré !");
+            handleCancel();
+        } catch (err: any) {
+            console.error("Erreur:", err.message);
+            toast.error("Erreur lors de l'enregistrement !");
+        } finally {
+            setLoading(false);
         }
     };
 
+
     return (
-        <div className="flex items-center justify-center min-h-[600px] px-4">
+        <div className="flex items-center justify-center min-h-[600px]">
             <div className="bg-white shadow-lg rounded-2xl w-full max-w-lg p-6 space-y-6">
                 <div className="flex justify-center">
                     <div className="bg-lime-400 rounded-full p-4 shadow-md">

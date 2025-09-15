@@ -1,14 +1,14 @@
 
 export const ENDPOINTS_PASSWORDS = {
-    CreerMotDePasse: "/api/operations/:id",
-    ObtenirMotDePasseID: '/api/operations/:id',
-    UpdateMotDePasseID: '/api/operations/:id',
-    DeleteMotDePasseID: '/api/operations/:id',
+    CreerMotDePasse: "/operations/:id",
+    ObtenirMotDePasseID: '/operations/:id',
+    UpdateMotDePasseID: '/operations/:id',
+    DeleteMotDePasseID: '/operations/:id',
 };
 
 export const ENDPOINTS_CREDITCARDS = {
-    CreerMotDePasse: "/api/operations/creditCard/:id",
-    ObtenirMotDePasseID: '/api/operations/creditCard/:id',
-    UpdateMotDePasseID: '/api/operations/creditCard/:id',
-    DeleteMotDePasseID: '/api/operations/creditCard/:id',
+    CreerMotDePasse: "/operations/creditCard/:id",
+    ObtenirMotDePasseID: '/operations/creditCard/:id',
+    UpdateMotDePasseID: '/operations/creditCard/:id',
+    DeleteMotDePasseID: '/operations/creditCard/:id',
 };

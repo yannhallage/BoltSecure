@@ -3,7 +3,7 @@
 export const setSession = (data: string, type: string) => {
     if (type === 'email') {
         localStorage.setItem('email', data);
-    } else {
+    } else if (type === 'utilisateur') {
         localStorage.setItem('utilisateur', data);
     }
 
