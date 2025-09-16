@@ -5,6 +5,9 @@ import { PasswordZod } from "@/types/web/interface.type";
 import { z } from "zod";
 import { XCircle, Save } from "lucide-react";
 import { toast } from 'react-toastify';
+import { useNavigate } from "react-router";
+
+
 import { useEffect, useRef, useState } from 'react';
 import { Input } from "@/components/ui/input";
 
@@ -50,8 +53,9 @@ import TableExample, { TableExampleForDocuments } from "@/components/TableExampl
 import { Checkbox } from "@/components/ui/checkbox";
 import CreerFolders from "@/components/CreerFolders";
 import { motion } from "framer-motion";
-import { createPassword } from "@/hooks/web/useCreatePassword";
-import { getSession } from "@/lib/localstorage";
+import { createPassword } from "@/hooks/web/password/useCreatePassword";
+import { getSession, removeSession } from "@/lib/localstorage";
+import { useCreditCard } from "@/hooks/web/creditCarte/useCreditCard";
 
 enum View {
     Main = "MainComponent",
@@ -67,11 +71,12 @@ export default function Layout() {
     const [openFolders, setOpenFolders] = useState(false);
     const [stateOfChange, setStateOfChange] = useState<string>("MainComponent");
     const [message, setMessage] = useState("");
-
+    const navigate = useNavigate()
     const handleclickHome = () => setStateOfChange(View.Main);
     const handleclickPassword = () => setStateOfChange(View.AddPassword);
     const handleclickCreditCards = () => setStateOfChange(View.CreditCard);
     const handleclickTrash = () => setStateOfChange(View.TrashComponent);
+    const { Email } = getSession()
 
     useEffect(() => {
         if (message === "PassordsComponent") {
@@ -206,8 +211,8 @@ export default function Layout() {
                                         <span className="text-sm font-medium text-gray-800">
                                             Olivia Rhye
                                         </span>
-                                        <span className="text-xs text-gray-500">
-                                            olivia@untitledui.com
+                                        <span className="text-[11px] text-gray-500">
+                                            {Email ? Email : 'olivia@untitledui.com'}
                                         </span>
                                     </div>
                                 </div>
@@ -247,7 +252,12 @@ export default function Layout() {
                                 <Repeat className="mr-2 h-4 w-4" /> Add account
                             </DropdownMenuItem>
                             <DropdownMenuSeparator />
-                            <DropdownMenuItem className="text-red-500">
+                            <DropdownMenuItem className="text-red-500 cursor-pointer" onClick={
+                                () => {
+                                    removeSession()
+                                    navigate("/auth");
+                                }
+                            }>
                                 <LogOut className="mr-2 h-4 w-4" /> Sign out
                             </DropdownMenuItem>
                         </DropdownMenuContent>
@@ -256,7 +266,7 @@ export default function Layout() {
             </aside>
 
             {/* Contenu principal scrollable */}
-            <main className="ml-64 flex-1 h-screen overflow-y-auto p-6 space-y-6">
+            <main className="ml-64 flex-1 h-screen overflow-y-auto bg-[#EFEEEA] p-6 space-y-6">
                 {stateOfChange === 'MainComponent' && <MainComponent />}
                 {stateOfChange === 'AddPassword' && <AddPassword setMessage={setMessage} />}
                 {stateOfChange === 'PassordsComponent' && <PasswordsComponent />}
@@ -382,8 +392,6 @@ function MainComponent() {
                 {dossiersCree.length > 0 &&
                     dossiersCree.map((item, index) => (
                         <motion.div
-                        // initial={{ opacity: 0, y: 10 }
-                        // } animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}
                         >
                             <Card
                                 key={index}
@@ -491,7 +499,7 @@ function PasswordsComponent() {
 
         setLoading(true);
         try {
-            await createPassword(user, parseResult.data); 
+            await createPassword(user, parseResult.data);
             toast.success("Mot de passe enregistré !");
             handleCancel();
         } catch (err: any) {
@@ -612,27 +620,35 @@ interface CreditCardFormProps {
 }
 
 function CreditCardAddComponent({ setMessage }: CreditCardFormProps) {
-    const [loading, setLoading] = useState(false);
     const [title, setTitle] = useState("");
-    const [holderName, setHolderName] = useState("");
-    const [cardNumber, setCardNumber] = useState("");
-    const [expiry, setExpiry] = useState("");
+    const [nomTitulaire, setNomTitulaire] = useState("");
+    const [numeroCarte, setNumeroCarte] = useState("");
+    const [dateExpiration, setDateExpiration] = useState("");
     const [cvc, setCVC] = useState("");
     const [setAsDefault, setSetAsDefault] = useState(false);
 
-    const handleSave = () => {
-        setLoading(true);
-        setTimeout(() => {
-            setLoading(false);
-            setTitle("");
-            setHolderName("");
-            setCardNumber("");
-            setExpiry("");
-            setCVC("");
-            setSetAsDefault(false);
-            if (setMessage) setMessage("MainComponent");
-            toast.success("Carde de credit enregistrée ! ");
-        }, 1500);
+    const { user } = getSession();
+    const { handleSave, handleCancel, loading } = useCreditCard(user || '', setMessage);
+
+    const handleCancelForm = () => {
+        setTitle("");
+        setNomTitulaire("");
+        setNumeroCarte("");
+        setDateExpiration("");
+        setCVC("");
+    };
+
+    const onSave = () => {
+        const data = {
+            titre: title,
+            nomTitulaire,
+            numeroCarte,
+            dateExpiration,
+            cvc,
+            proprietaireId: user || ""
+        };
+
+        handleSave(data, handleCancelForm);
     };
 
     return (
@@ -666,37 +682,37 @@ function CreditCardAddComponent({ setMessage }: CreditCardFormProps) {
                     </div>
 
                     <div className="space-y-2">
-                        <Label htmlFor="holderName">Nom du titulaire</Label>
+                        <Label htmlFor="nomTitulaire">Nom du titulaire</Label>
                         <Input
-                            id="holderName"
+                            id="nomTitulaire"
                             placeholder="ex: Jean Dupont"
-                            value={holderName}
-                            onChange={(e) => setHolderName(e.target.value)}
+                            value={nomTitulaire}
+                            onChange={(e) => setNomTitulaire(e.target.value)}
                             required
                             className="h-11"
                         />
                     </div>
 
                     <div className="space-y-2">
-                        <Label htmlFor="cardNumber">Numéro de carte</Label>
+                        <Label htmlFor="numeroCarte">Numéro de carte</Label>
                         <Input
-                            id="cardNumber"
+                            id="numeroCarte"
                             className="h-11"
                             placeholder="0000 0000 0000 0000"
-                            value={cardNumber}
-                            onChange={(e) => setCardNumber(e.target.value)}
+                            value={numeroCarte}
+                            onChange={(e) => setNumeroCarte(e.target.value)}
                         />
                     </div>
 
                     <div className="flex gap-4">
                         <div className="flex-1 space-y-2">
-                            <Label htmlFor="expiry">Date d'expiration</Label>
+                            <Label htmlFor="dateExpiration">Date d'expiration</Label>
                             <Input
-                                id="expiry"
+                                id="dateExpiration"
                                 className="h-11"
                                 placeholder="MM/AA"
-                                value={expiry}
-                                onChange={(e) => setExpiry(e.target.value)}
+                                value={dateExpiration}
+                                onChange={(e) => setDateExpiration(e.target.value)}
                             />
                         </div>
                         <div className="flex-1 space-y-2">
@@ -725,7 +741,7 @@ function CreditCardAddComponent({ setMessage }: CreditCardFormProps) {
                     <Button
                         type="button"
                         className="w-full cursor-pointer bg-lime-500 hover:bg-lime-600 text-white"
-                        onClick={handleSave}
+                        onClick={onSave}
                         disabled={loading}
                     >
                         {loading ? (
@@ -739,6 +755,7 @@ function CreditCardAddComponent({ setMessage }: CreditCardFormProps) {
         </div>
     );
 }
+
 
 function TrashComponent() {
     return (
