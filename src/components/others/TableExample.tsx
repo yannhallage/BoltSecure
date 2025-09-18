@@ -20,7 +20,7 @@ import { useGetPasswords } from '@/hooks/web/password/useGetPasswords';
 import { useGetCreditcards } from '@/hooks/web/creditCarte/useGetCreditcards';
 import { getSession } from '@/lib/localstorage';
 import { socialAccounts, BankAccounts } from '@/data/socialAccounts';
-import AlertComponent from "./pages/app/AlertComponent"
+import AlertComponent from "../pages/app/AlertComponent"
 
 
 

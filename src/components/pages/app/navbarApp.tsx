@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
-import Account from "@/components/Account";
+import Account from "@/components/others/Account";
 // import { useNavigate } from "react-router";
 // import { Button } from "@/components/ui/button";
 

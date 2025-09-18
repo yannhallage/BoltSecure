@@ -14,8 +14,8 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { useState } from "react";
-import AddPassword from "@/components/AddPassword"
-import CreditCard from "@/components/CreditCard"
+import AddPassword from "@/components/others/AddPassword"
+import CreditCard from "@/components/others/CreditCard"
 
 export function DropdownMenuDemo() {
     const [open, setOpen] = useState(false)

@@ -2,13 +2,13 @@
 "use client"
 import { motion } from "framer-motion";
 
-import TableExample, { TableExampleForDocuments } from "@/components/TableExample";
+import TableExample, { TableExampleForDocuments } from "@/components/others/TableExample";
 // import NavbarComponentLanding from "@/components/pages/Navbar";
 import NavbarApp from "@/components/pages/app/navbarApp";
 import { Settings, Trash2, Download } from 'lucide-react';
 
-import ToolitpPassword, { ToolitpCreditCards, ToolitpPasskeys, ToolitpButtonCreeFolder } from "@/components/comp-357";
-import MenuWithIcons from "@/components/MenuWithIcons";
+import ToolitpPassword, { ToolitpCreditCards, ToolitpPasskeys, ToolitpButtonCreeFolder } from "@/components/others/comp-357";
+import MenuWithIcons from "@/components/others/MenuWithIcons";
 import { useState } from "react";
 // import { Button } from "@/components/ui/button";
 import { DropdownMenuDemo } from "@/components/pages/app/DropdownMenuDemo";
@@ -147,13 +147,13 @@ export default function BolstSecurePage() {
                                                                             src="https://www.thiings.co/_next/image?url=https%3A%2F%2Flftz25oez4aqbxpq.public.blob.vercel-storage.com%2Fimage-6TJq3TblGrgJLKvMLFj3N2YcDEXG2A.png&w=500&q=75"
                                                                             alt="" />
                                                                         <div className="flex flex-col space-y-1 truncate flex-1">
-                                                                            <span className="truncate text-sm tracking-wide font-medium"> 
+                                                                            <span className="truncate text-sm tracking-wide font-medium">
                                                                                 {
                                                                                     item.name
                                                                                 }
                                                                             </span>
                                                                             <div className="text-xs text-muted-foreground">
-                                                                                { item.contenu}<span className="lowercase"> contenu</span>
+                                                                                {item.contenu}<span className="lowercase"> contenu</span>
                                                                             </div>
                                                                         </div>
                                                                     </div>

@@ -25,13 +25,13 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import SettingsDialog from "./pages/app/SettingsDialog"
+import SettingsDialog from "../pages/app/SettingsDialog"
 import { useState } from "react"
 
 
 
 export default function Account() {
-  const [open ,setOpen] = useState(false)
+  const [open, setOpen] = useState(false)
   return (
     <>
       <DropdownMenu>
@@ -60,7 +60,7 @@ export default function Account() {
           <DropdownMenuSeparator />
           <DropdownMenuGroup>
             <DropdownMenuItem onClick={() => { setOpen(true) }}>
-              <Settings size={16} className="opacity-60" aria-hidden="true"/>
+              <Settings size={16} className="opacity-60" aria-hidden="true" />
               <span>parameters</span>
             </DropdownMenuItem>
             <DropdownMenuItem>

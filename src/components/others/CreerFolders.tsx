@@ -1,7 +1,7 @@
 import { useId } from "react"
 
 import { Button } from "@/components/ui/button"
-// import { Checkbox } from "@/components/ui/checkbox"
+
 import {
   Dialog,
   DialogContent,
@@ -12,13 +12,23 @@ import {
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { CopyPlus } from "lucide-react"
 
 export default function CreerFolders() {
   const id = useId()
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline" className="cursor-pointer">Ajouter un dossier</Button>
+        <Button variant="outline" className="cursor-pointer">
+          <div className="flex space-x-2 ">
+            <span>
+              Ajouter un dossier
+            </span>
+            <span>
+              <CopyPlus />
+            </span>
+          </div>
+        </Button>
       </DialogTrigger>
       <DialogContent>
         <div className="flex flex-col items-center gap-2">

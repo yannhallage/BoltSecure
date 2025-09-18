@@ -1,9 +1,9 @@
-import InfoMenu from "@/components/info-menu"
+import InfoMenu from "@/components/others/info-menu"
 // import Logo from "@/components/logo"
 import { Settings } from 'lucide-react';
 
-import NotificationMenu from "@/components/notification-menu"
-import UserMenu from "@/components/user-menu"
+import NotificationMenu from "@/components/others/notification-menu"
+import UserMenu from "@/components/others/user-menu"
 import { Button } from "@/components/ui/button"
 import {
   NavigationMenu,

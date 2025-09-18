@@ -1,5 +1,6 @@
 "use client";
 import { Label } from "@/components/ui/label"
+import { CopyPlus } from 'lucide-react';
 
 import { PasswordZod } from "@/types/web/interface.type";
 import { z } from "zod";
@@ -48,10 +49,10 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
-import TableExample, { TableExampleForDocuments } from "@/components/TableExample";
+import TableExample, { TableExampleForDocuments } from "@/components/others/TableExample";
 
 import { Checkbox } from "@/components/ui/checkbox";
-import CreerFolders from "@/components/CreerFolders";
+import CreerFolders from "@/components/others/CreerFolders";
 import { motion } from "framer-motion";
 import { createPassword } from "@/hooks/web/password/useCreatePassword";
 import { getSession, removeSession } from "@/lib/localstorage";
@@ -77,6 +78,8 @@ export default function Layout() {
     const handleclickCreditCards = () => setStateOfChange(View.CreditCard);
     const handleclickTrash = () => setStateOfChange(View.TrashComponent);
     const { Email } = getSession()
+    const [active, setActive] = useState("home")
+
 
     useEffect(() => {
         if (message === "PassordsComponent") {
@@ -94,64 +97,89 @@ export default function Layout() {
     return (
         <div className="flex h-screen">
             {/* Sidebar fixe */}
-            <aside className="w-64 border-r rounded-r-2xl bg-gradient-to-b from-gray-50 via-white to-gray-100 p-4 flex flex-col justify-between fixed inset-y-0 left-0 shadow-md">
+            <aside className="w-64 border-r border-gray-100 rounded-r-2xl 
+                bg-gradient-to-b from-white via-gray-50 to-white 
+                p-4 flex flex-col justify-between fixed inset-y-0 left-0 
+                shadow-[0_2px_10px_rgba(0,0,0,0.05)]">
+
                 {/* Top: Logo + Navigation */}
-                <div className="overflow-y-auto">
-                    <h1 className="text-xl font-bold mb-6 text-gray-800">Untitled UI</h1>
+                <div className="overflow-y-auto h-full bg-transparent p-4">
+                    <h1 className="text-2xl font-extrabold mb-8 tracking-tight text-gray-900">
+                        <span className="bg-gradient-to-r from-blue-600 to-indigo-500 bg-clip-text text-transparent drop-shadow-sm">
+                            BoltSecure
+                        </span>
+                    </h1>
 
-                    <nav className="space-y-2">
+                    <nav className="space-y-1">
                         <Button
                             variant="ghost"
-                            className="w-full justify-start cursor-pointer hover:bg-gray-100 rounded-lg"
-                            onClick={handleclickHome}
+                            className={`w-full justify-start cursor-pointer rounded-xl px-3 py-2 transition-all duration-200
+                ${active === "home"
+                                    ? "bg-gradient-to-r from-blue-50 to-indigo-50 text-blue-600 shadow-sm"
+                                    : "text-gray-700 hover:text-blue-600 hover:bg-blue-50/60"}`}
+                            onClick={() => {
+                                setActive("home")
+                                handleclickHome()
+                            }}
                         >
-                            <Home className="mr-2 h-4 w-4" /> Home
+                            <Home className="mr-2 h-5 w-5 opacity-80" /> Home
                         </Button>
 
                         <Button
                             variant="ghost"
-                            className="w-full justify-start cursor-pointer hover:bg-gray-100 rounded-lg"
-                            onClick={handleclickPassword}
+                            className={`w-full justify-start cursor-pointer rounded-xl px-3 py-2 transition-all duration-200
+                ${active === "passwords"
+                                    ? "bg-gradient-to-r from-blue-50 to-indigo-50 text-blue-600 shadow-sm"
+                                    : "text-gray-700 hover:text-blue-600 hover:bg-blue-50/60"}`}
+                            onClick={() => {
+                                setActive("passwords")
+                                handleclickPassword()
+                            }}
                         >
-                            <Lock className="mr-2 h-4 w-4" /> Passwords
+                            <Lock className="mr-2 h-5 w-5 opacity-80" /> Passwords
                         </Button>
 
                         <Button
                             variant="ghost"
-                            className="w-full justify-start cursor-pointer hover:bg-gray-100 rounded-lg"
-                            onClick={handleclickCreditCards}
+                            className={`w-full justify-start cursor-pointer rounded-xl px-3 py-2 transition-all duration-200
+                ${active === "creditcards"
+                                    ? "bg-gradient-to-r from-blue-50 to-indigo-50 text-blue-600 shadow-sm"
+                                    : "text-gray-700 hover:text-blue-600 hover:bg-blue-50/60"}`}
+                            onClick={() => {
+                                setActive("creditcards")
+                                handleclickCreditCards()
+                            }}
                         >
-                            <CreditCard className="mr-2 h-4 w-4" /> Credit Cards
+                            <CreditCard className="mr-2 h-5 w-5 opacity-80" /> Credit Cards
                         </Button>
 
-                        <Separator className="my-2" />
+                        <Separator className="my-4" />
 
                         {/* Folders avec toggle */}
                         <div>
                             <Button
                                 variant="ghost"
-                                className="w-full justify-between hover:bg-gray-100 rounded-lg"
+                                className="w-full justify-between text-gray-700 cursor-pointer hover:text-blue-600 hover:bg-blue-50/60 rounded-xl px-3 py-2 transition-all duration-200"
                                 onClick={() => setOpenFolders(!openFolders)}
                             >
                                 <span className="flex items-center">
-                                    <Folder className="mr-2 h-4 w-4" /> Folders
+                                    <Folder className="mr-2 h-5 w-5 opacity-80" /> Folders
                                 </span>
                                 <ChevronDown
-                                    className={`h-4 w-4 transition-transform ${openFolders ? "rotate-180" : ""
-                                        }`}
+                                    className={`h-4 w-4 transition-transform duration-200 ${openFolders ? "rotate-180" : ""}`}
                                 />
                             </Button>
                             {openFolders && (
-                                <div className="ml-6 mt-1 space-y-1">
+                                <div className="ml-6 mt-2 space-y-1">
                                     <Button
                                         variant="ghost"
-                                        className="w-full justify-start text-sm hover:bg-gray-100 rounded-md"
+                                        className="w-full justify-start text-sm text-gray-600 cursor-pointer hover:text-blue-600 hover:bg-blue-50/60 rounded-lg px-3 py-1.5 transition-all"
                                     >
                                         Folder 1
                                     </Button>
                                     <Button
                                         variant="ghost"
-                                        className="w-full justify-start text-sm hover:bg-gray-100 rounded-md"
+                                        className="w-full justify-start text-sm text-gray-600 cursor-pointer hover:text-blue-600 hover:bg-blue-50/60 rounded-lg px-3 py-1.5 transition-all"
                                     >
                                         Folder 2
                                     </Button>
@@ -159,69 +187,86 @@ export default function Layout() {
                             )}
                         </div>
 
-                        <Separator className="my-2" />
+                        <Separator className="my-4" />
 
                         <Button
                             variant="ghost"
-                            className="w-full justify-start hover:bg-gray-100 rounded-lg"
+                            className={`w-full justify-start rounded-xl px-3 py-2 transition-all duration-200
+                ${active === "download"
+                                    ? "bg-gradient-to-r from-blue-50 to-indigo-50 text-blue-600 shadow-sm"
+                                    : "text-gray-700 hover:text-blue-600 hover:bg-blue-50/60"}`}
+                            onClick={() => setActive("download")}
                         >
-                            <Download className="mr-2 h-4 w-4" /> Download
+                            <Download className="mr-2 h-5 w-5 opacity-80" /> Download
                         </Button>
 
                         <Button
                             variant="ghost"
-                            className="w-full justify-start hover:bg-gray-100 rounded-lg"
+                            className={`w-full justify-start rounded-xl px-3 py-2 transition-all duration-200
+                ${active === "settings"
+                                    ? "bg-gradient-to-r from-blue-50 to-indigo-50 text-blue-600 shadow-sm"
+                                    : "text-gray-700 hover:text-blue-600 hover:bg-blue-50/60"}`}
+                            onClick={() => setActive("settings")}
                         >
-                            <Settings className="mr-2 h-4 w-4" /> Settings
+                            <Settings className="mr-2 h-5 w-5 opacity-80" /> Settings
                         </Button>
 
                         <Button
                             variant="ghost"
-                            className="w-full justify-start hover:bg-gray-100 rounded-lg"
+                            className={`w-full justify-start rounded-xl px-3 py-2 transition-all duration-200
+                ${active === "support"
+                                    ? "bg-gradient-to-r from-blue-50 to-indigo-50 text-blue-600 shadow-sm"
+                                    : "text-gray-700 hover:text-blue-600 hover:bg-blue-50/60"}`}
+                            onClick={() => setActive("support")}
                         >
-                            <HelpCircle className="mr-2 h-4 w-4" /> Support
+                            <HelpCircle className="mr-2 h-5 w-5 opacity-80" /> Support
                         </Button>
 
-                        <Separator className="my-2" />
+                        <Separator className="my-4" />
 
                         <Button
                             variant="ghost"
-                            className="w-full justify-start cursor-pointer hover:bg-red-100 rounded-lg"
-                            onClick={handleclickTrash}
+                            className={`w-full justify-start rounded-xl px-3 py-2 transition-all duration-200
+                ${active === "trash"
+                                    ? "bg-red-50 text-red-700 shadow-sm"
+                                    : "text-red-600 hover:text-red-700 hover:bg-red-50/70"}`}
+                            onClick={() => {
+                                setActive("trash")
+                                handleclickTrash()
+                            }}
                         >
-                            <Trash2 className="mr-2 h-4 w-4" /> Trash
+                            <Trash2 className="mr-2 h-5 w-5 opacity-80" /> Trash
                         </Button>
                     </nav>
                 </div>
 
                 {/* Bottom: Profil utilisateur */}
-                <div className="mt-6 border rounded-2xl p-1 bg-white/70 backdrop-blur-sm hover:bg-white/90 transition shadow-sm">
+                <div className="mt-6 border border-gray-100 rounded-2xl p-2 bg-gradient-to-r from-white to-gray-50 backdrop-blur-sm cursor-pointer hover:bg-gray-50 transition shadow-sm">
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                             <Button
                                 variant="ghost"
-                                className="w-full justify-between px-2 py-2"
+                                className="w-full justify-between px-2 py-2 rounded-xl hover:bg-gray-50/70 transition"
                             >
-                                <div className="flex items-center space-x-2">
-                                    <Avatar className="h-8 w-8">
+                                <div className="flex items-center space-x-3">
+                                    <Avatar className="h-9 w-9 ring-1 ring-gray-200">
                                         <AvatarImage src="https://i.pravatar.cc/40" alt="Olivia Rhye" />
                                         <AvatarFallback>OR</AvatarFallback>
                                     </Avatar>
                                     <div className="flex flex-col text-left">
-                                        <span className="text-sm font-medium text-gray-800">
+                                        <span className="text-sm font-semibold text-gray-900">
                                             Olivia Rhye
                                         </span>
-                                        <span className="text-[11px] text-gray-500">
+                                        <span className="text-xs text-gray-500">
                                             {Email ? Email : 'olivia@untitledui.com'}
                                         </span>
                                     </div>
                                 </div>
-                                <ChevronDown className="h-4 w-4 opacity-70" />
+                                <ChevronDown className="h-4 w-4 opacity-60" />
                             </Button>
                         </DropdownMenuTrigger>
-
-                        <DropdownMenuContent className="w-56" align="end">
-                            <DropdownMenuLabel>Mon compte</DropdownMenuLabel>
+                        <DropdownMenuContent className="w-56 rounded-xl shadow-lg border border-gray-100" align="end">
+                            <DropdownMenuLabel className="text-xs uppercase text-gray-500">Mon compte</DropdownMenuLabel>
                             <DropdownMenuSeparator />
                             <DropdownMenuItem>
                                 <User className="mr-2 h-4 w-4" /> View profile
@@ -233,16 +278,16 @@ export default function Layout() {
                                 <BookOpen className="mr-2 h-4 w-4" /> Documentation
                             </DropdownMenuItem>
                             <DropdownMenuSeparator />
-                            <DropdownMenuLabel>Switch account</DropdownMenuLabel>
+                            <DropdownMenuLabel className="text-xs uppercase text-gray-500">Switch account</DropdownMenuLabel>
                             <DropdownMenuItem>
-                                <Avatar className="mr-2 h-6 w-6">
+                                <Avatar className="mr-2 h-6 w-6 ring-1 ring-gray-200">
                                     <AvatarImage src="https://i.pravatar.cc/41" alt="Olivia Rhye" />
                                     <AvatarFallback>OR</AvatarFallback>
                                 </Avatar>
                                 Olivia Rhye
                             </DropdownMenuItem>
                             <DropdownMenuItem>
-                                <Avatar className="mr-2 h-6 w-6">
+                                <Avatar className="mr-2 h-6 w-6 ring-1 ring-gray-200">
                                     <AvatarImage src="https://i.pravatar.cc/42" alt="Sienna Hewitt" />
                                     <AvatarFallback>SH</AvatarFallback>
                                 </Avatar>
@@ -252,18 +297,17 @@ export default function Layout() {
                                 <Repeat className="mr-2 h-4 w-4" /> Add account
                             </DropdownMenuItem>
                             <DropdownMenuSeparator />
-                            <DropdownMenuItem className="text-red-500 cursor-pointer" onClick={
-                                () => {
-                                    removeSession()
-                                    navigate("/auth");
-                                }
-                            }>
+                            <DropdownMenuItem className="text-red-500 cursor-pointer" onClick={() => {
+                                removeSession()
+                                navigate("/auth");
+                            }}>
                                 <LogOut className="mr-2 h-4 w-4" /> Sign out
                             </DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>
                 </div>
             </aside>
+
 
             {/* Contenu principal scrollable */}
             <main className="ml-64 flex-1 h-screen overflow-y-auto bg-[#EFEEEA] p-6 space-y-6">
@@ -377,50 +421,55 @@ function MainComponent() {
     ]
     return (
         <>
-            {/* Header */}
-            <div className="flex items-center justify-between">
-                <h2 className="text-lg font-bold">Dossiers</h2>
-                <div className="space-x-2">
-                    {/* <Button variant="outline" className="cursor-pointer">Ajouter un dossier</Button> */}
+            <div className="flex items-center justify-between mb-6">
+                <h2 className="text-xl font-semibold tracking-tight text-gray-800">
+                    Dossiers
+                </h2>
+                <div className="flex items-center gap-2">
                     <CreerFolders />
-                    <Button className="cursor-pointer">Export report</Button>
+                    <Button className="cursor-pointer bg-gradient-to-r from-blue-600 to-indigo-500 text-white font-medium px-4 py-2 rounded-lg shadow hover:shadow-md transition">
+                        <div className="flex items-center gap-2">
+                            <span>Export report</span>
+                        </div>
+                    </Button>
                 </div>
             </div>
 
-            {/* Stats cards */}
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
                 {dossiersCree.length > 0 &&
                     dossiersCree.map((item, index) => (
                         <motion.div
+                            key={index}
+                            whileHover={{ scale: 1.02 }}
+                            transition={{ type: "spring", stiffness: 200, damping: 15 }}
                         >
-                            <Card
-                                key={index}
-                                className="shadow-md rounded-xl bg-white backdrop-blur-sm hover:shadow-lg transition duration-300"
-                            >
+                            <Card className="border border-gray-100 rounded-xl bg-white/80 backdrop-blur-sm hover:shadow-xl transition duration-300">
                                 {/* Header */}
-                                <CardHeader className="flex items-center justify-between">
-                                    <CardTitle className="text-base font-medium text-gray-700">
+                                <CardHeader className="flex items-center justify-between pb-2">
+                                    <CardTitle className="text-base font-semibold text-gray-800">
                                         {item.title}
                                     </CardTitle>
-                                    <button className="p-1 rounded-full hover:bg-red-100">
-                                        <Trash2 className="w-5 h-5 cursor-pointer text-gray-500 hover:text-red-700" />
+                                    <button className="p-1 rounded-full hover:bg-red-100 transition">
+                                        <Trash2 className="w-5 h-5 cursor-pointer text-gray-400 hover:text-red-600" />
                                     </button>
                                 </CardHeader>
 
                                 {/* Content */}
                                 <CardContent className="flex items-center justify-between">
                                     <div className="flex items-center gap-3">
-                                        <div className="bg-lime-100 rounded-full p-2 flex items-center justify-center">
+                                        <div className="bg-gradient-to-tr from-lime-200 to-lime-100 rounded-full p-2 flex items-center justify-center shadow-inner">
                                             <img
                                                 width={28}
                                                 src="https://www.thiings.co/_next/image?url=https%3A%2F%2Flftz25oez4aqbxpq.public.blob.vercel-storage.com%2Fimage-6TJq3TblGrgJLKvMLFj3N2YcDEXG2A.png&w=500&q=75"
                                                 alt="pages"
                                             />
                                         </div>
-                                        <p className="text-xl font-bold">{item.value}</p>
+                                        <p className="text-lg text-gray-800 font-semibold">
+                                            {item.value}
+                                        </p>
                                     </div>
 
-                                    <p className="text-sm font-medium text-green-600 bg-green-100 px-2 py-1 rounded-lg">
+                                    <p className="text-sm font-medium text-green-700 bg-green-100 px-2 py-1 rounded-lg shadow-sm">
                                         {item.growth}
                                     </p>
                                 </CardContent>
@@ -429,13 +478,24 @@ function MainComponent() {
                     ))}
             </div>
 
-            {/* Table */}
-            <Card>
-                <CardHeader><CardTitle>All items</CardTitle></CardHeader>
+            <Card className="border border-gray-100 shadow-sm rounded-xl">
+                <CardHeader className="pb-3">
+                    <CardTitle className="text-lg font-semibold text-gray-800">
+                        All items
+                    </CardTitle>
+                </CardHeader>
                 <CardContent>
                     <div className="flex items-center justify-between mb-4">
-                        <Input placeholder="Search" className="w-64" />
-                        <Button variant="outline">Filters</Button>
+                        <Input
+                            placeholder="Search"
+                            className="w-64 border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        />
+                        <Button
+                            variant="outline"
+                            className="rounded-lg border-gray-200 hover:bg-blue-50 hover:text-blue-600 transition"
+                        >
+                            Filters
+                        </Button>
                     </div>
                     <TableExample />
                 </CardContent>
