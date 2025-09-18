@@ -486,7 +486,8 @@ function PasswordsComponent() {
             motDePasse: password.trim(),
             proprietaireId: user,
             dossierId: folder || undefined,
-            reference: website ? { type: "autre", valeur: website.trim() } : undefined,
+            // reference: website ? { type: "autre", valeur: website.trim() } : undefined,
+            trash: false
         };
 
         const parseResult = PasswordZod.safeParse(dataSending);
@@ -627,6 +628,12 @@ function CreditCardAddComponent({ setMessage }: CreditCardFormProps) {
     const [cvc, setCVC] = useState("");
     const [setAsDefault, setSetAsDefault] = useState(false);
 
+
+    type Reference = {
+        type: "carte_credit" | "reseau_social" | "autre";
+        valeur: string;
+    };
+
     const { user } = getSession();
     const { handleSave, handleCancel, loading } = useCreditCard(user || '', setMessage);
 
@@ -639,12 +646,18 @@ function CreditCardAddComponent({ setMessage }: CreditCardFormProps) {
     };
 
     const onSave = () => {
+
+        const reference: Reference = {
+            type: "carte_credit",
+            valeur: title || ""
+        };
         const data = {
             titre: title,
             nomTitulaire,
             numeroCarte,
             dateExpiration,
             cvc,
+            reference,
             proprietaireId: user || ""
         };
 

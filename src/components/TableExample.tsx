@@ -2,8 +2,6 @@
 
 import { useState } from "react"
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog"
-import { Button } from "@/components/ui/button"
-// import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Eye, Copy } from "lucide-react"
 
@@ -19,8 +17,9 @@ import {
 import { Send } from 'lucide-react';
 import { motion } from "framer-motion"
 import { useGetPasswords } from '@/hooks/web/password/useGetPasswords';
+import { useGetCreditcards } from '@/hooks/web/creditCarte/useGetCreditcards';
 import { getSession } from '@/lib/localstorage';
-import { socialAccounts } from '@/data/socialAccounts';
+import { socialAccounts, BankAccounts } from '@/data/socialAccounts';
 import AlertComponent from "./pages/app/AlertComponent"
 
 
@@ -28,23 +27,58 @@ import AlertComponent from "./pages/app/AlertComponent"
 export default function TableExample() {
   const { user } = getSession();
 
-  const { passwords, loading, error } = useGetPasswords(user ?? '');
+  const { passwords, loading, error } = useGetPasswords(user ?? "");
+  const { creditCards, loadings, errors } = useGetCreditcards(user ?? "");
 
-  if (loading) {
+  if (loading || loadings) {
     return (
       <p className="text-muted-foreground mt-4 text-center text-sm">
-        Chargement des mots de passe...
+        Chargement des données...
       </p>
     );
   }
 
-  if (error) {
+  if (error || errors) {
     return (
       <p className="text-red-500 mt-4 text-center text-sm">
-        Erreur : {error}
+        Erreur : {error || errors}
       </p>
     );
   }
+
+  // Fusionner les données
+  const allData = [
+    ...(passwords || []).map((p: any) => ({ ...p, type: "password" })),
+    ...(creditCards || []).map((c: any) => ({ ...c, type: "creditCard" })),
+  ];
+
+  // helper pour trouver socialAccount
+  const findSocial = (item: any) => {
+    const candidates: string[] = [];
+    if (item.titre) candidates.push(item.titre.toLowerCase());
+    if (item.card_brand) candidates.push(item.card_brand.toLowerCase());
+    if (item.brand) candidates.push(item.brand.toLowerCase());
+    if (item.reference?.valeur) candidates.push(item.reference.valeur.toLowerCase());
+
+    return socialAccounts.find((acc: any) =>
+      candidates.some((c) => acc.name?.toLowerCase() === c)
+    );
+  };
+
+  // helper pour trouver bankAccount
+  const findBank = (item: any) => {
+    const candidates: string[] = [];
+    if (item.bankName) candidates.push(item.bankName.toLowerCase());
+    if (item.card_brand) candidates.push(item.card_brand.toLowerCase());
+    if (item.titre) candidates.push(item.titre.toLowerCase());
+
+    return BankAccounts.find(
+      (bank: any) =>
+        bank.bankName &&
+        candidates.some((c) => bank.bankName?.toLowerCase().includes(c))
+    );
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 10 }}
@@ -55,36 +89,76 @@ export default function TableExample() {
         <TableHeader className="bg-gradient-to-r from-blue-500 to-blue-600 text-white">
           <TableRow className="hover:bg-transparent">
             <TableHead className="text-white">Titre</TableHead>
-            <TableHead className="text-white">Email / Identifiant</TableHead>
-            <TableHead className="text-white">Site</TableHead>
-            <TableHead className="text-white">Dossier</TableHead>
-            <TableHead className="text-right text-white">Date création</TableHead>
+            <TableHead className="text-white">Type</TableHead>
+            <TableHead className="text-white">Date ajout</TableHead>
             <TableHead className="text-right text-white">Actions</TableHead>
           </TableRow>
         </TableHeader>
 
         <TableBody>
-          {passwords && passwords.length > 0 ? (
-            passwords.map((pwd: any) => {
-              const social = socialAccounts.find(
-                (acc) => acc.name.toLowerCase() === pwd.titre.toLowerCase()
-              );
+          {allData.length > 0 ? (
+            allData.map((item: any) => {
+              const social = findSocial(item);
+              const bank = item.type === "creditCard" ? findBank(item) : null;
+
+              const title =
+                item.titre || item.cardholder_name || item.card_brand || bank?.bankName || "Sans titre";
 
               return (
                 <TableRow
-                  key={pwd.id}
+                  key={`${item.type}-${item.id ?? item._id ?? Math.random()}`}
                   className="hover:bg-blue-50 transition-colors duration-200"
                 >
-                  {/* Titre + Logo */}
                   <TableCell>
                     <div className="flex items-center gap-3">
-                      {social ? (
+                      {item.type === "creditCard" ? (
+                        bank ? (
+                          <img
+                            className="rounded-full"
+                            src={bank.image}
+                            width={40}
+                            height={40}
+                            alt={bank.bankName}
+                          />
+                        ) : (
+                          <div className="rounded-full bg-gradient-to-br from-cyan-400 to-teal-500 p-1">
+                            <svg
+                              width="28"
+                              height="28"
+                              viewBox="0 0 64 64"
+                              fill="none"
+                              xmlns="http://www.w3.org/2000/svg"
+                            >
+                              <rect
+                                x="16"
+                                y="22"
+                                width="32"
+                                height="20"
+                                rx="3"
+                                stroke="#005C7A"
+                                strokeWidth="2"
+                                fill="#fff"
+                              />
+                              <line
+                                x1="16"
+                                y1="30"
+                                x2="48"
+                                y2="30"
+                                stroke="#005C7A"
+                                strokeWidth="2"
+                              />
+                              <circle cx="22" cy="36" r="2" fill="#005C7A" />
+                              <circle cx="30" cy="36" r="2" fill="#005C7A" />
+                            </svg>
+                          </div>
+                        )
+                      ) : social ? (
                         <img
                           className="rounded-full"
                           src={social.image}
                           width={30}
                           height={30}
-                          alt={pwd.titre}
+                          alt={title}
                         />
                       ) : (
                         <div className="rounded-full bg-gradient-to-br from-cyan-400 to-teal-500 p-1">
@@ -102,71 +176,47 @@ export default function TableExample() {
                           </svg>
                         </div>
                       )}
-                      <div>
-                        <div className="font-medium text-gray-900">{pwd.titre}</div>
-                        <span className="text-gray-500 mt-0.5 text-xs">
-                          {pwd.identifiant}
-                        </span>
-                      </div>
+                      <div className="font-medium text-gray-900">{title}</div>
                     </div>
                   </TableCell>
 
-                  {/* Email / Identifiant */}
                   <TableCell className="text-[13px] text-gray-700">
-                    {pwd.identifiant}
+                    {item.type === "password" ? "Mot de passe" : "Carte bancaire"}
                   </TableCell>
 
-                  {/* Site */}
                   <TableCell className="text-[13px] text-gray-700">
-                    {pwd.reference?.valeur || "-"}
-                  </TableCell>
-
-                  {/* Dossier */}
-                  <TableCell className="text-[13px] text-gray-700">
-                    {pwd.dossierId || "-"}
-                  </TableCell>
-
-                  {/* Date création */}
-                  <TableCell className="text-right text-[13px] text-gray-700">
-                    {pwd.dateCreation
-                      ? new Date(pwd.dateCreation).toLocaleDateString()
+                    {item.dateCreation || item.dateAjout
+                      ? new Date(item.dateCreation || item.dateAjout).toLocaleDateString()
                       : "-"}
                   </TableCell>
 
-                  {/* Actions */}
-                  <TableCell className="text-right flex space-x-3 text-[13px] text-gray-700">
-                    <span className="mt-2">
+                  <TableCell className="flex space-x-1 float-end justify-end text-[13px] text-gray-700">
+                    <div className="mt-3">
                       <EditDialog
-                        password={pwd.identifiant}
-                        email={pwd.identifiant}
-                        title={pwd.titre}
+                        password={item.identifiant}
+                        email={item.identifiant}
+                        title={title}
                       />
-                    </span>
-                    <span>
-                      <AlertComponent />
-                    </span>
+                    </div>
+                    <AlertComponent />
                   </TableCell>
                 </TableRow>
               );
             })
           ) : (
             <TableRow>
-              <TableCell colSpan={6} className="h-24 text-center">
+              <TableCell colSpan={4} className="h-24 text-center">
                 <p className="text-gray-500 mt-4 text-center text-sm">
-                  {passwords && passwords.length === 0
-                    ? "Aucune donnée disponible pour l'instant."
-                    : ""}
+                  Aucune donnée disponible pour l'instant.
                 </p>
               </TableCell>
             </TableRow>
           )}
         </TableBody>
       </Table>
-
     </motion.div>
-  )
+  );
 }
-
 export function TableExampleForDocuments() {
   return (
     <motion.div
@@ -254,21 +304,15 @@ function EditDialog({ email, password, title }: any) {
       </DialogTrigger>
 
       <DialogContent className="max-w-md rounded-xl p-0 overflow-hidden">
-        {/* Header */}
         <div className="flex justify-between items-center border-b px-4 py-3">
           <h2 className="text-lg font-semibold">{title}</h2>
           {/* <Button variant="ghost" size="sm">Edit</Button> */}
         </div>
-
-        {/* Contenu */}
         <div className="divide-y">
-          {/* Email */}
           <div className="px-4 py-3">
             <Label className="block text-sm text-gray-500 mb-1">Email or Username</Label>
             <p className="text-sm text-gray-800">{email}</p>
           </div>
-
-          {/* Password */}
           <div className="px-4 py-3">
             <Label className="block text-sm text-gray-500 mb-1">{"mot de passe"}</Label>
             <div className="flex items-center justify-between">
@@ -284,8 +328,6 @@ function EditDialog({ email, password, title }: any) {
               </div>
             </div>
           </div>
-
-          {/* Password Health */}
           <div className="px-4 py-3">
             <Label className="block text-sm text-gray-500 mb-1">Password Health</Label>
             <div className="flex items-center gap-2 text-green-600 text-sm font-medium">
@@ -297,8 +339,6 @@ function EditDialog({ email, password, title }: any) {
               <span className="underline cursor-pointer">Upgrade</span>
             </p>
           </div>
-
-          {/* Website */}
           <div className="px-4 py-3">
             <Label className="block text-sm text-gray-500 mb-1">Website Address</Label>
             <a href="https://yahoo.com" className="text-blue-600 text-sm hover:underline">

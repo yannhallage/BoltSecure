@@ -26,7 +26,8 @@ export const PasswordZod = z.object({
     proprietaireId: z.string(), // ObjectId string
     dossierId: z.string().optional(), // ObjectId string
     dateCreation: z.date().optional(),
-    dateModification: z.date().optional()
+    dateModification: z.date().optional(),
+    trash: z.boolean(),
 })
 
 // CreditCard
@@ -38,7 +39,7 @@ export const CreditCardZod = z.object({
     cvc: z.string().min(3), // chiffré
     reference: z
         .object({
-            type: z.enum(["reseau_social", "banque", "autre"]),
+            type: z.enum(["reseau_social", "carte_credit", "autre"]),
             valeur: z.string().min(1)
         })
         .optional(),
