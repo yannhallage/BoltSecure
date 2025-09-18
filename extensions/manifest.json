@@ -1,0 +1,38 @@
+{
+    "manifest_version": 3,
+    "name": "BoltSecure",
+    "version": "1.0.0",
+    "description": "Gestionnaire sécurisé avec chiffrement côté client.",
+    "icons": {
+        "16": "icons/secure1.png",
+        "48": "icons/secure2.png",
+        "128": "icons/secure3.png"
+    },
+    "action": {
+        "default_popup": "popup/popup.html",
+        "default_icon": {
+            "16": "icons/secure1.png",
+            "48": "icons/secure2.png",
+            "128": "icons/secure3.png"
+        }
+    },
+    "background": {
+        "service_worker": "background.js",
+        "type": "module"
+    },
+    "permissions": [
+        "storage",
+        "activeTab",
+        "scripting"
+    ],
+    "content_scripts": [
+        {
+            "matches": [
+                "<all_urls>"
+            ],
+            "js": [
+                "content.js"
+            ]
+        }
+    ]
+}

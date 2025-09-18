@@ -1,0 +1,19 @@
+{
+  "name": "extensions",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc && shx mkdir -p dist/icons dist/popup && shx cp manifest.json dist/ && shx cp public/icons/* dist/icons/ && shx cp src/popup/popup.html src/popup/popup.css dist/popup/",
+    "watch": "tsc -w"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "@types/chrome": "^0.1.12",
+    "shx": "^0.4.0",
+    "typescript": "^5.9.2"
+  }
+}
