@@ -379,7 +379,7 @@ function MainComponent() {
         <>
             {/* Header */}
             <div className="flex items-center justify-between">
-                <h2 className="text-lg font-bold">Site traffic</h2>
+                <h2 className="text-lg font-bold">Dossiers</h2>
                 <div className="space-x-2">
                     {/* <Button variant="outline" className="cursor-pointer">Ajouter un dossier</Button> */}
                     <CreerFolders />
@@ -431,7 +431,7 @@ function MainComponent() {
 
             {/* Table */}
             <Card>
-                <CardHeader><CardTitle>Pages and screens</CardTitle></CardHeader>
+                <CardHeader><CardTitle>All items</CardTitle></CardHeader>
                 <CardContent>
                     <div className="flex items-center justify-between mb-4">
                         <Input placeholder="Search" className="w-64" />
