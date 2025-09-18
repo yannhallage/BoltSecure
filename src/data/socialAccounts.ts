@@ -113,7 +113,7 @@ export const BankAccounts = [
         iban: "FR7612345678901234567890123",
         bic: "SOGEFRPP",
         email: "jean.dupont@socgen.com",
-        image: "https://discovertemplate.com/brand-logos/societe-generale-logo-banking-on-trust-and-global-financial-services/",
+        image: "https://discovertemplate.com/wp-content/uploads/2024/04/Societe-Generale.jpg",
     },
     {
         id: 2,

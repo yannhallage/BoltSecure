@@ -1,4 +1,5 @@
 import { CircleAlertIcon, Trash2 } from "lucide-react"
+
 import {
     AlertDialog,
     AlertDialogAction,
@@ -12,8 +13,14 @@ import {
 } from "@/components/ui/alert-dialog"
 import { Button } from "@/components/ui/button"
 import { toast } from "react-toastify"
+import { OnTrashStorage } from "@/lib/OnTrash"
 
-export default function AlertComponent() {
+interface InfoProps {
+    OnTrash: string;
+    setMessage?: (msg: string) => void; 
+}
+
+export default function AlertComponent({ OnTrash, setMessage }: InfoProps) {
     return (
         <AlertDialog>
             <AlertDialogTrigger asChild>
@@ -24,6 +31,7 @@ export default function AlertComponent() {
                     <Trash2 className="mr-2 h-3 w-3" />
                 </Button>
             </AlertDialogTrigger>
+
             <AlertDialogContent>
                 <div className="flex flex-col gap-2 max-sm:items-center sm:flex-row sm:gap-4">
                     <div
@@ -40,15 +48,25 @@ export default function AlertComponent() {
                         </AlertDialogDescription>
                     </AlertDialogHeader>
                 </div>
+
                 <AlertDialogFooter>
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction className="bg-red-700 hover:opacity-50 cursor-pointer"
+                    <AlertDialogAction
+                        className="bg-red-700 hover:opacity-50 cursor-pointer"
                         onClick={() => {
-                            toast.success('item supprimer')
+                            const result = OnTrashStorage(OnTrash);
+                            console.log(result);
+                            toast.success("Déplacé vers la corbeille");
+
+                            if (setMessage) {
+                                setMessage(OnTrash);
+                            }
                         }}
-                    >Supprimer</AlertDialogAction>
+                    >
+                        Corbeille <Trash2 className="mr-2 h-3 w-3" />
+                    </AlertDialogAction>
                 </AlertDialogFooter>
             </AlertDialogContent>
         </AlertDialog>
-    )
+    );
 }

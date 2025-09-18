@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog"
 import { Label } from "@/components/ui/label"
 import { Eye, Copy } from "lucide-react"
@@ -26,10 +26,14 @@ import AlertComponent from "../pages/app/AlertComponent"
 
 export default function TableExample() {
   const { user } = getSession();
-
+  const [message, setMessage] = useState("");
   const { passwords, loading, error } = useGetPasswords(user ?? "");
   const { creditCards, loadings, errors } = useGetCreditcards(user ?? "");
 
+  useEffect(()=>{
+    if (message) FilterItemsData(message)
+  }, [message])
+  
   if (loading || loadings) {
     return (
       <p className="text-muted-foreground mt-4 text-center text-sm">
@@ -46,13 +50,11 @@ export default function TableExample() {
     );
   }
 
-  // Fusionner les données
-  const allData = [
+  let allData = [
     ...(passwords || []).map((p: any) => ({ ...p, type: "password" })),
     ...(creditCards || []).map((c: any) => ({ ...c, type: "creditCard" })),
   ];
 
-  // helper pour trouver socialAccount
   const findSocial = (item: any) => {
     const candidates: string[] = [];
     if (item.titre) candidates.push(item.titre.toLowerCase());
@@ -65,7 +67,6 @@ export default function TableExample() {
     );
   };
 
-  // helper pour trouver bankAccount
   const findBank = (item: any) => {
     const candidates: string[] = [];
     if (item.bankName) candidates.push(item.bankName.toLowerCase());
@@ -79,6 +80,11 @@ export default function TableExample() {
     );
   };
 
+  const FilterItemsData = (children:any) => {
+    if (children) {
+      allData = allData.filter((children: any) => children !== message)
+    }
+  }
   return (
     <motion.div
       initial={{ opacity: 0, y: 10 }}
@@ -198,7 +204,10 @@ export default function TableExample() {
                         title={title}
                       />
                     </div>
-                    <AlertComponent />
+                    <AlertComponent
+                      OnTrash={item._id}
+                      setMessage={setMessage}
+                    />
                   </TableCell>
                 </TableRow>
               );

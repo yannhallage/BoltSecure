@@ -440,8 +440,8 @@ function MainComponent() {
                     dossiersCree.map((item, index) => (
                         <motion.div
                             key={index}
-                            whileHover={{ scale: 1.02 }}
-                            transition={{ type: "spring", stiffness: 200, damping: 15 }}
+                            // whileHover={{ scale: 1.02 }}
+                            // transition={{ type: "spring", stiffness: 200, damping: 15 }}
                         >
                             <Card className="border border-gray-100 rounded-xl bg-white/80 backdrop-blur-sm hover:shadow-xl transition duration-300">
                                 {/* Header */}
@@ -470,7 +470,7 @@ function MainComponent() {
                                     </div>
 
                                     <p className="text-sm font-medium text-green-700 bg-green-100 px-2 py-1 rounded-lg shadow-sm">
-                                        {item.growth}
+                                        {'ajouter'}
                                     </p>
                                 </CardContent>
                             </Card>
