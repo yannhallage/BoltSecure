@@ -4,6 +4,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
   <title>BoltSecure</title>
   <style>
     body {
@@ -46,7 +48,7 @@
     }
 
     input {
-      width: 80%;
+      width: 100%;
       padding: 12px 40px 12px 12px;
       border: none;
       border-radius: 6px;
@@ -149,22 +151,22 @@
 <body>
   <div class="popup">
 
-    <img src="https://www.gstatic.com/marketing-cms/assets/images/e4/8e/85fdbcab45359a409bbd132d7040/160px-2x.png=s160-fcrop64=1,00000000ffffffff-rw" alt="Logo" class="logo">
+    <img
+      src="https://www.gstatic.com/marketing-cms/assets/images/e4/8e/85fdbcab45359a409bbd132d7040/160px-2x.png=s160-fcrop64=1,00000000ffffffff-rw"
+      alt="Logo" class="logo">
 
     <h2>Welcome!</h2>
-
-    <!-- Champ de saisie -->
     <div class="input-group">
       <input type="password" id="master" placeholder="Email">
       <button class="toggle-password" onclick="togglePassword()">👁</button>
     </div>
 
-    <!-- Mot de passe oublié -->
     <a href="#" class="forgot">Creer un compte?</a>
 
-    <!-- Bouton principal -->
-    <button class="btn">Continue</button>
-    
+    <button class="btn">
+      Continue
+    </button>
+
     <div class="account">
       <div class="circle">Ya</div>
       <div class="email">yannhallage2001@gmail.com</div>
@@ -181,6 +183,27 @@
         input.type = "password";
       }
     }
+
+    const BtnValiderInput = document.querySelector('.btn')
+
+    BtnValiderInput.addEventListener('click', () => {
+      const input = document.getElementById("master");
+
+      if (input.value.trim() !== "") {
+        BtnValiderInput.textContent = "Champs vérifié !";
+        BtnValiderInput.style.backgroundColor = "green";
+        BtnValiderInput.style.color = "white";
+      } else {
+        BtnValiderInput.textContent = "Veuillez remplir le champ";
+        BtnValiderInput.style.backgroundColor = "#D92C54";
+        BtnValiderInput.style.color = "white";
+        setTimeout(() => {
+          BtnValiderInput.textContent = "Continue";
+          BtnValiderInput.style.backgroundColor = "white";
+          BtnValiderInput.style.color = "black";
+        }, 2000)
+      }
+    })
   </script>
 </body>
 

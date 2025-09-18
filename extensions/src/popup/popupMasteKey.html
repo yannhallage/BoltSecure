@@ -178,6 +178,28 @@
                 input.type = "password";
             }
         }
+
+        const BtnValiderInput = document.querySelector('.btn')
+
+            BtnValiderInput.addEventListener('click', () => {
+                const input = document.getElementById("master");
+
+                if (input.value.trim() !== "") {
+                    BtnValiderInput.textContent = "Champs vérifié !";
+                    BtnValiderInput.style.backgroundColor = "green";
+                    BtnValiderInput.style.color = "white";
+                } else {
+                    BtnValiderInput.textContent = "Veuillez remplir le champ";
+                    BtnValiderInput.style.backgroundColor = "#D92C54";
+                    BtnValiderInput.style.color = "white";
+                    setTimeout(() => {
+                        BtnValiderInput.textContent = "Continue";
+                        BtnValiderInput.style.backgroundColor = "white";
+                        BtnValiderInput.style.color = "black";
+                    }, 2000)
+                }
+            }
+            )
     </script>
 </body>
 
