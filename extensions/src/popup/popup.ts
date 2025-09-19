@@ -1,61 +1,99 @@
 let currentStep = 1;
 const totalSteps = 3;
+let emailGlobal: string = "";
+let passwordGlobal: string = "";
 
-const steps = document.querySelectorAll<HTMLElement>(".step");
-const stepTitle = document.getElementById("stepTitle") as HTMLElement;
-const prevBtn = document.getElementById("prevBtn") as HTMLButtonElement;
-const nextBtn = document.getElementById("nextBtn") as HTMLButtonElement;
-const togglePasswordBtn = document.getElementById("togglePassword") as HTMLButtonElement;
-const passwordInput = document.getElementById("password") as HTMLInputElement;
-
-// Fonction pour afficher la bonne étape
-function showStep(step: number) {
-    steps.forEach(s => s.classList.add("hidden"));
-    const activeStep = document.querySelector<HTMLElement>(`.step[data-step="${step}"]`);
-    if (activeStep) activeStep.classList.remove("hidden");
-
-    // Mettre à jour titre
-    if (step === 1) stepTitle.textContent = "Étape 1 : Email";
-    if (step === 2) stepTitle.textContent = "Étape 2 : Mot de passe";
-    if (step === 3) stepTitle.textContent = "Étape 3 : Master Key";
-
-    // Gérer boutons navigation
-    prevBtn.classList.toggle("hidden", step === 1);
-    nextBtn.textContent = step === totalSteps ? "Valider" : "Suivant";
+function showStep(step: number): void {
+  document.querySelectorAll<HTMLElement>(".step").forEach(el => {
+    el.classList.remove("active");
+  });
+  const target = document.querySelector<HTMLElement>(`.step[data-step="${step}"]`);
+  if (target) target.classList.add("active");
 }
 
-prevBtn.addEventListener("click", () => {
-    if (currentStep > 1) {
-        currentStep--;
-        showStep(currentStep);
-    }
-});
+function togglePassword(id: string): void {
+  const input = document.getElementById(id) as HTMLInputElement | null;
+  if (input) {
+    input.type = input.type === "password" ? "text" : "password";
+  }
+}
 
-nextBtn.addEventListener("click", () => {
-    if (currentStep < totalSteps) {
+async function sendStepData(step: number): Promise<boolean> {
+  try {
+    if (step === 1) {
+      const email = (document.getElementById("email") as HTMLInputElement)?.value.trim();
+      if (!email) return false;
+
+      const res = await fetch("http://localhost:2001/api/auth/authentification/email", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email })
+      });
+
+      if (!res.ok) throw new Error("Email invalide");
+      emailGlobal = email;
+      return true;
+    }
+
+    if (step === 2) {
+      const password = (document.getElementById("password") as HTMLInputElement)?.value.trim();
+      if (!password) return false;
+
+      const res = await fetch("http://localhost:2001/api/auth/authentification/password", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: emailGlobal, motDePasse: password })
+      });
+
+      if (!res.ok) throw new Error("Mot de passe invalide");
+      passwordGlobal = password;
+      return true;
+    }
+
+    if (step === 3) {
+      const master = (document.getElementById("master") as HTMLInputElement)?.value.trim();
+      if (!master) return false;
+
+      const res = await fetch("http://localhost:2001/api/auth/authentification/master-key", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: emailGlobal,
+          motDePasse: passwordGlobal,
+          masterKey: master
+        })
+      });
+
+      if (!res.ok) throw new Error("MasterKey invalide");
+      return true;
+    }
+
+    return false;
+  } catch (err) {
+    console.error("❌ Erreur API:", err);
+    alert((err as Error).message);
+    return false;
+  }
+}
+
+document.querySelectorAll<HTMLButtonElement>(".btn").forEach((btn, index) => {
+  btn.addEventListener("click", async () => {
+    const success = await sendStepData(currentStep);
+    if (success) {
+      if (currentStep < totalSteps) {
         currentStep++;
         showStep(currentStep);
-    } else {
-        // Dernière étape → récupérer les valeurs
-        const email = (document.getElementById("email") as HTMLInputElement).value;
-        const password = (document.getElementById("password") as HTMLInputElement).value;
-        const masterkey = (document.getElementById("masterkey") as HTMLInputElement).value;
-
-        console.log("Données saisies :", { email, password, masterkey });
-        alert("Vos données ont été enregistrées !");
+      } else {
+        alert("🎉 Connexion réussie !");
+      }
     }
+  });
 });
 
-// Toggle mot de passe
-togglePasswordBtn.addEventListener("click", () => {
-    if (passwordInput.type === "password") {
-        passwordInput.type = "text";
-        togglePasswordBtn.textContent = "🙈";
-    } else {
-        passwordInput.type = "password";
-        togglePasswordBtn.textContent = "👁";
-    }
-});
 
-// Init
-showStep(currentStep);
+document.querySelectorAll<HTMLButtonElement>(".toggle-password").forEach(btn => {
+  const targetId = btn.getAttribute("data-target");
+  if (targetId) {
+    btn.addEventListener("click", () => togglePassword(targetId));
+  }
+});

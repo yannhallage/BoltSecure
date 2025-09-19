@@ -5,184 +5,46 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>BoltSecure</title>
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: Arial, sans-serif;
-      background: #111;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      color: #fff;
-    }
-
-    .popup {
-      background: #000;
-      padding: 40px 30px;
-      border-radius: 10px;
-      width: 350px;
-      text-align: center;
-      box-shadow: 0 0 30px rgba(0, 0, 0, 0.8);
-    }
-
-    .logo {
-      width: 60px;
-      height: 60px;
-      margin: 0 auto 20px;
-      display: block;
-    }
-
-    h2 {
-      font-size: 24px;
-      margin-bottom: 25px;
-      font-weight: bold;
-    }
-
-    .input-group {
-      position: relative;
-      margin-bottom: 15px;
-    }
-
-    input {
-      width: 100%;
-      padding: 12px 40px 12px 12px;
-      border: none;
-      border-radius: 6px;
-      background: #1c1c1c;
-      color: #fff;
-      font-size: 14px;
-      outline: none;
-    }
-
-    input::placeholder {
-      color: #888;
-    }
-
-    .toggle-password {
-      position: absolute;
-      right: 10px;
-      top: 50%;
-      transform: translateY(-50%);
-      background: none;
-      border: none;
-      color: #aaa;
-      font-size: 18px;
-      cursor: pointer;
-    }
-
-    .forgot {
-      display: block;
-      margin-bottom: 20px;
-      font-size: 13px;
-      color: #4da6ff;
-      text-decoration: none;
-    }
-
-    .forgot:hover {
-      text-decoration: underline;
-    }
-
-    .btn {
-      width: 100%;
-      padding: 12px;
-      border: none;
-      border-radius: 6px;
-      background: #fff;
-      color: #000;
-      font-weight: bold;
-      cursor: pointer;
-      transition: 0.3s;
-    }
-
-    .btn:hover {
-      background: #ddd;
-    }
-
-    .account {
-      margin-top: 40px;
-      text-align: center;
-    }
-
-    .circle {
-      width: 40px;
-      height: 40px;
-      background: #e60073;
-      border-radius: 50%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      margin: 0 auto 10px;
-      font-weight: bold;
-    }
-
-    .email {
-      font-size: 14px;
-      margin-bottom: 10px;
-      color: #ccc;
-    }
-
-    .switch {
-      font-size: 13px;
-      color: #4da6ff;
-      text-decoration: none;
-    }
-
-    .switch:hover {
-      text-decoration: underline;
-    }
-
-    .step {
-      display: none;
-    }
-
-    .step.active {
-      display: block;
-    }
-  </style>
+  <link rel="stylesheet" href="popup.css">
 </head>
 
 <body>
   <div class="popup">
-
+  
     <img
       src="https://www.gstatic.com/marketing-cms/assets/images/e4/8e/85fdbcab45359a409bbd132d7040/160px-2x.png=s160-fcrop64=1,00000000ffffffff-rw"
       alt="Logo" class="logo">
-
-    <!-- ÉTAPE 1 : Email -->
+  
     <div class="step active" data-step="1">
-      <h2>Welcomeee!</h2>
+      <h2>Welcome!</h2>
       <div class="input-group">
-        <input type="text" id="email" placeholder="Email">
+        <input type="email" id="email" placeholder="Email">
       </div>
       <a href="#" class="forgot">Créer un compte ?</a>
-      <button class="btn" onclick="nextStep()">Continue</button>
+      <button class="btn">Continue</button>
     </div>
-
-    <!-- ÉTAPE 2 : Mot de passe -->
+  
     <div class="step" data-step="2">
-      <h2>Votre mot de passe!</h2>
+      <h2>Votre mot de passe</h2>
       <div class="input-group">
         <input type="password" id="password" placeholder="Mot de passe">
-        <button class="toggle-password" onclick="togglePassword('password')">👁</button>
+        <button class="toggle-password" data-target="password">👁</button>
       </div>
       <a href="#" class="forgot">Créer un compte ?</a>
-      <button class="btn" onclick="nextStep()">Continue</button>
+      <button class="btn">Continue</button>
     </div>
 
-    <!-- ÉTAPE 3 : Master Key -->
     <div class="step" data-step="3">
-      <h2>Master Key!</h2>
+      <h2>Master Key</h2>
       <div class="input-group">
-        <input type="password" id="masterkey" placeholder="Master Key">
-        <button class="toggle-password" onclick="togglePassword('masterkey')">👁</button>
+        <input type="password" id="master" placeholder="Master Key">
+        <button class="toggle-password" data-target="master">👁</button>
       </div>
       <a href="#" class="forgot">Créer un compte ?</a>
-      <button class="btn" onclick="validate()">Valider</button>
+      <button class="btn">Valider</button>
     </div>
-
-    <!-- Compte en bas -->
+  
+    <!-- Footer -->
     <div class="account">
       <div class="circle">Ya</div>
       <div class="email">yannhallage2001@gmail.com</div>
@@ -190,38 +52,8 @@
     </div>
   </div>
 
-  <script>
-    let currentStep = 1;
-    const totalSteps = 3;
 
-    function showStep(step) {
-      document.querySelectorAll(".step").forEach(el => el.classList.remove("active"));
-      document.querySelector(`.step[data-step="${step}"]`).classList.add("active");
-    }
-
-    function nextStep() {
-      if (currentStep < totalSteps) {
-        currentStep++;
-        showStep(currentStep);
-      }
-    }
-
-    function togglePassword(id) {
-      const input = document.getElementById(id);
-      input.type = input.type === "password" ? "text" : "password";
-    }
-
-    function validate() {
-      const email = document.getElementById("email").value.trim();
-      const password = document.getElementById("password").value.trim();
-      const masterkey = document.getElementById("masterkey").value.trim();
-
-      if (email && password && masterkey) {
-        alert("✅ Champs vérifiés !");
-      } else {
-        alert("❌ Remplissez tous les champs !");
-      }
-    }
+  <script type="module" src="popup.js">
   </script>
 </body>
 
