@@ -1,13 +1,13 @@
 import "../styles/style.css";
 import "../styles/popup.css";
 import { PopupProvider } from "../context/PopupProvider";
-import PopupLogin from "./win/PopupLogin";
+import PopupLogin from "./windows/PopupLogin";
 
 import { usePopup } from "../context/usePopup";
-import PopupVault from "./win/PopupVault";
-import PopupItems from "./win/PopupItems";
+import PopupVault from "./windows/PopupVault";
+import PopupItems from "./windows/PopupItems";
 import { BankAccounts, socialAccounts } from "../data/socialAccounts";
-import AccountPopup from "../app/win/AccountPopup";
+import AccountPopup from "./windows/AccountPopup";
 
 function PopupContainer() {
   const { popup } = usePopup();
