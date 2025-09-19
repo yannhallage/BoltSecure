@@ -1,7 +1,7 @@
 .popup-items-container {
     width: 400px;
     min-height: 91vh;
-    border-radius: 8px 8px 8px 8px;
+    border-radius: 8px 8px 8px 8px #000;
     background: #111;
     color: #fff;
     display: flex;
