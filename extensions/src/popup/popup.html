@@ -4,8 +4,6 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-
   <title>BoltSecure</title>
   <style>
     body {
@@ -94,7 +92,6 @@
       background: #fff;
       color: #000;
       font-weight: bold;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       cursor: pointer;
       transition: 0.3s;
     }
@@ -103,18 +100,8 @@
       background: #ddd;
     }
 
-    /* .keep {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 13px;
-      margin: 15px 0;
-      color: #bbb;
-      justify-content: flex-start;
-    } */
-
     .account {
-      margin-top: 50px;
+      margin-top: 40px;
       text-align: center;
     }
 
@@ -145,6 +132,14 @@
     .switch:hover {
       text-decoration: underline;
     }
+
+    .step {
+      display: none;
+    }
+
+    .step.active {
+      display: block;
+    }
   </style>
 </head>
 
@@ -155,18 +150,39 @@
       src="https://www.gstatic.com/marketing-cms/assets/images/e4/8e/85fdbcab45359a409bbd132d7040/160px-2x.png=s160-fcrop64=1,00000000ffffffff-rw"
       alt="Logo" class="logo">
 
-    <h2>Welcome!</h2>
-    <div class="input-group">
-      <input type="password" id="master" placeholder="Email">
-      <button class="toggle-password" onclick="togglePassword()">👁</button>
+    <!-- ÉTAPE 1 : Email -->
+    <div class="step active" data-step="1">
+      <h2>Welcomeee!</h2>
+      <div class="input-group">
+        <input type="text" id="email" placeholder="Email">
+      </div>
+      <a href="#" class="forgot">Créer un compte ?</a>
+      <button class="btn" onclick="nextStep()">Continue</button>
     </div>
 
-    <a href="#" class="forgot">Creer un compte?</a>
+    <!-- ÉTAPE 2 : Mot de passe -->
+    <div class="step" data-step="2">
+      <h2>Votre mot de passe!</h2>
+      <div class="input-group">
+        <input type="password" id="password" placeholder="Mot de passe">
+        <button class="toggle-password" onclick="togglePassword('password')">👁</button>
+      </div>
+      <a href="#" class="forgot">Créer un compte ?</a>
+      <button class="btn" onclick="nextStep()">Continue</button>
+    </div>
 
-    <button class="btn">
-      Continue
-    </button>
+    <!-- ÉTAPE 3 : Master Key -->
+    <div class="step" data-step="3">
+      <h2>Master Key!</h2>
+      <div class="input-group">
+        <input type="password" id="masterkey" placeholder="Master Key">
+        <button class="toggle-password" onclick="togglePassword('masterkey')">👁</button>
+      </div>
+      <a href="#" class="forgot">Créer un compte ?</a>
+      <button class="btn" onclick="validate()">Valider</button>
+    </div>
 
+    <!-- Compte en bas -->
     <div class="account">
       <div class="circle">Ya</div>
       <div class="email">yannhallage2001@gmail.com</div>
@@ -175,35 +191,37 @@
   </div>
 
   <script>
-    function togglePassword() {
-      const input = document.getElementById("master");
-      if (input.type === "password") {
-        input.type = "text";
-      } else {
-        input.type = "password";
+    let currentStep = 1;
+    const totalSteps = 3;
+
+    function showStep(step) {
+      document.querySelectorAll(".step").forEach(el => el.classList.remove("active"));
+      document.querySelector(`.step[data-step="${step}"]`).classList.add("active");
+    }
+
+    function nextStep() {
+      if (currentStep < totalSteps) {
+        currentStep++;
+        showStep(currentStep);
       }
     }
 
-    const BtnValiderInput = document.querySelector('.btn')
+    function togglePassword(id) {
+      const input = document.getElementById(id);
+      input.type = input.type === "password" ? "text" : "password";
+    }
 
-    BtnValiderInput.addEventListener('click', () => {
-      const input = document.getElementById("master");
+    function validate() {
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value.trim();
+      const masterkey = document.getElementById("masterkey").value.trim();
 
-      if (input.value.trim() !== "") {
-        BtnValiderInput.textContent = "Champs vérifié !";
-        BtnValiderInput.style.backgroundColor = "green";
-        BtnValiderInput.style.color = "white";
+      if (email && password && masterkey) {
+        alert("✅ Champs vérifiés !");
       } else {
-        BtnValiderInput.textContent = "Veuillez remplir le champ";
-        BtnValiderInput.style.backgroundColor = "#D92C54";
-        BtnValiderInput.style.color = "white";
-        setTimeout(() => {
-          BtnValiderInput.textContent = "Continue";
-          BtnValiderInput.style.backgroundColor = "white";
-          BtnValiderInput.style.color = "black";
-        }, 2000)
+        alert("❌ Remplissez tous les champs !");
       }
-    })
+    }
   </script>
 </body>
 
