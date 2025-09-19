@@ -3,12 +3,11 @@
     background: #000;
     min-height: 70vh;
     color: #fff;
-    border-radius: 16px;
+    border-radius: 16px #000;
     padding: 20px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    /* sépare header + accounts + footer */
 }
 
 /* Header */
