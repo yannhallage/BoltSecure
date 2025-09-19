@@ -1,0 +1,140 @@
+.account-popup {
+    width: 320px;
+    background: #000;
+    min-height: 70vh;
+    color: #fff;
+    border-radius: 16px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    /* sépare header + accounts + footer */
+}
+
+/* Header */
+.account-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.account-avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    color: #fff;
+}
+
+.account-avatar.main {
+    background: #d6336c;
+    font-size: 18px;
+}
+
+.account-avatar.secondary {
+    background: #2f9e44;
+    font-size: 14px;
+}
+
+.account-email {
+    margin-top: 8px;
+    font-size: 12px;
+}
+
+.account-plan {
+    font-size: 12px;
+    color: #aaa;
+}
+
+/* Accounts */
+.account-list {
+    background: #111;
+    border-radius: 12px;
+    padding: 1px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.account-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 7px;
+    align-items: center;
+}
+
+.account-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+}
+
+.account-options {
+    background: none;
+    border: none;
+    color: #ccc;
+    cursor: pointer;
+}
+
+/* Add account */
+.add-account {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #aaa;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.add-account:hover {
+    color: #fff;
+}
+
+.add-icon {
+    width: 32px;
+    height: 32px;
+    border: 1px solid #555;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Footer */
+.account-footer {
+    display: flex;
+    gap: 10px;
+    margin-top: auto;
+    /* pousse le footer en bas */
+}
+
+.btn-account {
+    flex: 1;
+    padding: 8px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.btn-account.lock {
+    background: #222;
+    color: #fff;
+}
+
+.btn-account.logout {
+    background: #222;
+    color: #f55;
+}
+
+.btn-account:hover {
+    background: #333;
+}

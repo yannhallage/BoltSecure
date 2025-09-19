@@ -1,0 +1,178 @@
+.popup-items-container {
+    width: 400px;
+    min-height: 91vh;
+    border-radius: 8px 8px 8px 8px;
+    background: #111;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    padding: 16px;
+    position: relative;
+}
+
+/* Header */
+.items-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.header-btn {
+    background: none;
+    border: none;
+    color: #9ca3af;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.header-btn:hover {
+    color: #fff;
+}
+
+.header-account {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #db2777;
+    display: flex;
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    color: #fff;
+    font-size: 14px;
+}
+
+/* Search bar */
+.search-bar {
+    display: flex;
+    align-items: center;
+    background: #18181b;
+    border: 1px solid #333;
+    border-radius: 8px;
+    padding: 6px 10px;
+    margin-bottom: 16px;
+}
+
+.search-bar input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    margin-left: 8px;
+    color: #fff;
+    font-size: 14px;
+}
+
+/* Liste scrollable */
+.items-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    flex: 1;
+    overflow-y: auto;
+    max-height: 65vh;
+    padding-right: 4px;
+    /* espace pour scrollbar */
+}
+
+/* Scroll custom */
+.items-list::-webkit-scrollbar {
+    width: 6px;
+}
+
+.items-list::-webkit-scrollbar-track {
+    background: #18181b;
+    border-radius: 8px;
+}
+
+.items-list::-webkit-scrollbar-thumb {
+    background: #444;
+    border-radius: 8px;
+}
+
+.items-list::-webkit-scrollbar-thumb:hover {
+    background: #666;
+}
+
+.items-title {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 12px;
+}
+
+/* Item */
+.item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: #18181b;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #333;
+    transition: background 0.2s;
+}
+
+.item:hover {
+    background: #222;
+}
+
+.item-icon {
+    font-size: 20px;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #2a2a2a;
+    border-radius: 6px;
+}
+
+.item-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.item-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #fff;
+}
+
+.item-subtitle {
+    font-size: 12px;
+    color: #9ca3af;
+}
+
+.item-options {
+    background: none;
+    border: none;
+    color: #9ca3af;
+    cursor: pointer;
+    font-size: 18px;
+}
+
+/* Bouton flottant */
+.add-button {
+    position: absolute;
+    bottom: 16px;
+    right: 16px;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: #fff;
+    color: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.add-button:hover {
+    background: #e5e7eb;
+}
