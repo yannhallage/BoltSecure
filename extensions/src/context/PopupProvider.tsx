@@ -1,7 +1,7 @@
 import { useState, type ReactNode } from "react";
 import { PopupContext } from "./PopupContext";
 
-type PopupType = "login" | "Browse" | "All-items" | "passwords" | "creditCards" | "settings" | "account";
+type PopupType = "login" | "Browse" | "Edit" | "All-items" | "passwords" | "creditCards" | "settings" | "account";
 
 export interface PopupContextProps {
     popup: PopupType;

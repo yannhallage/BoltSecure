@@ -1,0 +1,128 @@
+.item-detail-EditPopup {
+    width: 350px;
+    background: #000;
+    color: #fff;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    border-radius: 16px #000;
+    font-size:14px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+/* Header */
+.item-detail-header-EditPopup {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.back-btn-EditPopup {
+    background: transparent;
+    border: none;
+    color: #aaa;
+    font-size: 18px;
+    cursor: pointer;
+    border-radius: 8px;
+    padding: 6px 10px;
+    /* transition: all 0.2s ease-in-out; */
+}
+
+.back-btn-EditPopup:hover {
+    background: #333;
+    /* gris foncé au hover */
+    border: 1px solid #444;
+    /* bordure subtile */
+    color: #fff;
+    /* texte bien visible */
+}
+
+.edit-link-EditPopup {
+    font-size: 14px;
+    color: #60a5fa;
+    cursor: pointer;
+}
+
+/* Logo */
+.item-logo-EditPopup {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.item-logo-EditPopup img {
+    width: 48px;
+    height: 48px;
+}
+
+/* Title */
+.item-title-EditPopup {
+    text-align: center;
+    font-size: 18px;
+    font-weight: bold;
+    margin: 0;
+}
+
+/* Actions */
+.item-actions-EditPopup {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin: 12px 0;
+}
+
+.action-btn-EditPopup {
+    flex: 1;
+    background: #111;
+    border: none;
+    color: #fff;
+    font-size: 13px;
+    padding: 10px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.action-btn-EditPopup:hover {
+    background: #222;
+}
+
+/* Info blocks */
+.item-info-EditPopup {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.info-block-EditPopup {
+    background: #111;
+    padding: 12px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.info-block-EditPopup .label-EditPopup {
+    font-size: 12px;
+    color: #aaa;
+}
+
+.info-block-EditPopup p {
+    margin: 0;
+    font-size: 14px;
+}
+
+.info-block-EditPopup .a-EditPopup {
+    color: #60a5fa;
+    text-decoration: none;
+}
+
+.info-block-EditPopup .a-EditPopup:hover {
+    text-decoration: underline;
+}
+
+.strong-EditPopup {
+    color: #22c55e;
+    font-weight: bold;
+}

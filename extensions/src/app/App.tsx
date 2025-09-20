@@ -8,6 +8,7 @@ import PopupVault from "./windows/PopupVault";
 import PopupItems from "./windows/PopupItems";
 import { BankAccounts, socialAccounts } from "../data/socialAccounts";
 import AccountPopup from "./windows/AccountPopup";
+import EditPopup from "./windows/EditePopup";
 
 function PopupContainer() {
   const { popup } = usePopup();
@@ -27,6 +28,8 @@ function PopupContainer() {
       return <PopupItems title={'All credit Cards'} data={BankAccounts} />;
     case "account":
       return <AccountPopup />;
+    case "Edit":
+      return <EditPopup />;
     default:
       return null;
   }

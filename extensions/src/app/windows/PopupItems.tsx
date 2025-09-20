@@ -59,7 +59,7 @@ export default function PopupItems({ title, data }: PopupItemsProps) {
 
             <div className="items-list">
                 {data.map((item, index) => (
-                    <div key={index} className="item">
+                    <div key={index} className="item" onClick={() => { setPopup("Edit"); }}>
                         <div className="item-icon">
                             <img src={item.image} width={20} height={20} alt={item.name} />
                         </div>
