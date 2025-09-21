@@ -1,38 +1,138 @@
 import { useState } from "react";
+import { useEmail } from "../../../../src/hooks/auth/useEmail.hooks"
+import { usePassword } from "../../../../src/hooks/auth/usePassword.hooks"
+import { useMasterKey } from "../../../../src/hooks/auth/useMasterKey.hooks"
 import { useContext } from "react";
 import { ClipLoader } from 'react-spinners';
+import { TriangleAlert } from 'lucide-react';
+
 import { PopupContext } from "../../context/PopupContext";
 
 const PopupLogin = () => {
     const popupContext = useContext(PopupContext);
-    const [password, setPassword] = useState("");
-    
+    // const [password, setPassword] = useState("");
+
     const [show, setShow] = useState(false);
+    const [showAlert, setShowAlert] = useState(true);
     const [loading, setLoading] = useState(false);
     const [multiple] = useState(3);
     const [size] = useState(13);
 
     const [step, setStep] = useState(1);
-    const [email, setEmail] = useState("");
-    const [masterKey, setMasterKey] = useState("");
+    // const [email, setEmail] = useState("");
+    // const [masterKey, setMasterKey] = useState("");
+
+    const { valueEmail,
+        validEmail,
+        loadingEmail
+        , errorEmail
+        , setValueEmail,
+        submitEmail
+
+    } = useEmail("");
+
+    const { valuePassword,
+        validPassword,
+        loadingPassword,
+        errorPassword,
+        setValuePassword,
+        submitPassword
+
+    } = usePassword("");
+
+    const { valueMasterKey,
+        validMasterKey,
+        loadingMasterKey,
+        errorMasterKey,
+        setValueMasterKey,
+        submitMasterKey
+    } = useMasterKey("");
 
     if (!popupContext) return null;
 
     const { setPopup } = popupContext;
 
-    const EvenementOnClick = () => {
-        setLoading(true)
-        if (step === 3) {
-            setTimeout(() => {
-                setPopup("Browse")
-                setLoading(false)
-            }, 1000)
+    const EvenementOnClickEmail = async () => {
+        if (valueEmail !== '') {
+            const succes = await submitEmail()
+            if (succes) {
+                setLoading(true)
+                if (step === 3) {
+                    setTimeout(() => {
+                        setPopup("Browse")
+                        setLoading(false)
+                    }, 1000)
+                } else {
+                    setTimeout(() => {
+                        setStep(step + 1)
+                        setLoading(false)
+                    }, 1000)
+                }
+            }
         } else {
+            setLoading(true)
             setTimeout(() => {
-                setStep(step + 1)
+                setShowAlert(false)
                 setLoading(false)
-            }, 1000)
-       }
+            }, 300)
+        }
+    }
+    const EvenementOnClickPassword = async () => {
+        if (valuePassword !== '') {
+            const success = await submitPassword()
+
+            if (success) {
+                setLoading(true)
+                if (step === 3) {
+                    setTimeout(() => {
+                        setPopup("Browse")
+                        setLoading(false)
+                    }, 1000)
+                } else {
+                    setTimeout(() => {
+                        setStep(step + 1)
+                        setLoading(false)
+                    }, 1000)
+                }
+            }
+        } else {
+            setLoading(true)
+            setTimeout(() => {
+                setShowAlert(false)
+                setLoading(false)
+            }, 300)
+        }
+    }
+    const EvenementOnClickMasterKey =async () => {
+        if (valueMasterKey !== '') {
+            const success = await submitMasterKey()
+
+            if (success) {
+                setLoading(true)
+                if (step === 3) {
+                    setTimeout(() => {
+                        setPopup("Browse")
+                        setLoading(false)
+                    }, 1000)
+                } else {
+                    setTimeout(() => {
+                        setStep(step + 1)
+                        setLoading(false)
+                    }, 1000)
+                }
+            }
+        } else {
+            setLoading(true)
+            setTimeout(() => {
+                setShowAlert(false)
+                setLoading(false)
+            }, 300)
+        }
+    }
+
+
+    if (errorEmail) {
+        console.log(errorEmail)
     }
     return (
         <>
@@ -50,19 +150,36 @@ const PopupLogin = () => {
                             <input
                                 type="text"
                                 placeholder="Entrez votre Email"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
+                                value={valueEmail}
+                                onChange={(e) => setValueEmail(e.target.value)}
                             />
                             <button type="button" onClick={() => setShow(!show)}>
                                 👁
                             </button>
                         </div>
 
+                        <span
+                            className="link"
+                            hidden={showAlert}
+                            style={{
+                                color: "#E4004B",
+                                backgroundColor: '#18181b',
+                                fontSize: '11px',
+                                fontFamily: 'monospace',
+                                textDecoration: "none",
+                                cursor: "",
+                                padding: '10px',
+                                border: 'solid 1px #333'
+                            }}
+                        >
+                            veuillez remplir tout les champs <TriangleAlert size={15} />
+                        </span>
+
                         <a href="#" className="link">
                             Forgot your Master Password?
                         </a>
 
-                        <button className="btn" onClick={EvenementOnClick}>
+                        <button className="btn" onClick={EvenementOnClickEmail}>
                             {loading ? <ClipLoader size={size} speedMultiplier={multiple} /> : "Continuez"}
                         </button>
 
@@ -79,8 +196,8 @@ const PopupLogin = () => {
                             <input
                                 type="password"
                                 placeholder="Entrez votre mot de passe"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
+                                value={valuePassword}
+                                onChange={(e) => setValuePassword(e.target.value)}
                             />
                             <button type="button" onClick={EvenementOnClick}>
                                 👁
@@ -91,7 +208,7 @@ const PopupLogin = () => {
                             Forgot your Master Password?
                         </a>
 
-                        <button className="btn" onClick={EvenementOnClick}>
+                        <button className="btn" onClick={EvenementOnClickPassword}>
                             {loading ? <ClipLoader size={size} speedMultiplier={multiple} /> : "Continuez"}
                         </button>
 
@@ -108,8 +225,8 @@ const PopupLogin = () => {
                             <input
                                 type="password"
                                 placeholder="Entrez votre Master Key"
-                                value={masterKey}
-                                onChange={(e) => setMasterKey(e.target.value)}
+                                value={valueMasterKey}
+                                onChange={(e) => setValueMasterKey(e.target.value)}
                             />
                             <button type="button" onClick={() => setShow(!show)}>
                                 👁
@@ -120,7 +237,7 @@ const PopupLogin = () => {
                             Forgot your Master Password?
                         </a>
 
-                        <button className="btn" onClick={EvenementOnClick}>
+                        <button className="btn" onClick={EvenementOnClickMasterKey}>
                             {loading ? <ClipLoader size={size} speedMultiplier={multiple} /> : "Validez"}
                         </button>
 
