@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { toast } from "react-toastify";
-import { CreditCardService } from "@/services/web/creditcard.service";
+import { CreditCardService } from "../../../services/web/creditcard.service";
 import { z } from "zod";
-import { CreditCardZod } from "@/types/web/interface.type";
+import { CreditCardZod } from "../../../types/web/interface.type";
 
 type CreditCardInput = z.infer<typeof CreditCardZod>;
 

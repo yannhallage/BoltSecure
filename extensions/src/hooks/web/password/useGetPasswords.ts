@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { PasswordService } from "@/services/web/password.service";
+import { PasswordService } from "../../../services/web/password.service";
 
 export function useGetPasswords(userId: string) {
     const [passwords, setPasswords] = useState<string[]>([]);

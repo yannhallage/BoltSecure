@@ -1,5 +1,5 @@
-import { PasswordService } from "@/services/web/password.service";
-import { PasswordZod } from "@/types/web/interface.type";
+import { PasswordService } from "../../../services/web/password.service";
+import { PasswordZod } from "../../../types/web/interface.type";
 import { z } from "zod";
 
 export async function updatePassword(id: string, data: Partial<z.infer<typeof PasswordZod>>): Promise<string> {

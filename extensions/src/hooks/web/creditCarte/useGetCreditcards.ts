@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { CreditCardService } from "@/services/web/creditcard.service";
+import { CreditCardService } from "../../../services/web/creditcard.service";
 
 export function useGetCreditcards(userId: string) {
     const [creditCards, setCreditCards] = useState<string[]>([]);

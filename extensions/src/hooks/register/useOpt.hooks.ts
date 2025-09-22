@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { RegisterService } from "@/services/register/registerService";
+import { RegisterService } from "../../services/register/registerService";
 import type { UseOtpResult } from "../../types/register/general.types";
-import type { IAuthOtpVerificationInput } from "@/validations/register.zod";
-import { encrypt } from "@/lib/url/crypto";
-import { decrypt } from "@/lib/url/crypto";
+import type { IAuthOtpVerificationInput } from "../../validations/register.zod";
+import { encrypt } from "../../lib/url/crypto";
+import { decrypt } from "../../lib/url/crypto";
 
 export const useOtpCode = (initialValue = ""): UseOtpResult => {
     const [value, setValue] = useState(initialValue);

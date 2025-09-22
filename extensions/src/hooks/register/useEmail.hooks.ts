@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { RegisterService } from "@/services/register/registerService";
+import { RegisterService } from "../../services/register/registerService";
 import type { UseEmailResult } from "../../types/register/general.types";
-import { encrypt } from "@/lib/url/crypto";
+import { encrypt } from "../../lib/url/crypto";
 
 
 export interface AuthEmailResponse {

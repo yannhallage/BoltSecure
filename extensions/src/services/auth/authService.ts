@@ -1,9 +1,8 @@
-import { Http } from "@/api/http";
-// import { LocalStorage } from "@/lib/localstorage";
 
-import { ENDPOINTS_AUTH } from "@/api/auth/Endpoint";
-import type { IAuthEmailInput, IAuthmotDePasseInput, IAuthResponseUser, IAuthOtpVerificationInput, IAuthMasterKeyInput } from "@/validations/register.zod";
-import { LocalStorage } from "@/lib/localstorage";
+import type { IAuthEmailInput, IAuthmotDePasseInput, IAuthResponseUser, IAuthOtpVerificationInput, IAuthMasterKeyInput } from "../../validations/register.zod";
+import { Http } from "../../api/http";
+import { ENDPOINTS_AUTH } from "../../api/auth/Endpoint";
+import { LocalStorage } from "../../lib/localstorage";
 
 
 export interface AuthEmailResponse {

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { encrypt } from "@/lib/url/crypto";
+import { encrypt } from "../../lib/url/crypto";
 import { jwtDecode } from "jwt-decode";
 import { type GoogleJwtPayload, type GoogleUser } from "../../types/register/google.type";
 

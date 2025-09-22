@@ -1,9 +1,8 @@
 import { useState } from "react";
-import { AuthService } from "@/services/auth/authService";
+import { AuthService } from "../../services/auth/authService";
 // import type { IAuthMasterKeyInput } from "@/validations/register.zod";
 import { type UseMasterKeyResult } from "../../types/register/general.types";
-import { encrypt } from "@/lib/url/crypto";
-import { decrypt } from "@/lib/url/crypto";
+import { decrypt, encrypt } from "../../lib/url/crypto";
 
 
 

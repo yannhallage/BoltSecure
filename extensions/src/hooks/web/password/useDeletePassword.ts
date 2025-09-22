@@ -1,4 +1,4 @@
-import { PasswordService } from "@/services/web/password.service";
+import { PasswordService } from "../../../services/web/password.service";
 
 export async function deletePassword(id: string) {
     try {

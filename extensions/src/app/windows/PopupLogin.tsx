@@ -1,12 +1,12 @@
 import { useState } from "react";
-import { useEmail } from "../../../../src/hooks/auth/useEmail.hooks"
-import { usePassword } from "../../../../src/hooks/auth/usePassword.hooks"
-import { useMasterKey } from "../../../../src/hooks/auth/useMasterKey.hooks"
 import { useContext } from "react";
 import { ClipLoader } from 'react-spinners';
 import { TriangleAlert } from 'lucide-react';
 
 import { PopupContext } from "../../context/PopupContext";
+import { useMasterKey } from "../../hooks/auth/useMasterKey.hooks";
+import { useEmail } from "../../hooks/auth/useEmail.hooks";
+import { usePassword } from "../../hooks/auth/usePassword.hooks";
 
 const PopupLogin = () => {
     const popupContext = useContext(PopupContext);

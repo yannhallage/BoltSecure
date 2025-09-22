@@ -1,8 +1,7 @@
 import { useState } from "react";
-import { AuthService } from "@/services/auth/authService";
-// import type { IAuthmotDePasseInput } from "@/validations/register.zod";
-import { encrypt } from "@/lib/url/crypto";
-import { decrypt } from "@/lib/url/crypto";
+import { AuthService } from "../../services/auth/authService";
+import { encrypt } from "../../lib/url/crypto";
+import { decrypt } from "../../lib/url/crypto";
 
 
 export const usePassword = (initialValue = "") => {
