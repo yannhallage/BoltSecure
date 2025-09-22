@@ -12,5 +12,6 @@ export async function createPassword(userId: string, data: z.infer<typeof Passwo
         throw err;
     } finally {
         loading = false;
+        console.log(loading)
     }
 }

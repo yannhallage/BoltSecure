@@ -24,21 +24,36 @@ export const usePassword = (initialValue = "") => {
             setLoadingPassword(true);
             setErrorPassword(null);
 
-            const encryptedEmail = localStorage.getItem('xxxml');
+            let encryptedEmail: string | null = null;
+
+            if (chrome?.storage?.local) {
+                const result = await chrome.storage.local.get(["xxxml"]);
+                encryptedEmail = result.xxxml || null;
+            } else {
+                encryptedEmail = localStorage.getItem("xxxml");
+            }
+
             if (!encryptedEmail) {
-                alert("email introuvable");
+                alert("Email introuvable");
                 return false;
             }
 
             const email = decrypt(encryptedEmail);
-            
+
             const res = await AuthService.Password(
                 email.trim(),
-                valuePassword.trim(),
+                valuePassword.trim()
             );
 
-            const encryptedPassword = encrypt(valuePassword)
-            localStorage.setItem('xxxpp', encryptedPassword);
+            const encryptedPassword = encrypt(valuePassword);
+
+            if (chrome?.storage?.local) {
+                await chrome.storage.local.set({ xxxpp: encryptedPassword });
+                console.log("Password sauvegardé dans chrome.storage.local");
+            } else {
+                localStorage.setItem("xxxpp", encryptedPassword);
+                console.log("Password sauvegardé dans localStorage");
+            }
 
             if ((res as any).data ?? true) {
                 return true;
@@ -52,6 +67,7 @@ export const usePassword = (initialValue = "") => {
         } finally {
             setLoadingPassword(false);
         }
+
     };
 
     const handleChange = (val: string) => {

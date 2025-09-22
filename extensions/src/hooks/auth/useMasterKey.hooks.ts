@@ -28,11 +28,20 @@ export const useMasterKey = (initialValue = ""): UseMasterKeyResult => {
             setLoadingMasterKey(true);
             setErrorMasterKey(null);
 
-            const encryptedEmail = localStorage.getItem('xxxml');
-            // const encryptedOtp = localStorage.getItem('xxxop');
-            const encryptedPassword = localStorage.getItem('xxxpp');
-            if (!encryptedEmail  || !encryptedPassword) {
-                alert("un problème est survenu lors de la récupération des données");
+            let encryptedEmail: string | null = null;
+            let encryptedPassword: string | null = null;
+
+            if (chrome?.storage?.local) {
+                const result = await chrome.storage.local.get(["xxxml", "xxxpp"]);
+                encryptedEmail = result.xxxml || null;
+                encryptedPassword = result.xxxpp || null;
+            } else {
+                encryptedEmail = localStorage.getItem("xxxml");
+                encryptedPassword = localStorage.getItem("xxxpp");
+            }
+
+            if (!encryptedEmail || !encryptedPassword) {
+                alert("Un problème est survenu lors de la récupération des données");
                 return false;
             }
 
@@ -46,7 +55,14 @@ export const useMasterKey = (initialValue = ""): UseMasterKeyResult => {
             );
 
             const encryptedMasterKey = encrypt(valueMasterKey);
-            localStorage.setItem('xxxmm', encryptedMasterKey);
+            
+            if (chrome?.storage?.local) {
+                await chrome.storage.local.set({ xxxmm: encryptedMasterKey });
+                console.log("MasterKey sauvegardée dans chrome.storage.local");
+            } else {
+                localStorage.setItem("xxxmm", encryptedMasterKey);
+                console.log("MasterKey sauvegardée dans localStorage");
+            }
 
             if ((res as any).success ?? true) {
                 return true;
@@ -60,6 +76,7 @@ export const useMasterKey = (initialValue = ""): UseMasterKeyResult => {
         } finally {
             setLoadingMasterKey(false);
         }
+
     };
 
 

@@ -30,14 +30,23 @@ export const useEmail = (initialValue = ""): UseEmailResult => {
         try {
             setLoadingEmail(true);
             setErrorEmail(null);
-            
-            console.log(valueEmail)
+
+            console.log(valueEmail);
             const res: AuthEmailResponse = await AuthService.Email(valueEmail);
 
             if (res.message) {
                 console.log(res.message);
+
                 const encryptedEmail = encrypt(valueEmail);
-                localStorage.setItem('xxxml', encryptedEmail);
+
+                if (chrome?.storage?.local) {
+                    await chrome.storage.local.set({ xxxml: encryptedEmail });
+                    console.log("Email chiffré sauvegardé dans chrome.storage.local");
+                } else {
+                    localStorage.setItem("xxxml", encryptedEmail);
+                    console.log("Email chiffré sauvegardé dans localStorage");
+                }
+
                 return true;
             } else {
                 setErrorEmail("Email non valide");
@@ -49,6 +58,7 @@ export const useEmail = (initialValue = ""): UseEmailResult => {
         } finally {
             setLoadingEmail(false);
         }
+
     };
 
     const handleChange = (val: string) => {

@@ -9,9 +9,36 @@ import PopupItems from "./windows/PopupItems";
 import { BankAccounts, socialAccounts } from "../data/socialAccounts";
 import AccountPopup from "./windows/AccountPopup";
 import EditPopup from "./windows/EditePopup";
+import { useEffect } from "react";
 
 function PopupContainer() {
-  const { popup } = usePopup();
+  const { popup, setPopup } = usePopup();
+
+  useEffect(() => {
+    async function checkStorage() {
+      try {
+        let hasData = false;
+
+        if (chrome?.storage?.local) {
+          const result = await chrome.storage.local.get(["xxxml", "xxxpp", "xxxmm"]);
+          hasData = !!(result.xxxml && result.xxxpp && result.xxxmm);
+        } else {
+          const email = localStorage.getItem("xxxml");
+          const password = localStorage.getItem("xxxpp");
+          const masterKey = localStorage.getItem("xxxmm");
+          hasData = !!(email && password && masterKey);
+        }
+
+        if (hasData) {
+          setPopup("Browse");
+        }
+      } catch (err) {
+        console.error("Erreur lors de la vérification du storage :", err);
+      }
+    }
+
+    checkStorage();
+  }, [setPopup]);
 
   switch (popup) {
     case "login":
@@ -21,11 +48,11 @@ function PopupContainer() {
     case "settings":
       return <PopupVault />;
     case "All-items":
-      return <PopupItems title={'All items'} data={socialAccounts} />
+      return <PopupItems title={"All items"} data={socialAccounts} />;
     case "passwords":
-      return <PopupItems title={'All passwords'} data={socialAccounts} />;
+      return <PopupItems title={"All passwords"} data={socialAccounts} />;
     case "creditCards":
-      return <PopupItems title={'All credit Cards'} data={BankAccounts} />;
+      return <PopupItems title={"All credit Cards"} data={BankAccounts} />;
     case "account":
       return <AccountPopup />;
     case "Edit":
