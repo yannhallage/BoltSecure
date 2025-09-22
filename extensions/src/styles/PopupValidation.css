@@ -1,0 +1,119 @@
+.save-popup {
+    width: 320px;
+    background: #111;
+    color: #fff;
+    border-radius: 16px;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+}
+
+/* Header */
+.popup-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.icon-circle {
+    background: #10b981;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.user-circle {
+    margin-left: auto;
+    margin-right: 8px;
+    background: #374151;
+    border-radius: 50%;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    color: #aaa;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+/* Title + subtitle */
+.title {
+    font-size: 18px;
+    margin: 0;
+    font-weight: bold;
+}
+
+.subtitle {
+    font-size: 12px;
+    color: #9ca3af;
+    margin-bottom: 20px;
+}
+
+/* Fields */
+.field {
+    margin-bottom: 14px;
+}
+
+.field label {
+    display: block;
+    font-size: 12px;
+    margin-bottom: 6px;
+    color: #d1d5db;
+}
+
+.field input {
+    width: 88%;
+    padding: 18px;
+    border-radius: 10px;
+    border: none;
+    background: #1f2937;
+    color: #fff;
+}
+
+.password-wrapper {
+    display: flex;
+    align-items: center;
+}
+
+.eye-btn {
+    margin-left: 6px;
+    background: #374151;
+    border: none;
+    color: #fff;
+    border-radius: 8px;
+    padding: 6px 10px;
+    cursor: pointer;
+}
+
+/* Show more */
+.show-more {
+    font-size: 12px;
+    color: #9ca3af;
+    margin: 10px 0 20px 0;
+    cursor: pointer;
+}
+
+/* Save button */
+.save-btn {
+    width: 100%;
+    padding: 12px;
+    background: #10b981;
+    border: none;
+    border-radius: 10px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.save-btn:hover {
+    background: #059669;
+}

@@ -1,23 +1,45 @@
 {
-    "manifest_version": 3,
-    "name": "BoltSecure",
-    "version": "1.0.0",
-    "description": "Gestionnaire sécurisé",
-    "action": {
-        "default_popup": "index.html",
-        "default_icon": {
-            "16": "icon.png",
-            "48": "icon.png",
-            "128": "icon.png"
-        }
-    },
-    "permissions": [
-        "storage",
-        "tabs",
-        "activeTab",
-        "scripting"
-    ],
-    "background": {
-        "service_worker": "background.js"
+  "manifest_version": 3,
+  "name": "BoltSecure",
+  "version": "1.0.0",
+  "description": "Gestionnaire sécurisé",
+  
+  "action": {
+    "default_popup": "index.html",
+    "default_icon": {
+      "16": "icon.png",
+      "48": "icon.png",
+      "128": "icon.png"
     }
+  },
+
+  "background": {
+    "service_worker": "background.js"
+  },
+
+  "permissions": [
+    "storage",
+    "tabs",
+    "activeTab",
+    "scripting"
+  ],
+
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ],
+
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "popup/*",
+        "styles/*",
+        "icons/*"
+      ],
+      "matches": ["<all_urls>"]
+    }
+  ]
 }
