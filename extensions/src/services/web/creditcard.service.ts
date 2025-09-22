@@ -1,6 +1,6 @@
-import { Http } from "@/api/http";
-import { ENDPOINTS_CREDITCARDS } from "@/api/web/Endpoint";
-import { CreditCardZod } from "@/types/web/interface.type";
+import { Http } from "../../api/http";
+import { ENDPOINTS_CREDITCARDS } from "../../api/web/Endpoint";
+import { CreditCardZod } from "../../types/web/interface.type";
 import { z } from "zod";
 
 export class CreditCardService {

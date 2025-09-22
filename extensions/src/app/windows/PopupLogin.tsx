@@ -65,6 +65,7 @@ const PopupLogin = () => {
                 } else {
                     setTimeout(() => {
                         setStep(step + 1)
+                        setShowAlert(true)
                         setLoading(false)
                     }, 1000)
                 }
@@ -90,6 +91,7 @@ const PopupLogin = () => {
                     }, 1000)
                 } else {
                     setTimeout(() => {
+                        setShowAlert(true)
                         setStep(step + 1)
                         setLoading(false)
                     }, 1000)
@@ -117,7 +119,9 @@ const PopupLogin = () => {
                 } else {
                     setTimeout(() => {
                         setStep(step + 1)
+                        setShowAlert(true)
                         setLoading(false)
+                        setShowAlert(false)
                     }, 1000)
                 }
             }
@@ -133,6 +137,12 @@ const PopupLogin = () => {
 
     if (errorEmail) {
         console.log(errorEmail)
+    }
+    if (errorMasterKey) {
+        console.log(errorMasterKey)
+    }
+    if (errorPassword) {
+        console.log(errorPassword)
     }
     return (
         <>
@@ -199,11 +209,27 @@ const PopupLogin = () => {
                                 value={valuePassword}
                                 onChange={(e) => setValuePassword(e.target.value)}
                             />
-                            <button type="button" onClick={EvenementOnClick}>
+                            <button type="button">
                                 👁
                             </button>
                         </div>
 
+                        <span
+                            className="link"
+                            hidden={showAlert}
+                            style={{
+                                color: "#E4004B",
+                                backgroundColor: '#18181b',
+                                fontSize: '11px',
+                                fontFamily: 'monospace',
+                                textDecoration: "none",
+                                cursor: "",
+                                padding: '10px',
+                                border: 'solid 1px #333'
+                            }}
+                        >
+                            veuillez remplir tout les champs <TriangleAlert size={15} />
+                        </span>
                         <a href="#" className="link">
                             Forgot your Master Password?
                         </a>
@@ -233,6 +259,22 @@ const PopupLogin = () => {
                             </button>
                         </div>
 
+                        <span
+                            className="link"
+                            hidden={showAlert}
+                            style={{
+                                color: "#E4004B",
+                                backgroundColor: '#18181b',
+                                fontSize: '11px',
+                                fontFamily: 'monospace',
+                                textDecoration: "none",
+                                cursor: "",
+                                padding: '10px',
+                                border: 'solid 1px #333'
+                            }}
+                        >
+                            veuillez remplir tout les champs <TriangleAlert size={15} />
+                        </span>
                         <a href="#" className="link">
                             Forgot your Master Password?
                         </a>

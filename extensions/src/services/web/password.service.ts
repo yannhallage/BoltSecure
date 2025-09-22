@@ -1,8 +1,8 @@
 // services/password.service.ts
-import { Http } from "@/api/http";
+import { Http } from "../../api/http";
 import { z } from "zod";
-import { ENDPOINTS_PASSWORDS } from "@/api/web/Endpoint";
-import { PasswordZod } from "@/types/web/interface.type";
+import { ENDPOINTS_PASSWORDS } from "../../api/web/Endpoint";
+import { PasswordZod } from "../../types/web/interface.type";
 
 
 export class PasswordService {
