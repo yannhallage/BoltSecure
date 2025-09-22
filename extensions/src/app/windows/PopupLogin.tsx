@@ -23,17 +23,17 @@ const PopupLogin = () => {
     // const [masterKey, setMasterKey] = useState("");
 
     const { valueEmail,
-        validEmail,
-        loadingEmail
-        , errorEmail
+        // validEmail,
+        // loadingEmail,
+         errorEmail
         , setValueEmail,
         submitEmail
 
     } = useEmail("");
 
     const { valuePassword,
-        validPassword,
-        loadingPassword,
+        // validPassword,
+        // loadingPassword,
         errorPassword,
         setValuePassword,
         submitPassword
@@ -41,8 +41,8 @@ const PopupLogin = () => {
     } = usePassword("");
 
     const { valueMasterKey,
-        validMasterKey,
-        loadingMasterKey,
+        // validMasterKey,
+        // loadingMasterKey,
         errorMasterKey,
         setValueMasterKey,
         submitMasterKey

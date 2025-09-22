@@ -2,7 +2,8 @@
 import { Http } from "../../api/http";
 import { ENDPOINTS_REGISTER } from "../../api/register/Endpoint";
 import { LocalStorage } from "../../lib/localstorage";
-import type { IAuthEmailInput, IAuthmotDePasseInput, IAuthResponseUser, IAuthOtpVerificationInput, IAuthMasterKeyInput } from "../../validations/register.zod";
+// import type { IAuthEmailInput, IAuthmotDePasseInput, IAuthResponseUser, IAuthOtpVerificationInput, IAuthMasterKeyInput } from "../../validations/register.zod";
+import type { IAuthResponseUser, IAuthOtpVerificationInput } from "../../validations/register.zod";
 // import { email } from 'zod';
 
 

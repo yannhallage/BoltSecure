@@ -1,5 +1,6 @@
 
-import type { IAuthEmailInput, IAuthmotDePasseInput, IAuthResponseUser, IAuthOtpVerificationInput, IAuthMasterKeyInput } from "../../validations/register.zod";
+// import type { IAuthEmailInput, IAuthmotDePasseInput, IAuthResponseUser, IAuthOtpVerificationInput, IAuthMasterKeyInput } from "../../validations/register.zod";
+import type { IAuthResponseUser } from "../../validations/register.zod";
 import { Http } from "../../api/http";
 import { ENDPOINTS_AUTH } from "../../api/auth/Endpoint";
 import { LocalStorage } from "../../lib/localstorage";
