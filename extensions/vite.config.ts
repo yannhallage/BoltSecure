@@ -1,3 +1,4 @@
+// vite.config.ts
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import { resolve } from "path";
@@ -9,7 +10,8 @@ export default defineConfig({
     viteStaticCopy({
       targets: [
         { src: "manifest.json", dest: "." },
-        { src: "public/icon.png", dest: "." }
+        { src: "public/icon.png", dest: "." },
+        { src: "src/styles/*", dest: "styles" }
       ]
     })
   ],
@@ -17,12 +19,15 @@ export default defineConfig({
     rollupOptions: {
       input: {
         popup: resolve(__dirname, "index.html"),
-        background: resolve(__dirname, "src/background.ts"),
-        content: resolve(__dirname, "src/content.tsx"),
+        background: resolve(__dirname, "src/background.ts")
       },
       output: {
-        entryFileNames: "[name].js"
+        entryFileNames: "[name].js",
+        format: "es"
       }
-    }
+    },
+    outDir: "dist",
+    emptyOutDir: true,
+    target: "es2015"
   }
 });

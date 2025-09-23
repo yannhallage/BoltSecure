@@ -13,7 +13,6 @@ const PopupValidation: React.FC = () => {
         <div className="save-popup">
             <div className="popup-header">
                 <div className="icon-circle"><LockKeyhole size={18}/></div>
-                {/* <div className="user-circle">Ya</div> */}
                 <button className="close-btn">✕</button>
             </div>
 

@@ -2,7 +2,6 @@ import "../styles/style.css";
 import "../styles/popup.css";
 import { PopupProvider } from "../context/PopupProvider";
 import PopupLogin from "./windows/PopupLogin";
-
 import { usePopup } from "../context/usePopup";
 import PopupVault from "./windows/PopupVault";
 import PopupItems from "./windows/PopupItems";
@@ -10,6 +9,7 @@ import { BankAccounts, socialAccounts } from "../data/socialAccounts";
 import AccountPopup from "./windows/AccountPopup";
 import EditPopup from "./windows/EditePopup";
 import { useEffect } from "react";
+// import PopupSelect from "./windows/PopupSelect";
 
 function PopupContainer() {
   const { popup, setPopup } = usePopup();
