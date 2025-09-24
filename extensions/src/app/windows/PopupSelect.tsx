@@ -18,7 +18,19 @@ const data: EmailItem[] = [
     { id: 8, label: "exemple5@gmail.com" }
 ];
 
-const PopupSelect: React.FC = () => {
+interface PopupSelectProps {
+    targetInput: HTMLInputElement;
+    onClose?: () => void;          
+}
+
+const PopupSelect: React.FC<PopupSelectProps> = ({ targetInput, onClose }) => {
+
+    const handleSelect = (value: string) => {
+        targetInput.value = value;
+        targetInput.dispatchEvent(new Event("input", { bubbles: true }));
+        if (onClose) onClose();
+    };
+
     return (
         <div className="emails-popup">
             {/* Header */}
@@ -36,11 +48,12 @@ const PopupSelect: React.FC = () => {
                     <div
                         key={item.id}
                         className={`email-item ${item.type === "premium" ? "premium" : ""}`}
+                        onClick={() => handleSelect(item.label)}
+                        style={{ cursor: "pointer" }}
                     >
-                        <div className="icon"><LockKeyhole  size={18}/></div>
+                        <div className="icon"><LockKeyhole size={18} /></div>
                         <div className="info">
                             <p className="title">{item.label}</p>
-                            
                         </div>
                     </div>
                 ))}

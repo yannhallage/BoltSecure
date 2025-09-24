@@ -8,7 +8,7 @@ export default defineConfig({
         react(),
         viteStaticCopy({
             targets: [
-                { src: "src/styles/*", dest: "styles" }
+                { src: "src/styles/*", dest: "styles" } // CSS du content script
             ]
         })
     ],
@@ -20,7 +20,7 @@ export default defineConfig({
             input: resolve(__dirname, "src/content.tsx"),
             output: {
                 entryFileNames: "content.js",
-                format: "iife"
+                format: "iife" // obligatoire pour MV3 content scripts
             }
         }
     }
