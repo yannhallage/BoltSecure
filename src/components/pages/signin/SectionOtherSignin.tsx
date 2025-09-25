@@ -116,7 +116,9 @@ const SectionOtherSignin = () => {
                     setChildren('')
                     setBtnDisabled(false)
                     setLoadingSpinner(false)
-                    navigate('/web')
+                    // navigate('/web')
+                    // window.location.href ='http://localhost:5173/web'
+                    window.location.reload()
                 }, 2000)
             }
             if (errorMasterKey) {

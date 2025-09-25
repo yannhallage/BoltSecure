@@ -32,7 +32,7 @@ export default function PopupVault() {
                 </button>
                 <button
                     className="vault-item"
-                    onClick={() => setPopup("creditCards")}
+                    onClick={() => setPopup("Browse")}
                 >
                     <Settings size={28} />
                     <span>Settings</span>
