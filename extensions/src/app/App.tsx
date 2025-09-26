@@ -6,20 +6,16 @@ import PopupLogin from "./windows/PopupLogin";
 import { usePopup } from "../context/usePopup";
 import PopupVault from "./windows/PopupVault";
 import PopupItems from "./windows/PopupItems";
-// import { BankAccounts, socialAccounts } from "../data/socialAccounts";
 import AccountPopup from "./windows/AccountPopup";
 import EditPopup from "./windows/EditePopup";
-import {useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useGetPasswords } from "../hooks/web/password/useGetPasswords";
 import { useGetCreditcards } from "../hooks/web/creditCarte/useGetCreditcards";
-
-// import type { PasswordItem } from '../types/web/PasswordItem ';
 
 function PopupContainer() {
   const { popup, setPopup, setDataPasswords, setDataRegister } = usePopup();
 
   const [userId, setUserId] = useState<string | null>(null);
-  // const { setDataPasswords, setDataRegister } = useContext(PopupContext)
   const { passwords, loading, error } = useGetPasswords(userId ?? "");
   const { creditCards, loadings, errors } = useGetCreditcards(userId ?? "");
 
@@ -63,14 +59,13 @@ function PopupContainer() {
 
   useEffect(() => {
     if (passwords) {
-      setDataPasswords(passwords);
-      
+      setDataPasswords(prev => [...prev, ...passwords]);
     }
   }, [passwords, setDataPasswords]);
 
   useEffect(() => {
     if (creditCards) {
-      setDataRegister(creditCards);
+      setDataRegister(prev => [...prev, ...creditCards]);
     }
   }, [creditCards, setDataRegister]);
 
@@ -92,13 +87,19 @@ function PopupContainer() {
       return <PopupItems
         title="All creditCards"
         data={creditCards}
+        type="creditCards"
       />;
-    
+
     case "passwords":
       if (!userId) return <div>Loading user...</div>;
       if (loading) return <div>Loading passwords...</div>;
       if (error) return <div>Error: {error}</div>;
-      return <PopupItems title="All passwords" data={passwords} />;
+
+      return <PopupItems
+        title="All passwords"
+        data={passwords}
+        type="passwords"
+      />;
 
     case "account":
       return <AccountPopup />;
@@ -107,8 +108,8 @@ function PopupContainer() {
     default:
       return null;
   }
-  
-  
+
+
 }
 
 export default function App() {

@@ -18,12 +18,18 @@ export interface PopupContextProps {
     setDataPasswords: React.Dispatch<React.SetStateAction<unknown[]>>;
     dataRegister: unknown[];
     setDataRegister: React.Dispatch<React.SetStateAction<unknown[]>>;
+    changeText: string;
+    typeChange: string;
+    setChangeText: React.Dispatch<React.SetStateAction<string>>;
+    setTypeChange: React.Dispatch<React.SetStateAction<string>>;
 }
 
 export const PopupProvider = ({ children }: { children: ReactNode }) => {
     const [popup, setPopup] = useState<PopupType>("login");
     const [dataPasswords, setDataPasswords] = useState<unknown[]>([]);
     const [dataRegister, setDataRegister] = useState<unknown[]>([]);
+    const [changeText, setChangeText] = useState<string>("");
+    const [typeChange, setTypeChange] = useState<string>("");
 
     return (
         <PopupContext.Provider
@@ -34,6 +40,9 @@ export const PopupProvider = ({ children }: { children: ReactNode }) => {
                 setDataPasswords,
                 dataRegister,
                 setDataRegister,
+                changeText,
+                setChangeText,
+                typeChange, setTypeChange
             }}
         >
             {children}

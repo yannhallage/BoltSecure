@@ -2,6 +2,7 @@ import { Search, Plus, LayoutGrid, LockKeyhole } from "lucide-react";
 import { useContext, useState, useEffect } from "react";
 import { PopupContext } from "../../context/PopupContext";
 import { socialAccounts, BankAccounts } from "../../data/socialAccounts";
+import { usePopup } from "../../context/usePopup";
 
 export type ItemData = {
     titre: string;
@@ -13,11 +14,13 @@ export type ItemData = {
 type PopupItemsProps = {
     title: string;
     data: ItemData[];
+    type:string
 };
 
-export default function PopupItems({ title, data }: PopupItemsProps) {
+export default function PopupItems({ title, data, type }: PopupItemsProps) {
     const popupContext = useContext(PopupContext);
     const [optionSelectionner, setOptionSelectionner] = useState<string>("");
+    const { setChangeText, setTypeChange } = usePopup();
 
     useEffect(() => {
         if (title) setOptionSelectionner(title);
@@ -37,7 +40,12 @@ export default function PopupItems({ title, data }: PopupItemsProps) {
             return account?.image || null
         }
     };
-
+    const handleClikOnFunction = (indice : string, titre:string) => {
+        console.log(indice, titre)
+        setChangeText(titre)
+        setTypeChange(indice)
+        setPopup('Edit')
+    }
     return (
         <div className="popup-items-container">
             <div className="items-header">
@@ -60,7 +68,7 @@ export default function PopupItems({ title, data }: PopupItemsProps) {
                 {data.map((item, index) => {
                     const imgSrc = getItemImage(item.titre);
                     return (
-                        <div key={index} className="item" >
+                        <div key={index} className="item" id={type} onClick={() => { handleClikOnFunction(type, item.titre)}}>
                             <div className="item-icon">
                                 {imgSrc ? (
                                     <img src={imgSrc} width={20} height={20} alt={item.titre} />
