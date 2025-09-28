@@ -95,12 +95,18 @@ async function checkStorage() {
         }
 
         /**
+         * Vérifie si l’input est pertinent (email ou password)
+         */
+        function isRelevantInput(input: HTMLInputElement): boolean {
+            return input.type === "email" || input.type === "password";
+        }
+
+        /**
          * Détection du type de formulaire
          */
         function detectFormType(form: HTMLFormElement): "login" | "signup" {
             const action = form.getAttribute("action")?.toLowerCase() || "";
-            const hasConfirmPassword =
-                form.querySelectorAll("input[type='password']").length > 1;
+            const hasConfirmPassword = form.querySelectorAll("input[type='password']").length > 1;
 
             if (
                 action.includes("signup") ||
@@ -114,7 +120,19 @@ async function checkStorage() {
         }
 
         /**
-         * Extraction des identifiants d’un formulaire
+         * Vérifie si PopupValidation doit être déclenché
+         */
+        function shouldTriggerValidation(form: HTMLFormElement): boolean {
+            const formType = detectFormType(form);
+            const hasEmail = !!form.querySelector("input[type='email']");
+            const hasPassword = !!form.querySelector("input[type='password']");
+
+            // Trigger uniquement si signup avec email + password
+            return formType === "signup" && hasEmail && hasPassword;
+        }
+
+        /**
+         * Extraction des identifiants
          */
         function extractCredentials(form: HTMLFormElement) {
             const inputs = form.querySelectorAll("input");
@@ -123,10 +141,7 @@ async function checkStorage() {
 
             inputs.forEach((input) => {
                 if (input.type === "password") password = input.value;
-                if (
-                    input.type === "email" ||
-                    input.name.toLowerCase().includes("user")
-                ) {
+                if (input.type === "email" || input.name.toLowerCase().includes("user")) {
                     username = input.value;
                 }
             });
@@ -135,9 +150,11 @@ async function checkStorage() {
         }
 
         /**
-         * Gestion de la soumission d’un formulaire
+         * Gestion de la soumission
          */
         function handleFormSubmit(form: HTMLFormElement) {
+            if (!shouldTriggerValidation(form)) return;
+
             const { username, password } = extractCredentials(form);
             if (!username || !password) return;
 
@@ -146,48 +163,43 @@ async function checkStorage() {
 
             chrome.storage.local.get([domain], (result) => {
                 const existing = result[domain] || null;
-
-                if (!existing) {
-                    injectPopupValidation({ username, password, domain, formType });
-                } else if (existing.password !== password) {
-                    injectPopupValidation({ username, password, domain, formType });
-                } else if (formType === "signup") {
-                    injectPopupValidation({ username, password, domain, formType });
-                } else {
-                    console.log("✅ Identifiants déjà enregistrés pour ce domaine");
-                }
+                console.log(existing)
+                injectPopupValidation({ username, password, domain, formType });
             });
         }
 
         /**
-         * Setup des listeners
+         * Setup listeners ciblés
          */
         function setupListeners() {
-            // Autofill (input focus)
+            // Autofill uniquement sur inputs pertinents
             document.addEventListener("focusin", (e) => {
-                const target = e.target as HTMLElement;
-                if (target.tagName === "INPUT") injectPopupSelect(target);
+                const target = e.target as HTMLInputElement;
+                if (target && target.tagName === "INPUT" && isRelevantInput(target)) {
+                    injectPopupSelect(target);
+                }
             });
 
             // Fermeture du popup select si clic ailleurs
             document.addEventListener("click", (e) => {
                 const target = e.target as HTMLElement;
-                if (!(target.tagName === "INPUT")) {
+                if (!(target.tagName === "INPUT" && isRelevantInput(target as HTMLInputElement))) {
                     document.getElementById("emails-popup")?.remove();
                 }
             });
 
-            // Sauvegarde / update (submit classique)
+            // Soumission formulaire
             document.addEventListener("submit", (e) => {
-                handleFormSubmit(e.target as HTMLFormElement);
+                const form = e.target as HTMLFormElement;
+                if (form) handleFormSubmit(form);
             });
 
-            // Sauvegarde / update (bouton JS sans submit)
+            // Click sur bouton submit
             document.addEventListener("click", (e) => {
                 const target = e.target as HTMLElement;
                 if (
                     target.tagName === "BUTTON" ||
-                    (target as HTMLInputElement).type === "submit"
+                    (target instanceof HTMLInputElement && target.type === "submit")
                 ) {
                     const form = target.closest("form") as HTMLFormElement | null;
                     if (form) handleFormSubmit(form);

@@ -1,8 +1,7 @@
 import { Search, Plus, LayoutGrid, LockKeyhole } from "lucide-react";
-import { useContext, useState, useEffect } from "react";
-import { PopupContext } from "../../context/PopupContext";
-import { socialAccounts, BankAccounts } from "../../data/socialAccounts";
+import { useEffect, useState } from "react";
 import { usePopup } from "../../context/usePopup";
+import { socialAccounts, BankAccounts } from "../../data/socialAccounts";
 
 export type ItemData = {
     titre: string;
@@ -13,39 +12,42 @@ export type ItemData = {
 
 type PopupItemsProps = {
     title: string;
-    data: ItemData[];
-    type:string
+    type: "passwords" | "creditCards";
 };
 
-export default function PopupItems({ title, data, type }: PopupItemsProps) {
-    const popupContext = useContext(PopupContext);
+export default function PopupItems({ title, type }: PopupItemsProps) {
+    const {
+        dataPasswords,
+        dataRegister,
+        setPopup,
+        setChangeText,
+        setTypeChange
+    } = usePopup();
+
     const [optionSelectionner, setOptionSelectionner] = useState<string>("");
-    const { setChangeText, setTypeChange } = usePopup();
+    const [data, setData] = useState<ItemData[]>([]);
 
     useEffect(() => {
         if (title) setOptionSelectionner(title);
     }, [title]);
 
-    if (!popupContext) return null;
-    const { setPopup } = popupContext;
+    useEffect(() => {
+        setData(type === "creditCards" ? (dataRegister as ItemData[]) || [] : (dataPasswords as ItemData[]) || []);
+    }, [type, dataPasswords, dataRegister]);
 
     const getItemImage = (titre?: string) => {
         if (!titre) return null;
-        const account = socialAccounts.find(acc => acc.name === titre);
-
-        if (account) {
-            return account?.image || null;
-        } else {
-            const account = BankAccounts.find(acc => acc.name === titre)
-            return account?.image || null
-        }
+        const account = socialAccounts.find(acc => acc.name === titre)
+            || BankAccounts.find(acc => acc.name === titre);
+        return account?.image || null;
     };
-    const handleClikOnFunction = (indice : string, titre:string) => {
-        console.log(indice, titre)
-        setChangeText(titre)
-        setTypeChange(indice)
-        setPopup('Edit')
-    }
+
+    const handleClick = (itemType: string, titre: string) => {
+        setChangeText(titre);
+        setTypeChange(itemType);
+        setPopup("Edit");
+    };
+
     return (
         <div className="popup-items-container">
             <div className="items-header">
@@ -65,16 +67,12 @@ export default function PopupItems({ title, data, type }: PopupItemsProps) {
             <h2 className="items-title">{optionSelectionner}</h2>
 
             <div className="items-list">
-                {data.map((item, index) => {
+                {data.map(item => {
                     const imgSrc = getItemImage(item.titre);
                     return (
-                        <div key={index} className="item" id={type} onClick={() => { handleClikOnFunction(type, item.titre)}}>
+                        <div key={item.titre} className="item" onClick={() => handleClick(type, item.titre)}>
                             <div className="item-icon">
-                                {imgSrc ? (
-                                    <img src={imgSrc} width={20} height={20} alt={item.titre} />
-                                ) : (
-                                    <LockKeyhole size={18} />
-                                )}
+                                {imgSrc ? <img src={imgSrc} width={20} height={20} alt={item.titre} /> : <LockKeyhole size={18} />}
                             </div>
                             <div className="item-info">
                                 <span className="item-title">{item.titre}</span>

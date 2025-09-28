@@ -3,7 +3,8 @@
 import type { IAuthResponseUser } from "../../validations/register.zod";
 import { Http } from "../../api/http";
 import { ENDPOINTS_AUTH } from "../../api/auth/Endpoint";
-import { LocalStorage } from "../../lib/localstorage";
+// import { LocalStorage } from "../../lib/localstorage";
+import { storage } from "../../lib/storage";
 
 
 export interface AuthEmailResponse {
@@ -45,13 +46,15 @@ export class AuthService {
         });
 
         if (data) {
-            LocalStorage(data.user._id, 'utilisateur');
-            LocalStorage(data.user.email, 'email');
+            // LocalStorage(data.user._id, 'utilisateur');
+            // LocalStorage(data.user.email, 'email');
+            await storage.set({ utilisateur: data.user._id });
             console.log('sesssion ouverte !');
         } else {
             console.log('un porbleme d\'ouverture de session !')
         }
-        LocalStorage(data.token_connexion, 'token_connexion')
+        await storage.set({ token_connexion: data.token_connexion });
+        // LocalStorage(data.token_connexion, 'token_connexion')
         return data;
     }
 }

@@ -2,12 +2,11 @@ import { useState } from "react";
 import { AuthService } from "../../services/auth/authService";
 import type { UseEmailResult } from "../../types/register/general.types";
 import { encrypt } from "../../lib/url/crypto";
-
+import { storage } from "../../lib/storage";
 
 export interface AuthEmailResponse {
     message: string;
 }
-
 
 export const useEmail = (initialValue = ""): UseEmailResult => {
     const [valueEmail, setValueEmail] = useState(initialValue);
@@ -16,7 +15,6 @@ export const useEmail = (initialValue = ""): UseEmailResult => {
     const [errorEmail, setErrorEmail] = useState<string | null>(null);
 
     const checkValid = (val: string) => {
-        // simple validation longueur + regex basique email
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         setValidEmail(val.length > 6 && emailRegex.test(val));
     };
@@ -31,21 +29,14 @@ export const useEmail = (initialValue = ""): UseEmailResult => {
             setLoadingEmail(true);
             setErrorEmail(null);
 
-            console.log(valueEmail);
             const res: AuthEmailResponse = await AuthService.Email(valueEmail);
 
             if (res.message) {
-                console.log(res.message);
-
                 const encryptedEmail = encrypt(valueEmail);
-
-                if (chrome?.storage?.local) {
-                    await chrome.storage.local.set({ xxxml: encryptedEmail });
-                    console.log("Email chiffré sauvegardé dans chrome.storage.local");
-                } else {
-                    localStorage.setItem("xxxml", encryptedEmail);
-                    console.log("Email chiffré sauvegardé dans localStorage");
-                }
+                // ⚡ On sauvegarde email chiffré + identifiant utilisateur
+                // await storage.set({ xxxml: encryptedEmail, utilisateur: valueEmail });
+                await storage.set({ xxxml: encryptedEmail });
+                console.log("Email sauvegardés dans storage");
 
                 return true;
             } else {
@@ -58,8 +49,8 @@ export const useEmail = (initialValue = ""): UseEmailResult => {
         } finally {
             setLoadingEmail(false);
         }
-
     };
+
 
     const handleChange = (val: string) => {
         setValueEmail(val);
