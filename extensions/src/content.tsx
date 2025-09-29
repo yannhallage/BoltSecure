@@ -10,7 +10,7 @@ async function checkStorage() {
     try {
         let hasData = false;
 
-        // Vérification stockage
+        // Vérification stockage global
         if (chrome?.storage?.local) {
             const result = await chrome.storage.local.get(["xxxml", "xxxpp", "xxxmm"]);
             hasData = !!(result.xxxml && result.xxxpp && result.xxxmm);
@@ -25,7 +25,7 @@ async function checkStorage() {
         if (!hasData || window.location.href.includes("localhost:5173/web")) return;
 
         /**
-         * 🏗️ Fonction générique pour monter un composant React
+         * Mount React component
          */
         function mountReactComponent(
             id: string,
@@ -48,28 +48,23 @@ async function checkStorage() {
 
                 const root = ReactDOM.createRoot(container);
                 root.render(Component);
-            } else {
-                console.warn(`⚠️ Le container #${id} existe déjà, injection ignorée.`);
             }
         }
 
         /**
-         * Popup de sélection (autofill)
+         * PopupSelect → autofill
          */
-        function injectPopupSelect(target: HTMLElement) {
+        function injectPopupSelect(target: HTMLInputElement) {
             mountReactComponent(
                 "emails-popup",
                 <PopupSelect
-                    targetInput={target as HTMLInputElement}
+                    targetInput={target}
                     onClose={() => document.getElementById("emails-popup")?.remove()}
                 />,
                 { width: "400px", top: "10px", right: "10px" }
             );
         }
 
-        /**
-         * Popup de validation (sauvegarde / update)
-         */
         function injectPopupValidation({
             username,
             password,
@@ -95,14 +90,14 @@ async function checkStorage() {
         }
 
         /**
-         * Vérifie si l’input est pertinent (email ou password)
+         * Vérifie si l’input est pertinent
          */
         function isRelevantInput(input: HTMLInputElement): boolean {
             return input.type === "email" || input.type === "password";
         }
 
         /**
-         * Détection du type de formulaire
+         * Détecte le type de formulaire
          */
         function detectFormType(form: HTMLFormElement): "login" | "signup" {
             const action = form.getAttribute("action")?.toLowerCase() || "";
@@ -120,15 +115,25 @@ async function checkStorage() {
         }
 
         /**
-         * Vérifie si PopupValidation doit être déclenché
+         * Vérifie si PopupValidation doit s'afficher selon formulaire et domaine
          */
         function shouldTriggerValidation(form: HTMLFormElement): boolean {
             const formType = detectFormType(form);
             const hasEmail = !!form.querySelector("input[type='email']");
             const hasPassword = !!form.querySelector("input[type='password']");
+            const domain = window.location.hostname;
 
-            // Trigger uniquement si signup avec email + password
-            return formType === "signup" && hasEmail && hasPassword;
+            // Si formulaire signup et email+password présents
+            if (formType !== "signup" || !hasEmail || !hasPassword) return false;
+
+            // Vérifie si on a déjà des identifiants pour ce domaine
+            chrome.storage.local.get([domain], (result) => {
+                const existing = result[domain] || null;
+                if (!existing) return true; // Pas d'identifiants → popup à afficher
+                return false; // Déjà enregistré → pas de popup
+            });
+
+            return true; // Par défaut, afficher
         }
 
         /**
@@ -150,26 +155,28 @@ async function checkStorage() {
         }
 
         /**
-         * Gestion de la soumission
+         * Gestion de la soumission de formulaire
          */
         function handleFormSubmit(form: HTMLFormElement) {
-            if (!shouldTriggerValidation(form)) return;
-
-            const { username, password } = extractCredentials(form);
-            if (!username || !password) return;
-
             const domain = window.location.hostname;
             const formType = detectFormType(form);
+            const { username, password } = extractCredentials(form);
+
+            if (!username || !password) return;
+            if (formType !== "signup") return; // Seulement signup
 
             chrome.storage.local.get([domain], (result) => {
                 const existing = result[domain] || null;
-                console.log(existing)
-                injectPopupValidation({ username, password, domain, formType });
+
+                // Si pas d'identifiants ou mot de passe différent → popup
+                if (!existing || existing.password !== password) {
+                    injectPopupValidation({ username, password, domain, formType });
+                }
             });
         }
 
         /**
-         * Setup listeners ciblés
+         * Setup listeners
          */
         function setupListeners() {
             // Autofill uniquement sur inputs pertinents
@@ -180,7 +187,7 @@ async function checkStorage() {
                 }
             });
 
-            // Fermeture du popup select si clic ailleurs
+            // Fermeture du PopupSelect si clic ailleurs
             document.addEventListener("click", (e) => {
                 const target = e.target as HTMLElement;
                 if (!(target.tagName === "INPUT" && isRelevantInput(target as HTMLInputElement))) {
@@ -188,13 +195,13 @@ async function checkStorage() {
                 }
             });
 
-            // Soumission formulaire
+            // Soumission formulaire classique
             document.addEventListener("submit", (e) => {
                 const form = e.target as HTMLFormElement;
                 if (form) handleFormSubmit(form);
             });
 
-            // Click sur bouton submit
+            // Soumission via bouton JS
             document.addEventListener("click", (e) => {
                 const target = e.target as HTMLElement;
                 if (
