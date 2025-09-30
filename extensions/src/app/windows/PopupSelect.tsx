@@ -1,29 +1,36 @@
-import React from "react";
-import "../../styles/PopupSelect.css"
+import React, { useEffect, useState } from "react";
+import "../../styles/PopupSelect.css";
 import { CircleAlert, Settings, LockKeyhole } from "lucide-react";
 
-interface EmailItem {
-    id: number;
+interface PasswordItem {
+    id: string;
     label: string;
+    email?: string;
     type?: "premium" | "normal";
 }
 
-const data: EmailItem[] = [
-    { id: 2, label: "yannhallage2001@gmail.com" },
-    { id: 3, label: "contact.yannhallage@gmail.com" },
-    { id: 4, label: "exemple1@gmail.com" },
-    { id: 5, label: "exemple2@gmail.com" },
-    { id: 6, label: "exemple3@gmail.com" },
-    { id: 7, label: "exemple4@gmail.com" },
-    { id: 8, label: "exemple5@gmail.com" }
-];
-
 interface PopupSelectProps {
     targetInput: HTMLInputElement;
-    onClose?: () => void;          
+    onClose?: () => void;
 }
 
 const PopupSelect: React.FC<PopupSelectProps> = ({ targetInput, onClose }) => {
+    const [passwords, setPasswords] = useState<PasswordItem[]>([]);
+    const [loading, setLoading] = useState(true);
+
+    // Récupération des passwords via le background script
+    useEffect(() => {
+        setLoading(true);
+        chrome.runtime.sendMessage({ type: "getPasswords" }, (response) => {
+            if (response?.success) {
+                setPasswords(response.data);
+                console.log("✅ Passwords récupérés :", response.data);
+            } else {
+                console.warn("⚠️ Impossible de récupérer les passwords :", response?.error);
+            }
+            setLoading(false);
+        });
+    }, []);
 
     const handleSelect = (value: string) => {
         targetInput.value = value;
@@ -42,25 +49,36 @@ const PopupSelect: React.FC<PopupSelectProps> = ({ targetInput, onClose }) => {
                     </button>
                 </div>
             </div>
+
             {/* Scrollable content */}
             <div className="emails-list">
-                {data.map((item) => (
-                    <div
-                        key={item.id}
-                        className={`email-item ${item.type === "premium" ? "premium" : ""}`}
-                        onClick={() => handleSelect(item.label)}
-                        style={{ cursor: "pointer" }}
-                    >
-                        <div className="icon"><LockKeyhole size={18} /></div>
-                        <div className="info">
-                            <p className="title">{item.label}</p>
+                {loading ? (
+                    <p className="no-data">Chargement...</p>
+                ) : passwords.length > 0 ? (
+                    passwords.map((item) => (
+                        <div
+                            key={item.id}
+                            className={`email-item ${item.type === "premium" ? "premium" : ""}`}
+                            onClick={() => handleSelect(item.label || item.email || "")}
+                            style={{ cursor: "pointer" }}
+                        >
+                            <div className="icon">
+                                <LockKeyhole size={18} />
+                            </div>
+                            <div className="info">
+                                <p className="title">{item.label || item.email}</p>
+                            </div>
                         </div>
-                    </div>
-                ))}
+                    ))
+                ) : (
+                    <p className="no-data">Aucun email disponible</p>
+                )}
             </div>
 
             {/* Footer */}
-            <div className="footer-warning"><CircleAlert size={11} /> Unprotected website</div>
+            <div className="footer-warning">
+                <CircleAlert size={11} /> Unprotected website
+            </div>
         </div>
     );
 };

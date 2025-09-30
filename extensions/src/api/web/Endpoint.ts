@@ -12,3 +12,6 @@ export const ENDPOINTS_CREDITCARDS = {
     UpdateCreditCard: '/operations/creditCard/:id',
     DeleteCreditCard: '/operations/creditCard/:id',
 };
+export const ENDPOINTS_EXTENSIONS = {
+    ObtenirMDPFormExtensions: "/operations/extensionmdp/:userId",
+};

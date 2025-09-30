@@ -12,6 +12,7 @@ import ProtectedRoute from './secure/ProtectedRoute';
 import PublicRoute from './secure/PublicRoute';
 import RedirectIfAuth from './secure/RedirectIfAuth';
 import Dashboard from './pages/Dashboard';
+import RegisterForm from './pages/RegisterForm';
 
 function App() {
   return (
@@ -46,6 +47,7 @@ function App() {
               } />
 
               <Route path="/" element={<LandingPage />} />
+              <Route path="/registerForm" element={<RegisterForm />} />
 
               <Route path="/web" element={
                 <ProtectedRoute>

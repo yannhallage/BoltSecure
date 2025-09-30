@@ -1,7 +1,7 @@
 // services/password.service.ts
 import { Http } from "../../api/http";
 import { z } from "zod";
-import { ENDPOINTS_PASSWORDS } from "../../api/web/Endpoint";
+import { ENDPOINTS_PASSWORDS, ENDPOINTS_EXTENSIONS } from "../../api/web/Endpoint";
 import { PasswordZod } from "../../types/web/interface.type";
 
 
@@ -17,6 +17,12 @@ export class PasswordService {
     // Récupérer tous les mots de passe d'un utilisateur
     static async getAll(userId: string): Promise<string[]> {
         return Http(ENDPOINTS_PASSWORDS.ObtenirMotDePasseID.replace(":userId", userId), {
+            method: "GET",
+        }) as Promise<string[]>;
+    }
+    //extensions mdp
+    static async getAllFromExtension(userId: string): Promise<string[]> {
+        return Http(ENDPOINTS_EXTENSIONS.ObtenirMDPFormExtensions.replace(":userId", userId), {
             method: "GET",
         }) as Promise<string[]>;
     }
