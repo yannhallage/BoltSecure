@@ -2,42 +2,36 @@ import React, { useEffect, useState } from "react";
 import "../../styles/PopupSelect.css";
 import { CircleAlert, Settings, LockKeyhole } from "lucide-react";
 
-interface PasswordItem {
-    id: string;
-    label: string;
-    email?: string;
-    type?: "premium" | "normal";
+export interface PasswordItem {
+    _id: string;
+    titre: string;
+    identifiant: string;
+    motDePasse: string;
+    reference?: {
+        type: string;
+        valeur: string;
+    };
+    proprietaireId: string;
+    dateCreation: string;
+    dateModification: string;
+    __v: number;
 }
 
 interface PopupSelectProps {
     targetInput: HTMLInputElement;
+    passwords: PasswordItem[];
     onClose?: () => void;
 }
 
-const PopupSelect: React.FC<PopupSelectProps> = ({ targetInput, onClose }) => {
-    const [passwords, setPasswords] = useState<PasswordItem[]>([]);
-    const [loading, setLoading] = useState(true);
-
-    // Récupération des passwords via le background script
-    useEffect(() => {
-        setLoading(true);
-        chrome.runtime.sendMessage({ type: "getPasswords" }, (response) => {
-            if (response?.success) {
-                setPasswords(response.data);
-                console.log("✅ Passwords récupérés :", response.data);
-            } else {
-                console.warn("⚠️ Impossible de récupérer les passwords :", response?.error);
-            }
-            setLoading(false);
-        });
-    }, []);
-
+const PopupSelect: React.FC<PopupSelectProps> = ({ targetInput, passwords, onClose }) => {
+    const [loading, setLoading] = useState(false);
+    
     const handleSelect = (value: string) => {
         targetInput.value = value;
+        // Déclenche un événement input pour que le site détecte le changement
         targetInput.dispatchEvent(new Event("input", { bubbles: true }));
         if (onClose) onClose();
     };
-
     return (
         <div className="emails-popup">
             {/* Header */}
@@ -57,16 +51,18 @@ const PopupSelect: React.FC<PopupSelectProps> = ({ targetInput, onClose }) => {
                 ) : passwords.length > 0 ? (
                     passwords.map((item) => (
                         <div
-                            key={item.id}
-                            className={`email-item ${item.type === "premium" ? "premium" : ""}`}
-                            onClick={() => handleSelect(item.label || item.email || "")}
+                            key={item._id}
+                            className={`email-item ${item.reference?.type === "premium" ? "premium" : ""}`}
+                            onClick={() => handleSelect(item.identifiant || "")}
                             style={{ cursor: "pointer" }}
                         >
                             <div className="icon">
                                 <LockKeyhole size={18} />
                             </div>
                             <div className="info">
-                                <p className="title">{item.label || item.email}</p>
+                                <p className="title">{item.titre }</p>
+                                <p className="subtitle">{item.identifiant}</p>
+                                {/* <p className="subtitle">{item.motDePasse ? "••••••" : ""}</p> */}
                             </div>
                         </div>
                     ))

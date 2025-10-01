@@ -1,15 +1,9 @@
-// content-script.tsx
 import ReactDOM from "react-dom/client";
 import PopupSelect from "./app/windows/PopupSelect";
 import PopupValidation from "./app/windows/PopupValidation";
 
 const DEBUG = true;
 console.log("✅ Content script chargé !");
-
-// --- Storage simulé pour tests ---
-const storedLogins: { domain: string; email: string; password: string }[] = [
-    { domain: "example.com", email: "test@example.com", password: "123456" }
-];
 
 (async function main() {
     try {
@@ -22,7 +16,7 @@ const storedLogins: { domain: string; email: string; password: string }[] = [
         const ROOTS = (window as any).__EXT_ROOTS = (window as any).__EXT_ROOTS || new Map<string, any>();
         const debug = (...args: any[]) => { if (DEBUG) console.log("[CS]", ...args); };
 
-        // --- Mount / Unmount React Components ---
+        // --- React mount helpers ---
         function mountReactComponent(id: string, Component: React.ReactNode, style: Partial<CSSStyleDeclaration>) {
             let container = document.getElementById(id);
             if (!container) {
@@ -60,7 +54,7 @@ const storedLogins: { domain: string; email: string; password: string }[] = [
             }
         }
 
-        // --- Helpers ---
+        // --- Input and form helpers ---
         function isRelevantInput(input: HTMLInputElement) {
             const t = (input.type || "").toLowerCase();
             const name = (input.name || "").toLowerCase();
@@ -83,19 +77,6 @@ const storedLogins: { domain: string; email: string; password: string }[] = [
             return { username, password };
         }
 
-        // --- Validation Logic ---
-        async function shouldTriggerValidation(form: HTMLFormElement) {
-            const { username } = extractCredentials(form);
-            const domain = window.location.hostname;
-            const formType = detectFormType(form);
-
-            // Vérifie si email existe déjà
-            const existing = storedLogins.find(u => u.domain === domain && u.email === username);
-
-            // Popup si signup et email inexistant, ou login et email inexistant
-            return !existing;
-        }
-
         function detectFormType(form: HTMLFormElement): "login" | "signup" {
             const action = form.getAttribute("action")?.toLowerCase() || "";
             const hasConfirmPassword = form.querySelectorAll("input[type='password']").length > 1;
@@ -103,40 +84,76 @@ const storedLogins: { domain: string; email: string; password: string }[] = [
             return "login";
         }
 
+        // --- Chrome storage / background helpers ---
+        async function loginExists(username: string): Promise<boolean> {
+            return new Promise((resolve) => {
+                chrome.runtime.sendMessage({ type: "getPasswords" }, (response) => {
+                    const passwords: { identifiant: string }[] =
+                        response?.success ? response.data : [];
+                    const exists = passwords.some(
+                        u => u.identifiant === username
+                    );
+                    resolve(exists);
+                });
+            });
+        }
+
+        // --- Popups ---
+        function injectPopupSelect(target: HTMLInputElement) {
+            if (!target || document.getElementById("emails-popup")) return;
+
+            chrome.runtime.sendMessage({ type: "getPasswords" }, (response) => {
+                const passwords = response?.success ? response.data : [];
+                debug("Passwords récupérés dans content script :", passwords);
+
+                mountReactComponent(
+                    "emails-popup",
+                    <PopupSelect
+                        targetInput={target}
+                        passwords={passwords}
+                        onClose={() => removePopup("emails-popup")}
+                    />,
+                    { width: "400px", top: "10px", left: "10px" }
+                );
+            });
+        }
+
+        function injectPopupValidation(username: string, password: string, domain: string) {
+            if (document.getElementById("save-popup")) return;
+            mountReactComponent(
+                "save-popup",
+                <PopupValidation
+                    username={username}
+                    password={password}
+                    domain={domain}
+                    formType="signup"
+                    onClose={() => removePopup("save-popup")}
+                />,
+                { width: "350px", right: "10px", top: "10px" }
+            );
+        }
+
+        // --- Form submit handler ---
         async function handleFormSubmit(form: HTMLFormElement) {
             const { username, password } = extractCredentials(form);
             if (!username || !password) return;
 
             const domain = window.location.hostname;
-
-            if (await shouldTriggerValidation(form)) {
-                // Inject PopupValidation
-                injectPopupValidation(username, password, domain);
-
-                // Ajoute au storage simulé
-                storedLogins.push({ domain, email: username, password });
-                console.log("[TEST] Nouveau login ajouté:", { domain, username, password });
+            const exists = await loginExists(username);
+            if (exists) {
+                console.log("Login déjà existant, pas de popup injecté :", { domain, username });
+                return;
             }
-        }
 
-        // --- Inject Popups ---
-        function injectPopupSelect(target: HTMLInputElement) {
-            if (!target || document.getElementById("emails-popup")) return;
-            mountReactComponent("emails-popup",
-                <PopupSelect targetInput={target} onClose={() => removePopup("emails-popup")} />,
-                { width: "400px", top: "10px", right: "10px" }
-            );
-        }
-
-        function injectPopupValidation(username: string, password: string, domain: string) {
+            // Si PopupValidation déjà présent, on ne fait rien
             if (document.getElementById("save-popup")) return;
-            mountReactComponent("save-popup",
-                <PopupValidation username={username} password={password} domain={domain} onClose={() => removePopup("save-popup")} formType="signup" />,
-                { width: "350px", right: "10px", top: "10px" }
-            );
+
+            // Sinon injecte PopupValidation
+            injectPopupValidation(username, password, domain);
         }
 
-        // --- Event Listeners ---
+
+        // --- Event listeners ---
         document.addEventListener("focusin", e => {
             const target = e.target as HTMLInputElement;
             if (target && target.tagName === "INPUT" && isRelevantInput(target)) injectPopupSelect(target);
@@ -149,16 +166,16 @@ const storedLogins: { domain: string; email: string; password: string }[] = [
             if (!clickInsideInput && !clickInsideEmailsPopup) removePopup("emails-popup");
         }, true);
 
-        document.addEventListener("submit", e => {
+        document.addEventListener("submit", async e => {
             const form = e.target as HTMLFormElement;
-            if (form) handleFormSubmit(form);
+            if (form) await handleFormSubmit(form);
         }, true);
 
-        document.addEventListener("click", e => {
+        document.addEventListener("click", async e => {
             const target = e.target as HTMLElement;
             if (target.tagName === "BUTTON" || (target instanceof HTMLInputElement && target.type === "submit")) {
                 const form = target.closest("form") as HTMLFormElement | null;
-                if (form) handleFormSubmit(form);
+                if (form) await handleFormSubmit(form);
             }
         }, true);
 
@@ -169,7 +186,7 @@ const storedLogins: { domain: string; email: string; password: string }[] = [
     }
 })();
 
-// --- Storage Helpers ---
+// --- Storage helpers ---
 function getFromStorage(key: string): Promise<any> {
     return new Promise(resolve => {
         if (typeof chrome !== "undefined" && chrome.storage?.local) {

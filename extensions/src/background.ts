@@ -1,5 +1,4 @@
-import { getPasswordsForExtension } from "./services/background/password";
-import { storage } from "./lib/storage"; 
+import type { PasswordItem } from "./app/windows/PopupSelect";
 
 console.log("🔑 BoltSecure background lancé...");
 
@@ -7,42 +6,36 @@ chrome.runtime.onInstalled.addListener(() => {
     console.log("🚀 BoltSecure installé avec succès !");
 });
 
-// Listener pour sauvegarder un mot de passe
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-    if (message.type === "SAVE_PASSWORD") {
-        console.log("Mot de passe reçu :", message.payload);
-        console.log(sender);
-        sendResponse({ success: true });
+chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
+
+    // --- Récupérer les passwords ---
+    if (msg.type === "getPasswords") {
+        chrome.storage.local.get(["cachedPasswords"], (res) => {
+            sendResponse({ success: true, data: res.cachedPasswords || [] });
+        });
+        return true;
     }
-});
 
-// Listener pour récupérer les passwords
-chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
-    if (message.type === "getPasswords") {
-        try {
-            // 1️⃣ Vérifier le storage pour l'utilisateur
-            const result = await storage.get(["xxxml", "xxxpp", "xxxmm", "utilisateur"]);
-            console.log("Storage récupéré :", result);
-            const utilisateur = result.utilisateur ?? null;
+    // --- Mettre à jour les passwords ---
+    if (msg.type === "setPasswords") {
+        chrome.storage.local.set({ cachedPasswords: msg.data || [] }, () => {
+            sendResponse({ success: true });
+        });
+        return true; // pour support async
+    }
 
-            if (!utilisateur) {
-                console.warn("⚠️ Aucun utilisateur trouvé dans le storage !");
-                sendResponse({ success: false, error: "Utilisateur non trouvé" });
-                return;
-            }
+    // --- Sauvegarder un nouveau mot de passe (optionnel) ---
+    if (msg.type === "SAVE_PASSWORD") {
+        console.log("Mot de passe reçu :", msg.payload);
 
-            // 2️⃣ Récupérer les passwords via ton service
-            const passwords = await getPasswordsForExtension(utilisateur);
-            console.log("Passwords récupérés :", passwords);
-
-            if (passwords) console.log(passwords)
-            // 3️⃣ Envoyer la réponse au composant React
-            sendResponse({ success: true, data: passwords });
-        } catch (err: any) {
-            console.error("Erreur lors de la récupération des passwords :", err);
-            sendResponse({ success: false, error: err.message });
-        }
-
-        return true; // permet la réponse asynchrone
+        // On récupère les anciens passwords puis on ajoute le nouveau
+        chrome.storage.local.get(["cachedPasswords"], (res) => {
+            const existing: PasswordItem[] = res.cachedPasswords || [];
+            const updated = [...existing, msg.payload];
+            chrome.storage.local.set({ cachedPasswords: updated }, () => {
+                sendResponse({ success: true });
+            });
+        });
+        return true;
     }
 });

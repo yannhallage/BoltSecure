@@ -46,6 +46,11 @@ function PopupContainer() {
   // Met à jour les données dans le contexte
   useEffect(() => {
     if (passwords) setDataPasswords(passwords);
+
+    // envoie vers le background
+    chrome.runtime.sendMessage({ type: "setPasswords", data: passwords }, (response) => {
+      if (response?.success) console.log("Passwords envoyés au background ✅");
+    });
   }, [passwords, setDataPasswords]);
 
   useEffect(() => {

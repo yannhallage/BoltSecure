@@ -1,5 +1,6 @@
 import { useState, type ReactNode } from "react";
 import { PopupContext } from "./PopupContext";
+import type { PasswordItem } from "../types/web/PasswordItem ";
 
 type PopupType =
     | "login"
@@ -14,8 +15,8 @@ type PopupType =
 export interface PopupContextProps {
     popup: PopupType;
     setPopup: (popup: PopupType) => void;
-    dataPasswords: unknown[];
-    setDataPasswords: React.Dispatch<React.SetStateAction<unknown[]>>;
+    dataPasswords: PasswordItem[];
+    setDataPasswords: (data: PasswordItem[]) => void;
     dataRegister: unknown[];
     setDataRegister: React.Dispatch<React.SetStateAction<unknown[]>>;
     changeText: string;
@@ -26,7 +27,7 @@ export interface PopupContextProps {
 
 export const PopupProvider = ({ children }: { children: ReactNode }) => {
     const [popup, setPopup] = useState<PopupType>("login");
-    const [dataPasswords, setDataPasswords] = useState<unknown[]>([]);
+    const [dataPasswords, setDataPasswords] = useState<PasswordItem[]>([]); // ✅ corrigé
     const [dataRegister, setDataRegister] = useState<unknown[]>([]);
     const [changeText, setChangeText] = useState<string>("");
     const [typeChange, setTypeChange] = useState<string>("");
@@ -42,7 +43,8 @@ export const PopupProvider = ({ children }: { children: ReactNode }) => {
                 setDataRegister,
                 changeText,
                 setChangeText,
-                typeChange, setTypeChange
+                typeChange,
+                setTypeChange,
             }}
         >
             {children}
